@@ -1,0 +1,85 @@
+2017-05-17 10:16:52,670 -- DEBUG -- ***** Transfer task : SICK*****
+
+
+2017-05-17 10:17:00,831 -- INFO -- Creating lookup-table of GloVe embeddings ..
+2017-05-17 10:17:00,831 -- INFO -- Found 2407 words with GloVe vectors, out of 2558 words in vocabulary in 3.63 seconds.
+2017-05-17 10:17:00,831 -- INFO -- Example of 7 words in the word2id dict but with no GloVe vectors : ["person's", "boat's", 'funny,', 'brown,', 'ledge,', 'animal,', 'wall,']
+2017-05-17 10:17:02,723 -- INFO -- Computing embedding for test
+2017-05-17 10:17:03,615 -- INFO -- Computed test embeddings
+2017-05-17 10:17:03,615 -- INFO -- Computing embedding for train
+2017-05-17 10:17:04,455 -- INFO -- Computed train embeddings
+2017-05-17 10:17:04,456 -- INFO -- Computing embedding for dev
+2017-05-17 10:17:04,539 -- INFO -- Computed dev embeddings
+2017-05-17 10:17:35,322 -- DEBUG -- Dev : Pearson 0.768317769949
+2017-05-17 10:17:35,323 -- DEBUG -- Test : Pearson 0.771569226793 Spearman 0.691418649597 MSE 0.41394174833 for SICK Relatedness
+
+2017-05-17 10:17:35,327 -- DEBUG -- ***** Transfer task : SICK*****
+
+
+2017-05-17 10:17:38,893 -- INFO -- Creating lookup-table of GloVe embeddings ..
+2017-05-17 10:17:38,894 -- INFO -- Found 2407 words with GloVe vectors, out of 2558 words in vocabulary in 3.4 seconds.
+2017-05-17 10:17:38,894 -- INFO -- Example of 7 words in the word2id dict but with no GloVe vectors : ['dogs,', 'bread,', 't-shirt,', 'necklace,', 'weather,', 'bird,', 'unstitching']
+2017-05-17 10:17:38,896 -- INFO -- Computing embedding for test
+2017-05-17 10:17:39,627 -- INFO -- Computed test embeddings
+2017-05-17 10:17:39,627 -- INFO -- Computing embedding for train
+2017-05-17 10:17:40,335 -- INFO -- Computed train embeddings
+2017-05-17 10:17:40,336 -- INFO -- Computing embedding for dev
+2017-05-17 10:17:40,446 -- INFO -- Computed dev embeddings
+2017-05-17 10:17:40,501 -- INFO -- Training classifier with standard validation..
+2017-05-17 10:17:57,017 -- INFO -- [('reg:1e-05', 80.0), ('reg:0.0001', 80.0), ('reg:0.001', 79.8), ('reg:0.01', 79.8)]
+2017-05-17 10:17:57,017 -- INFO -- Validation : best param found is reg = 1e-05 with score 80.0
+2017-05-17 10:17:57,018 -- INFO -- 
+Evaluating...
+2017-05-17 10:18:01,350 -- DEBUG -- 
+Dev acc : 80.0 Test acc : 77.29 for SICK entailment
+
+2017-05-17 10:18:01,355 -- DEBUG -- ***** Transfer task : MRPC *****
+
+
+2017-05-17 10:18:09,384 -- INFO -- Creating lookup-table of GloVe embeddings ..
+2017-05-17 10:18:09,384 -- INFO -- Found 18621 words with GloVe vectors, out of 19695 words in vocabulary in 4.85 seconds.
+2017-05-17 10:18:09,384 -- INFO -- Example of 7 words in the word2id dict but with no GloVe vectors : ['bus\xe2\x80\x99', 'Al-Numan', 'Mascia-Frye', '20-', '.DJI', '.SPX', '\xe2\x80\x9c7th']
+2017-05-17 10:18:09,397 -- INFO -- Computing embedding for test
+2017-05-17 10:18:09,846 -- INFO -- Computed test embeddings
+2017-05-17 10:18:09,846 -- INFO -- Computing embedding for train
+2017-05-17 10:18:11,105 -- INFO -- Computed train embeddings
+2017-05-17 10:18:11,131 -- INFO -- Training classifier with 3-fold cross-validation
+2017-05-17 10:18:37,322 -- INFO -- [('reg:1e-05', 72.72), ('reg:0.0001', 72.72), ('reg:0.001', 72.72), ('reg:0.01', 72.72)]
+2017-05-17 10:18:37,322 -- INFO -- Cross-validation : best param found is reg = 1e-05 with score 72.72
+2017-05-17 10:18:37,322 -- INFO -- 
+Evaluating...
+2017-05-17 10:18:40,440 -- DEBUG -- Dev acc : 72.72 Test acc 73.1; Test F1 81.65 for MRPC.
+
+2017-05-17 10:18:40,448 -- DEBUG -- ***** Transfer task : STS14 *****
+
+
+2017-05-17 10:18:45,524 -- INFO -- Creating lookup-table of GloVe embeddings ..
+2017-05-17 10:18:45,524 -- INFO -- Found 10517 words with GloVe vectors, out of 11097 words in vocabulary in 4.24 seconds.
+2017-05-17 10:18:45,524 -- INFO -- Example of 7 words in the word2id dict but with no GloVe vectors : ['Cyracuz', "'are", 'raghdad', 'sistan-baluchestan', 'Kerry\xe2\x80\x99s', 'Value-Form', 'CNN.']
+2017-05-17 10:18:45,697 -- DEBUG -- deft-forum : pearson = (0.18142374661703844, 0.00010881882814228565), spearman = SpearmanrResult(correlation=0.25196009326064611, pvalue=6.0383004430292969e-08)
+2017-05-17 10:18:45,809 -- DEBUG -- deft-news : pearson = (0.63072837845796048, 1.1012032351291705e-34), spearman = SpearmanrResult(correlation=0.64657055196455415, pvalue=6.5983836822541939e-37)
+2017-05-17 10:18:46,016 -- DEBUG -- headlines : pearson = (0.37325212285034215, 3.3164500324394051e-26), spearman = SpearmanrResult(correlation=0.3851627593993161, pvalue=6.2164164991372019e-28)
+2017-05-17 10:18:46,239 -- DEBUG -- images : pearson = (0.52903999449620698, 2.5618447315510128e-55), spearman = SpearmanrResult(correlation=0.57299541289766387, pvalue=1.1570577159808274e-66)
+2017-05-17 10:18:46,458 -- DEBUG -- OnWN : pearson = (0.53794131049845262, 1.7575229609160709e-57), spearman = SpearmanrResult(correlation=0.61207989017525655, pvalue=2.6869915769758457e-78)
+2017-05-17 10:18:46,694 -- DEBUG -- tweet-news : pearson = (0.53718211486905421, 2.703753503722635e-57), spearman = SpearmanrResult(correlation=0.5518887648850721, pvalue=5.2703817131442859e-61)
+2017-05-17 10:18:46,694 -- DEBUG -- Results (all) : Pearson = 0.464927944632, Spearman = 0.503442912097
+
+2017-05-17 10:18:46,694 -- DEBUG -- ***** Transfer task : Image Annotation *****
+
+
+2017-05-17 10:19:10,180 -- INFO -- Creating lookup-table of GloVe embeddings ..
+2017-05-17 10:19:10,180 -- INFO -- Found 25213 words with GloVe vectors, out of 29631 words in vocabulary in 5.5 seconds.
+2017-05-17 10:19:10,180 -- INFO -- Example of 7 words in the word2id dict but with no GloVe vectors : ['carefoot', 'monoskier', 'infowarscom', 'cupbaords', 'convorbelt', 'threestep', 'poweredon']
+2017-05-17 10:19:10,210 -- INFO -- Computing embedding for test
+2017-05-17 10:19:12,914 -- INFO -- Computed test embeddings
+2017-05-17 10:19:12,914 -- INFO -- Computing embedding for train
+2017-05-17 10:20:21,358 -- INFO -- Computed train embeddings
+2017-05-17 10:20:21,358 -- INFO -- Computing embedding for dev
+2017-05-17 10:20:24,135 -- INFO -- Computed dev embeddings
+2017-05-17 10:20:24,156 -- INFO -- prepare data
+2017-05-17 10:20:34,718 -- INFO -- 
+ start epoch
+2017-05-17 10:22:49,674 -- INFO -- samples : 64000
+2017-05-17 10:23:03,335 -- INFO -- Image to text: 8.62, 23.6, 34.7, 22.0
+2017-05-17 10:23:14,642 -- INFO -- Text to Image: 6.536, 20.236, 30.532, 26.0
+2017-05-17 10:25:28,038 -- INFO -- samples : 128000
