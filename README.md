@@ -14,6 +14,7 @@ This code is written in python. The dependencies are :
 
 
 ## Tasks
+
 See [here](https://arxiv.org/pdf/1705.02364.pdf) for a detailed description of the available tasks.
 * Binary classification : MR (movie review), CR (product review), SUBJ (subjectivity status), MPQA (opinion-polarity), SST (sentiment analysis)
 * Multi-class classification : TREC (question-type classification), SST (fine-grained sentiment analysis)
@@ -38,7 +39,9 @@ SentEval requires the user to implement one function :
 that takes as input a numpy array of sentences (batch) and some parameters (params), and must return a numpy array of sentence embeddings.
 
 To perform the actual evaluation, first import senteval :
-    import senteval
+```python
+import senteval
+```
 define a SentEval object : 
     se = senteval.SentEval(batcher, prepare, params_senteval)
 and run the evaluation on a set of transfer tasks : 
