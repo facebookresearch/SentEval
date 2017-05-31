@@ -7,12 +7,8 @@ from torch.autograd import Variable
 from exutil import dotdict
 import data
 
-# get path to SentEval
-import getpass
-username = getpass.getuser()
-
 # Set PATHs
-PATH_TO_SENTEVAL = '/home/{0}/fbsource/fbcode/experimental/deeplearning/dkiela/senteval/'.format(username)
+PATH_TO_SENTEVAL = '/home/aconneau/notebooks/senteval/'
 PATH_TO_DATA = '/mnt/vol/gfsai-east/ai-group/users/aconneau/projects/sentence-encoding/transfer-tasks-automatic/'
                 
 # import SentEval
