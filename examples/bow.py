@@ -23,11 +23,10 @@ Note for users :
 You have to implement two functions :
     1) "batcher" : transforms a batch of sentences into sentence embeddings.
         i) takes as input a "batch", and "params".
-        ii) 
+        ii) outputs a numpy array of sentence embeddings
+        iii) Your sentence encoder should be in "params"
     2) "prepare" : sees the whole dataset, and can create a vocabulary
         i) outputs of "prepare" are stored in "params" that batcher will use.
-        ii) "prepare" can create a dictionary (chars/bpe/words).
-        iii) Below, "prepare" prepares the lookup-table of GloVe embeddings.
 """
 
 
@@ -60,11 +59,11 @@ def prepare(params, samples):
 
 
 # Set params for SentEval
-params_senteval = {'usepytorch':True,
-                   'task_path':PATH_TO_DATA,
-                   'seed':1111,
-                   'verbose':2, # 2: debug, 1: info, 0: warning
-                   'batch_size':64}
+params_senteval = {'usepytorch'   : True,
+                   'task_path'    : PATH_TO_DATA,
+                   'seed'         : 1111,
+                   'verbose'      : 2, # 2: debug, 1: info, 0: warning
+                   'batch_size'   : 64}
 
 params_senteval = dotdict(params_senteval)
 
