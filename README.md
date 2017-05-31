@@ -43,13 +43,19 @@ To perform the actual evaluation, first import senteval :
 import senteval
 ```
 define a SentEval object : 
-    se = senteval.SentEval(batcher, prepare, params_senteval)
+```python
+se = senteval.SentEval(batcher, prepare, params_senteval)
+```
 and run the evaluation on a set of transfer tasks : 
-    transfer_tasks = ['MR', 'MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'ImageAnnotation']
-    results = se.eval(transfer_tasks)
+```python
+transfer_tasks = ['MR', 'MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'ImageAnnotation']
+results = se.eval(transfer_tasks)
+```
 
 Run
+```bash
     python examples/bow.py
+```
 to evaluate the reproduce the results of avg(GloVe) vectors.
 
 ## SentEval parameters
