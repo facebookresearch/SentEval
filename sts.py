@@ -35,7 +35,7 @@ class STS14Eval(object):
     def do_prepare(self, params, prepare):
         return prepare(params, self.samples)
 
-    def run(self, network, batcher, params):
+    def run(self, batcher, params):
         results = {}
         for dataset in self.datasets:
             sys_scores = []
@@ -46,8 +46,8 @@ class STS14Eval(object):
                 
                 # we assume that the get_batch function already throws out the faulty ones
                 if len(batch1) == len(batch2) and len(batch1) > 0:
-                    enc1 = batcher(network, batch1, params)
-                    enc2 = batcher(network, batch2, params)
+                    enc1 = batcher(batch1, params)
+                    enc2 = batcher(batch2, params)
 
                     for kk in range(enc2.shape[0]):
                         sys_score = cosine(np.nan_to_num(enc1[kk]), np.nan_to_num(enc2[kk]))

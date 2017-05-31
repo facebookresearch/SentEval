@@ -50,7 +50,7 @@ class SNLIEval(object):
         with codecs.open(fpath, 'rb', 'latin-1') as f:
             return [line.encode('utf-8').split() for line in f.read().splitlines()]
 
-    def run(self, network, batcher, params):
+    def run(self, batcher, params):
         self.X, self.y = {}, {}
         for key in self.data:
             if key not in self.X: self.X[key] = []
@@ -64,8 +64,8 @@ class SNLIEval(object):
                 batch2 = input2[ii:ii + params.batch_size]
 
                 if len(batch1) == len(batch2) and len(batch1) > 0:
-                    enc1 = batcher(network, batch1, params)
-                    enc2 = batcher(network, batch2, params)
+                    enc1 = batcher(batch1, params)
+                    enc2 = batcher(batch2, params)
                     enc_input.append(np.hstack(( enc1, enc2, enc1 * enc2, np.abs(enc1 - enc2) )))
                 if (ii*params.batch_size) % (20000*params.batch_size) == 0:
                     logging.info("PROGRESS (encoding): %.2f%%" % (100 * ii / n_labels))

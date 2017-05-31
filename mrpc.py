@@ -44,7 +44,7 @@ class MRPCEval(object):
         return mrpc_data
         
 
-    def run(self, network, batcher, params):
+    def run(self, batcher, params):
         mrpc_embed = {'train':{}, 'test':{}}
                       
         for key in self.mrpc_data:
@@ -65,7 +65,7 @@ class MRPCEval(object):
                 mrpc_embed[key][txt_type] = []
                 for ii in range(0, len(text_data['y']), params.batch_size):
                     batch = text_data[txt_type][ii:ii + params.batch_size]
-                    embeddings = batcher(network, batch, params)
+                    embeddings = batcher(batch, params)
                     mrpc_embed[key][txt_type].append(embeddings)
                 mrpc_embed[key][txt_type] = np.vstack(mrpc_embed[key][txt_type])
             mrpc_embed[key]['y'] = np.array(text_data['y'])

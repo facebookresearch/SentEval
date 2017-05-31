@@ -47,7 +47,7 @@ class ImageAnnotationEval(object):
         return coco['train'], coco['valid'], coco['test']
     
 
-    def run(self, network, batcher, params):
+    def run(self, batcher, params):
         coco_embed = {'train':{'sentfeat':[], 'imgfeat':[]}, \
                      'dev':{'sentfeat':[], 'imgfeat':[]}, \
                      'test':{'sentfeat':[], 'imgfeat':[]}}
@@ -62,7 +62,7 @@ class ImageAnnotationEval(object):
             coco_embed[key]['X'] = []
             for ii in range(0, len(self.coco_data[key]['sent']), params.batch_size):
                 batch = self.coco_data[key]['sent'][ii:ii + params.batch_size]
-                embeddings = batcher(network, batch, params)
+                embeddings = batcher(batch, params)
                 coco_embed[key]['sentfeat'].append(embeddings)
             coco_embed[key]['sentfeat'] = np.vstack(coco_embed[key]['sentfeat'])[idx_unsort]
             coco_embed[key]['imgfeat'] = np.array(self.coco_data[key]['imgfeat'])

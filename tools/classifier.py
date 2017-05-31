@@ -62,7 +62,7 @@ class PyTorchClassifier(object):
         
         # Training
         while not stop_train and self.nepoch<=self.maxepoch:
-            self.trainepoch(trainX, trainy, nepoches=5)
+            self.trainepoch(trainX, trainy, nepoches=4)
             accuracy = self.score(devX, devy)
             if accuracy > bestaccuracy:
                 bestaccuracy = accuracy

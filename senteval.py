@@ -26,9 +26,8 @@ logging.basicConfig(filename='test_log.log',level=logging.DEBUG,\
       format='%(asctime)s -- %(name)s -- %(levelname)s -- %(message)s')
 
 class SentEval(object):
-    def __init__(self, task_path, network, batcher, prepare, params):
-        self.task_path = task_path
-        self.network = network
+    def __init__(self, batcher, prepare, params):
+        self.task_path = params.task_path
         self.batcher = batcher
         self.params = params
         self.prepare = prepare
@@ -84,7 +83,7 @@ class SentEval(object):
         self.params.current_task = name
         self.evaluation.do_prepare(self.params, self.prepare)
         
-        self.results = self.evaluation.run(self.network, self.batcher, self.params)
+        self.results = self.evaluation.run(self.batcher, self.params)
         
         return self.results
     

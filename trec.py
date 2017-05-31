@@ -34,7 +34,7 @@ class TRECEval(object):
         return trec_data
 
 
-    def run(self, network, batcher, params):
+    def run(self, batcher, params):
         train_embeddings, test_embeddings = [], []
         
         # Sort to reduce padding
@@ -49,7 +49,7 @@ class TRECEval(object):
         # Get train embeddings
         for ii in range(0, len(train_labels), params.batch_size):
             batch = train_samples[ii:ii + params.batch_size]
-            embeddings = batcher(network, batch, params)
+            embeddings = batcher(batch, params)
             train_embeddings.append(embeddings)
         train_embeddings = np.vstack(train_embeddings)
         logging.info('Computed train embeddings')
@@ -57,7 +57,7 @@ class TRECEval(object):
         # Get test embeddings
         for ii in range(0, len(test_labels), params.batch_size):
             batch = test_samples[ii:ii + params.batch_size]
-            embeddings = batcher(network, batch, params)
+            embeddings = batcher(batch, params)
             test_embeddings.append(embeddings)
         test_embeddings = np.vstack(test_embeddings)
         logging.info('Computed test embeddings')

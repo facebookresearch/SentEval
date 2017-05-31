@@ -29,8 +29,8 @@ sys.path.insert(0, PATH_TO_SENTEVAL)
 import senteval
 
 
-def batcher(network, batch, params):
-    embeddings = skipthoughts.encode(network, [unicode(' '.join(sent), errors="ignore")\
+def batcher(batch, params):
+    embeddings = skipthoughts.encode(params.encoder, [unicode(' '.join(sent), errors="ignore")\
                                      if sent!=[] else '.' for sent in batch],\
                                      verbose=False, use_eos=True)
     return embeddings
@@ -50,8 +50,8 @@ torch.cuda.set_device(2)
 
 
 if __name__ == "__main__":
-    model = skipthoughts.load_model()
-    se = senteval.SentEval(params_senteval.task_path, model, batcher, prepare, params_senteval)
+    params_senteval.encoder = skipthoughts.load_model()
+    se = senteval.SentEval(batcher, prepare, params_senteval)
     #se.eval(['TREC'])
     se.eval(['MR'])
     # se.eval(['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
