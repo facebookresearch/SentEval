@@ -1,3 +1,11 @@
+# Copyright (c) 2016-present, Facebook, Inc.
+# All rights reserved.
+#
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree. An additional grant
+# of patent rights can be found in the PATENTS file in the same directory.
+#
+
 import sys
 import numpy as np
 
@@ -62,18 +70,18 @@ def prepare(params, samples):
 params_senteval = {'usepytorch'   : True,
                    'task_path'    : PATH_TO_DATA,
                    'seed'         : 1111,
-                   'verbose'      : 2, # 2: debug, 1: info, 0: warning
+                   'verbose'      : 2, # (0:warning, 1:info, 2:debug)
                    'batch_size'   : 64}
-
 params_senteval = dotdict(params_senteval)
 
-torch.cuda.set_device(2)
+# set pytorch cuda device
+torch.cuda.set_device(1)
 
 if __name__ == "__main__":
-    params_senteval.model = None # No model here, just for illustration
+    params_senteval.model = None # No model here, just for illustration purposes
     se = senteval.SentEval(batcher, prepare, params_senteval)
-    se.eval(['MR', 'CR', 'SUBJ','MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
-    # se.eval(['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
+    se.eval(['MRPC'])
+    #se.eval(['MR', 'CR', 'SUBJ','MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
 
     
     

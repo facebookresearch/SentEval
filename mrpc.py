@@ -1,3 +1,11 @@
+# Copyright (c) 2016-present, Facebook, Inc.
+# All rights reserved.
+#
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree. An additional grant
+# of patent rights can be found in the PATENTS file in the same directory.
+#
+
 '''
 MRPC : Microsoft Research Paraphrase (detection) Corpus
 '''
@@ -9,8 +17,6 @@ import logging
 
 from utils import create_dictionary
 from tools.validation import KFoldClassifier
-
-from nltk.tokenize import word_tokenize
 
 from sklearn.metrics import f1_score
 
@@ -34,8 +40,8 @@ class MRPCEval(object):
         with open(fpath, 'rb') as f:
             for line in f:
                 text = line.strip().split('\t')
-                mrpc_data['X_A'].append(word_tokenize(text[3]))
-                mrpc_data['X_B'].append(word_tokenize(text[4]))
+                mrpc_data['X_A'].append(text[3].split())
+                mrpc_data['X_B'].append(text[4].split())
                 mrpc_data['y'].append(text[0])
                 
         mrpc_data['X_A'] = mrpc_data['X_A'][1:]

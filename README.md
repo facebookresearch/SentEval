@@ -10,7 +10,6 @@ This code is written in python. The dependencies are :
 * [Pytorch](http://pytorch.org/) >= 0.12
 * [NumPy](http://www.numpy.org/) and [SciPy](http://www.scipy.org/)
 * [scikit-learn](http://scikit-learn.org/stable/index.html)>="0.18.0"
-* [NLTK 3](http://www.nltk.org/)
 
 
 ## Tasks
@@ -111,11 +110,12 @@ This simple interface namely allows to evaluate the quality of a sentence encode
 
 
 ## TODO
-* Remove "network" parameter in bacher (the user can put it in "params") DONE
-* In bow.py, remove the lookup table (get_lut_glove). Create a word_vects dictionnary of word vectors. DONE
-* Reduce the number of parameters of senteval.SentEval DONE
+* Remove "network" parameter in batcher (the user can put it in "params") **DONE**
+* In bow.py, remove the lookup table (get_lut_glove). Create a word_vects dictionnary of word vectors. **DONE**
+* Reduce the number of parameters of senteval.SentEval **DONE**
 * Add SST/multi, add MultiNLI in get_transfer_data
-* Add SST/bin on the github. Add COCO dataset on the github
-* Change the "samples" in "prepare" so that we can compute "IDF" weights?
-
+* Add SST/bin on the github. Add COCO dataset on the github (Amazon S3 with proper clearance from legal to redistribute?)
+* Provide IDF weights in .pickle and propose average-idf-weighted-wordvectors ?
+* data download in bash file **DONE**
+* preprocess MRPC directly in download file and remove NLTK dependency
 
