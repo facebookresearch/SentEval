@@ -8,18 +8,18 @@ This code is written in python. The dependencies are :
 
 * Python 2.7
 * [Pytorch](http://pytorch.org/) >= 0.12
-* [NumPy](http://www.numpy.org/) and [SciPy](http://www.scipy.org/)
+* A recent version of [NumPy](http://www.numpy.org/) and [SciPy](http://www.scipy.org/)
 * [scikit-learn](http://scikit-learn.org/stable/index.html)>="0.18.0"
 
 
 ## Tasks
 
 See [here](https://arxiv.org/pdf/1705.02364.pdf) for a detailed description of the available tasks.
-* Binary classification : MR (movie review), CR (product review), SUBJ (subjectivity status), MPQA (opinion-polarity), SST (sentiment analysis)
-* Multi-class classification : TREC (question-type classification), SST (fine-grained sentiment analysis)
-* Entailment (NLI) and semantic relatedness : [SNLI](https://nlp.stanford.edu/projects/snli/) (entailment), [MultiNLI](https://www.nyu.edu/projects/bowman/multinli/) (entailment), [SICK](http://clic.cimec.unitn.it/composes/sick.html) (entailment/relatedness)
-* Semantic Textual Similarity : [STSBenchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results), [STS14](http://alt.qcri.org/semeval2014/task10/)
-* Paraphrase detection : [MRPC](https://aclweb.org/aclwiki/index.php?title=Paraphrase_Identification_(State_of_the_art))
+* Binary classification : [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (movie review), [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (product review), [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (subjectivity status), [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (opinion-polarity), [SST](https://nlp.stanford.edu/sentiment/index.html) (Stanford sentiment analysis)
+* Multi-class classification : [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/) (question-type classification), [SST](http://www.aclweb.org/anthology/P13-1045) (fine-grained Stanford sentiment analysis)
+* Entailment (NLI) : [SNLI](https://nlp.stanford.edu/projects/snli/) (caption-based NLI), [MultiNLI](https://www.nyu.edu/projects/bowman/multinli/) (Multi-genre NLI), [SICK](http://clic.cimec.unitn.it/composes/sick.html) (Sentences Involving Compositional Knowledge, entailment)
+* Semantic Textual Similarity : [STSBenchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results), [STS14](http://alt.qcri.org/semeval2014/task10/), [SICK](http://clic.cimec.unitn.it/composes/sick.html) (relatedness)
+* Paraphrase detection : [MRPC](https://aclweb.org/aclwiki/index.php?title=Paraphrase_Identification_(State_of_the_art)) (Microsoft Research Paraphrase Corpus)
 * Caption-Image retrieval : [COCO](http://mscoco.org/) dataset (with ResNet-101 2048d image embeddings)
 
 
