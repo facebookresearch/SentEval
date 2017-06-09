@@ -1,6 +1,6 @@
 # SentEval
 
-SentEval is a library for evaluating the quality of sentence embeddings as features for a broad and diverse set of "transfer" tasks. It is aimed to ease the study and the development of better general-purpose fixed-size sentence representations (see [InferSent](https://arxiv.org/pdf/1705.02364.pdf) for a comparison).
+SentEval is a library for evaluating the quality of sentence embeddings as features for a broad and diverse set of "transfer" tasks. It is aimed to ease the study and the development of better general-purpose fixed-size sentence representations (see [InferSent](https://arxiv.org/pdf/1705.02364.pdf) for a comparison of existing methods).
 
 ## Dependencies
 
@@ -8,7 +8,7 @@ This code is written in python. The dependencies are :
 
 * Python 2.7 (with recent versions of [NumPy](http://www.numpy.org/)/[SciPy](http://www.scipy.org/))
 * [Pytorch](http://pytorch.org/) >= 0.12
-* [scikit-learn](http://scikit-learn.org/stable/index.html)>="0.18.0"
+* [scikit-learn](http://scikit-learn.org/stable/index.html)>=0.18.0
 
 
 ## Tasks
