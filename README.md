@@ -24,11 +24,11 @@ See [here](https://arxiv.org/pdf/1705.02364.pdf) for a detailed description of t
 
 
 ## Download datasets
-
+To get all the transfer tasks datasets, run (in data/) :
 ```bash
 ./get_transfer_data.bash
 ```
-will automatically download the datasets and preprocess them, and put them in /data/senteval_data.
+This will automatically download and preprocess the datasets, and put them in /data/senteval_data.
 
 WARNING : Downloading the [MRPC](https://www.microsoft.com/en-us/download/details.aspx?id=52398) dataset requires the "[cabextract](https://www.cabextract.org.uk/#install)" command line (sudo apt-get/yum/brew install cabextract) to extract the provided Microsoft-specific MSI file.
 
@@ -38,7 +38,7 @@ WARNING : Downloading the [MRPC](https://www.microsoft.com/en-us/download/detail
 
 In examples/bow.py, we provide a minimal example for evaluating the quality of the *average of word vectors* (word2vec or GloVe) as sentence embeddings. 
 
-To get GloVe embeddings, run :
+To get GloVe embeddings, run (in examples/):
 ```bash
 ./get_glove.bash
 ```
