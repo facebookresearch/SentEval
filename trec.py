@@ -10,7 +10,6 @@
 TREC question-type classification
 '''
 
-import codecs
 import os
 import logging
 import numpy as np

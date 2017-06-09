@@ -27,10 +27,24 @@ logging.basicConfig(filename='test_log.log',level=logging.DEBUG,\
 
 class SentEval(object):
     def __init__(self, batcher, prepare, params):
-        self.task_path = params.task_path
-        self.batcher = batcher
+        # setting default parameters
+        params.usepytorch = True if 'usepytorch' not in params else params.usepytorch
+        params.classifier = params.classifier or 'LogReg'
+        params.nhid = params.nhid or 0
+        params.batch_size = params.batch_size or 128
+        params.verbose = params.verbose or 2
+        params.seed = params.seed or 1111
         self.params = params
+        
+        self.batcher = batcher
         self.prepare = prepare
+        
+        # sanity check
+        assert params.classifier in ['LogReg', 'MLP']
+        if params.classifier == 'MLP':
+            assert params.nhid>0, 'When using an MLP, you need to set params.nhid>0'
+        if not params.usepytorch and params.classifier == 'MLP':
+            assert False, 'No MLP implemented in scikit-learn'        
         
         # Set up logger
         logging_level = logging.WARNING if params.verbose==0\
@@ -54,31 +68,31 @@ class SentEval(object):
             return self.results
 
         if name == 'CR':
-            self.evaluation = CREval(self.task_path + '/CR', seed=self.params.seed)
+            self.evaluation = CREval(self.params.task_path + '/CR', seed=self.params.seed)
         elif name == 'MR':
-            self.evaluation = MREval(self.task_path + '/MR', seed=self.params.seed)
+            self.evaluation = MREval(self.params.task_path + '/MR', seed=self.params.seed)
         elif name == 'MPQA':
-            self.evaluation = MPQAEval(self.task_path + '/MPQA', seed=self.params.seed)
+            self.evaluation = MPQAEval(self.params.task_path + '/MPQA', seed=self.params.seed)
         elif name == 'SUBJ':
-            self.evaluation = SUBJEval(self.task_path + '/SUBJ', seed=self.params.seed)
+            self.evaluation = SUBJEval(self.params.task_path + '/SUBJ', seed=self.params.seed)
         elif name == 'SST':
-            self.evaluation = SSTBinaryEval(self.task_path + '/SST/binary', seed=self.params.seed)
+            self.evaluation = SSTBinaryEval(self.params.task_path + '/SST/binary', seed=self.params.seed)
         elif name == 'TREC':
-            self.evaluation = TRECEval(self.task_path + '/TREC', seed=self.params.seed)
+            self.evaluation = TRECEval(self.params.task_path + '/TREC', seed=self.params.seed)
         elif name == 'MRPC':
-            self.evaluation = MRPCEval(self.task_path + '/MRPC', seed=self.params.seed)
+            self.evaluation = MRPCEval(self.params.task_path + '/MRPC', seed=self.params.seed)
         elif name == 'SICKRelatedness':
-            self.evaluation = SICKRelatednessEval(self.task_path + '/SICK', seed=self.params.seed)
+            self.evaluation = SICKRelatednessEval(self.params.task_path + '/SICK', seed=self.params.seed)
         elif name == 'STSBenchmark':
-            self.evaluation = STSBenchmarkEval(self.task_path + '/STS/STSBenchmark', seed=self.params.seed)
+            self.evaluation = STSBenchmarkEval(self.params.task_path + '/STS/STSBenchmark', seed=self.params.seed)
         elif name == 'SICKEntailment':
-            self.evaluation = SICKEntailmentEval(self.task_path + '/SICK', seed=self.params.seed)
+            self.evaluation = SICKEntailmentEval(self.params.task_path + '/SICK', seed=self.params.seed)
         elif name == 'SNLI':
-            self.evaluation = SNLIEval(self.task_path + '/SNLI', seed=self.params.seed)
+            self.evaluation = SNLIEval(self.params.task_path + '/SNLI', seed=self.params.seed)
         elif name == 'STS14':
-            self.evaluation = STS14Eval(self.task_path + '/STS/STS14', seed=self.params.seed)
+            self.evaluation = STS14Eval(self.params.task_path + '/STS/STS14', seed=self.params.seed)
         elif name == 'ImageAnnotation':
-            self.evaluation = ImageAnnotationEval(self.task_path + '/COCO', seed=self.params.seed)
+            self.evaluation = ImageAnnotationEval(self.params.task_path + '/COCO', seed=self.params.seed)
         
         self.params.current_task = name
         self.evaluation.do_prepare(self.params, self.prepare)

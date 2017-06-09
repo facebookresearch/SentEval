@@ -17,8 +17,8 @@ import data
 
 # Set PATHs
 PATH_TO_SENTEVAL = '/home/aconneau/notebooks/senteval/'
-PATH_TO_DATA = '/mnt/vol/gfsai-east/ai-group/users/aconneau/projects/sentence-encoding/transfer-tasks-automatic/'
-PATH_TO_GLOVE = '/mnt/vol/gfsai-east/ai-group/users/aconneau/glove/glove.840B.300d.txt'
+PATH_TO_DATA = '../data/senteval_data/'
+PATH_TO_GLOVE = 'glove/glove.840B.300d.txt'
                 
 # import SentEval
 sys.path.insert(0, PATH_TO_SENTEVAL)
@@ -26,13 +26,13 @@ import senteval
 
 
 """
-Note for users : 
+Note : 
 
-You have to implement two functions :
+The user has to implement two functions :
     1) "batcher" : transforms a batch of sentences into sentence embeddings.
         i) takes as input a "batch", and "params".
         ii) outputs a numpy array of sentence embeddings
-        iii) Your sentence encoder should be in "params"
+        iii) Your sentence encoder should be in "params" 
     2) "prepare" : sees the whole dataset, and can create a vocabulary
         i) outputs of "prepare" are stored in "params" that batcher will use.
 """
@@ -43,7 +43,7 @@ def batcher(batch, params):
     embeddings = []
     
     for sent in batch:
-        sentvec = np.zeros(300)
+        sentvec = np.zeros(params.emb_dim)
         nbwords = 0
         for word in sent:
             if word in params.word_vec:
@@ -61,17 +61,13 @@ def batcher(batch, params):
 
 def prepare(params, samples):
     _, params.word2id = data.create_dictionary(samples)
-    params.emb_dim = 300
     params.word_vec = data.get_wordvec(PATH_TO_GLOVE, params.word2id)
+    params.emb_dim = len(params.word_vec[params.word_vec.keys()[0]])
     return
 
 
 # Set params for SentEval
-params_senteval = {'usepytorch'   : True,
-                   'task_path'    : PATH_TO_DATA,
-                   'seed'         : 1111,
-                   'verbose'      : 2, # (0:warning, 1:info, 2:debug)
-                   'batch_size'   : 64}
+params_senteval = {'seed': 1111, 'task_path': PATH_TO_DATA, 'usepytorch': False, 'batch_size': 64,'verbose': 2, 'classifier':'LogReg'}
 params_senteval = dotdict(params_senteval)
 
 # set pytorch cuda device
@@ -80,8 +76,9 @@ torch.cuda.set_device(1)
 if __name__ == "__main__":
     params_senteval.model = None # No model here, just for illustration purposes
     se = senteval.SentEval(batcher, prepare, params_senteval)
-    se.eval(['MRPC'])
-    #se.eval(['MR', 'CR', 'SUBJ','MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
+    transfer_tasks = ['MR', 'CR', 'SUBJ','MPQA', 'SST', 'TREC', 'SICKRelatedness',\
+                      'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation']
+    results = se.eval(transfer_tasks)
 
     
     

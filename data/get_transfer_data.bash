@@ -11,35 +11,37 @@ preprocess_exec=./tokenizer.sed
 
 mkdir $data_path
 
-TREC=()
-TREC+=('http://cogcomp.cs.illinois.edu/Data/QA/QC/train_5500.label')
-TREC+=('http://cogcomp.cs.illinois.edu/Data/QA/QC/TREC_10.label')
-
-SICK=()
-SICK+=('http://alt.qcri.org/semeval2014/task1/data/uploads/sick_train.zip')
-SICK+=('http://alt.qcri.org/semeval2014/task1/data/uploads/sick_trial.zip')
-SICK+=('http://alt.qcri.org/semeval2014/task1/data/uploads/sick_test_annotated.zip')
-
+TREC='http://cogcomp.cs.illinois.edu/Data/QA/QC'
+SICK='http://alt.qcri.org/semeval2014/task1/data/uploads'
 BINCLASSIF='http://www.stanford.edu/~sidaw/projects/datasmall_NB_ACL12.zip'
-
 STS14='http://alt.qcri.org/semeval2014/task10/data/uploads/sts-en-gs-2014.zip'
-
+SST='https://raw.githubusercontent.com/YingyuLiang/SIF/master/data'
 STSBenchmark='http://ixa2.si.ehu.es/stswiki/images/4/48/Stsbenchmark.tar.gz'
-
-# MRPC links to msi files that are not so easy to parse with UNIX
-MRPC='https://download.microsoft.com/download/D/4/6/D46FF87A-F6B9-4252-AA8B-3604ED519838/MSRParaphraseCorpus.msi'
-
 SNLI='https://nlp.stanford.edu/projects/snli/snli_1.0.zip'
 MULTINLI='https://www.nyu.edu/projects/bowman/multinli/multinli_0.9.zip'
+COCO='https://s3.amazonaws.com/senteval/coco_r101_feat'
 
-COCO=()
-COCO+=('https://github.com/fair/sent2vec/coco/train.pkl')
-COCO+=('https://github.com/fair/sent2vec/coco/valid.pkl')
-COCO+=('https://github.com/fair/sent2vec/coco/test.pkl')
-
+# MRPC is a special case (we use "cabextract" to extract the msi file on Linux, see below)
+MRPC='https://download.microsoft.com/download/D/4/6/D46FF87A-F6B9-4252-AA8B-3604ED519838/MSRParaphraseCorpus.msi'
 
 
-### download STS2014 and STSBenchmark (http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark)
+
+
+
+
+### Get Stanford Sentiment Treebank (SST) binary classification task
+# SST
+mkdir -p $data_path/SST/binary
+for split in train dev test
+do
+    curl -o $data_path/SST/binary/sentiment-$split $SST/sentiment-$split
+done
+
+
+
+
+### STS2014 and STSBenchmark (http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark)
+
 # STS14
 echo $data_path/STS
 mkdir $data_path/STS
@@ -75,22 +77,47 @@ do
 done
 
 
+
+
 ### download TREC
 mkdir $data_path/TREC
-for path in ${TREC[@]}
+
+for split in train_5500 TREC_10
 do
-    curl -o $data_path/TREC/$(basename $path) $path
+    urlname=$TREC/$split.label
+    curl -o $data_path/TREC/$split.label $urlname
 done
+
+
+
 
 ### download SICK
 mkdir $data_path/SICK
-for path in ${SICK[@]}
+
+for split in train trial test_annotated
 do
-    curl -o $data_path/SICK/$(basename $path) $path
-    unzip $data_path/SICK/$(basename $path) -d $data_path/SICK/
+    urlname=$SICK/sick_$split.zip
+    curl -o $data_path/SICK/sick_$split.zip $urlname
+    unzip $data_path/SICK/sick_$split.zip -d $data_path/SICK/
     rm $data_path/SICK/readme.txt
-    rm $data_path/SICK/$(basename $path)
+    rm $data_path/SICK/sick_$split.zip
 done
+
+for split in train trial test_annotated
+do
+    fname=$data_path/SICK/SICK_$split.txt
+    cut -f1 $fname | sed '1d' > $data_path/SICK/tmp1
+    cut -f4,5 $fname | sed '1d' > $data_path/SICK/tmp45
+    cut -f2 $fname | sed '1d' | $preprocess_exec > $data_path/SICK/tmp2
+    cut -f3 $fname | sed '1d' | $preprocess_exec > $data_path/SICK/tmp3
+    head -n 1 $fname > $data_path/SICK/tmp0
+    paste $data_path/SICK/tmp1 $data_path/SICK/tmp2 $data_path/SICK/tmp3 $data_path/SICK/tmp45 >> $data_path/SICK/tmp0
+    mv $data_path/SICK/tmp0 $fname
+    rm $data_path/SICK/tmp*
+done
+
+
+
 
 
 ### download MR CR SUBJ MPQA
@@ -141,9 +168,23 @@ done
 rm -r $data_path/SNLI/snli_1.0
 
 
+
+
+### Get COCO captions and resnet-101 2048d-features
+# Captions : Copyright (c) 2015, COCO Consortium. All rights reserved.
+mkdir $data_path/COCO
+for split in train valid test
+do
+    curl -o $data_path/COCO/$split.pkl $COCO/$split.pkl
+done
+
+
+
+
 ### download MRPC
 # This extraction needs "cabextract" to extract the MSI file
 
+sudo apt-get install cabextract
 sudo yum install cabextract
 sudo brew install cabextract
 
@@ -167,8 +208,3 @@ do
     mv $data_path/MRPC/tmp4 $fname
     rm $data_path/MRPC/tmp1 $data_path/MRPC/tmp2 $data_path/MRPC/tmp3
 done
-
-# TODO : COCO and SST
-
-
-

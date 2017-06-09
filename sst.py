@@ -10,9 +10,7 @@
 SST - binary classification
 '''
 
-import codecs
 import os
-import copy
 import logging
 import numpy as np
 
@@ -22,9 +20,9 @@ class SSTBinaryEval(object):
     def __init__(self, task_path, seed=1111):
         logging.debug('***** Transfer task : SST Binary classification *****\n\n')
         self.seed = seed
-        train = self.loadFile(os.path.join(task_path, 'sst.train.txt'))
-        dev = self.loadFile(os.path.join(task_path, 'sst.dev.txt'))
-        test = self.loadFile(os.path.join(task_path, 'sst.test.txt'))
+        train = self.loadFile(os.path.join(task_path, 'sentiment-train'))
+        dev = self.loadFile(os.path.join(task_path, 'sentiment-dev'))
+        test = self.loadFile(os.path.join(task_path, 'sentiment-test'))
         self.sst_data = {'train':train, 'dev':dev, 'test':test}
         
     def do_prepare(self, params, prepare):
@@ -37,8 +35,8 @@ class SSTBinaryEval(object):
         with open(fpath, 'rb') as f:
             for line in f:
                 sample = line.strip().split('\t')
-                sst_data['y'].append(int(sample[0]))
-                sst_data['X'].append(sample[1].split())
+                sst_data['y'].append(int(sample[1]))
+                sst_data['X'].append(sample[0].split())
         return sst_data
     
 

@@ -10,12 +10,10 @@
 MRPC : Microsoft Research Paraphrase (detection) Corpus
 '''
 
-import codecs
 import os
-import numpy as np
 import logging
+import numpy as np
 
-from utils import create_dictionary
 from tools.validation import KFoldClassifier
 
 from sklearn.metrics import f1_score
@@ -89,7 +87,8 @@ class MRPCEval(object):
         testF = np.c_[np.abs(testA - testB), testA * testB]
         testY = mrpc_embed['test']['y']
         
-        config_classifier = {'nclasses':2, 'seed':self.seed, 'usepytorch':params.usepytorch}
+        config_classifier = {'nclasses':2, 'seed':self.seed, 'usepytorch':params.usepytorch,\
+                            'classifier':params.classifier, 'nhid': params.nhid}
         clf = KFoldClassifier(train={'X':trainF, 'y':trainY}, test={'X':testF, 'y':testY},\
                               config=config_classifier)
         devacc, testacc, yhat = clf.run()

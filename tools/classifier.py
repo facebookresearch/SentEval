@@ -172,10 +172,12 @@ class MLP(PyTorchClassifier):
 
         self.model = nn.Sequential(
             nn.Linear(self.inputdim, self.hiddendim),
-            nn.Sigmoid(),
+            # TODO : add parameter p for dropout
+            nn.Dropout(p=0.25),
+            nn.Tanh(),
             nn.Linear(self.hiddendim, self.nclasses),
             ).cuda()
-        
+
         self.loss_fn = nn.CrossEntropyLoss().cuda()
         self.loss_fn.size_average = False
         self.optimizer = optim.Adam(self.model.parameters(), weight_decay=self.l2reg)

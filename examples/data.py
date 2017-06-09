@@ -50,11 +50,13 @@ def get_batch(batch_sentences, index_pad = 1e9 + 2):
     for i in xrange(len(batch_sentences)):
         batch[:lengths[i], i] = torch.LongTensor(batch_sentences[i])
     return batch, lengths
-    
+
+# Get word vectors from vocabulary (glove, word2vec, fasttext ..)
 def get_wordvec(path_to_vec, word2id):
     word_vec = {}
     n_found = 0
     with open(path_to_vec) as f:
+        # if word2vec or fasttext file : skip first line "next(f)"
         for line in f:
             word = line.split(' ', 1)[0]
             if word in word2id:

@@ -10,11 +10,8 @@
 Image Annotation/Retrieval with COCO
 '''
 
-import codecs
 import os
 import copy
-import json
-import scipy.io
 import logging
 import cPickle
 import numpy as np

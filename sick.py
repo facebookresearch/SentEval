@@ -10,7 +10,6 @@
 SICK Relatedness and Entailment
 '''
 
-import codecs
 import os
 import logging
 import numpy as np
@@ -195,7 +194,8 @@ class SICKEntailmentEval(SICKRelatednessEval):
         testF = np.c_[np.abs(testA - testB), testA * testB]
         testY = np.array(self.sick_data['test']['y'])
         
-        config_classifier = {'nclasses':3, 'seed':self.seed, 'usepytorch':params.usepytorch}
+        config_classifier = {'nclasses':3, 'seed':self.seed, 'usepytorch':params.usepytorch,\
+                             'classifier':params.classifier, 'nhid': params.nhid}
         clf = SplitClassifier(X={'train':trainF, 'valid':devF, 'test':testF},
                               y={'train':trainY, 'valid':devY, 'test':testY},
                               config=config_classifier)

@@ -21,17 +21,17 @@ from tools.validation import SplitClassifier
 class SNLIEval(object):
     def __init__(self, taskpath, seed=1111):
         self.seed = seed
-        train1 = self.loadFile(taskpath + '/s1.train')
-        train2 = self.loadFile(taskpath + '/s2.train')
-        trainlabels = open(taskpath + '/labels.train').read().splitlines()
+        train1 = self.loadFile(os.path.join(taskpath, 's1.train'))
+        train2 = self.loadFile(os.path.join(taskpath, 's2.train'))
+        trainlabels = open(os.path.join(taskpath, 'labels.train')).read().splitlines()
 
-        valid1 = self.loadFile(taskpath + '/s1.dev')
-        valid2 = self.loadFile(taskpath + '/s2.dev')
-        validlabels = open(taskpath + '/labels.dev').read().splitlines()
+        valid1 = self.loadFile(os.path.join(taskpath, 's1.dev'))
+        valid2 = self.loadFile(os.path.join(taskpath, 's2.dev'))
+        validlabels = open(os.path.join(taskpath, 'labels.dev')).read().splitlines()
 
-        test1 = self.loadFile(taskpath + '/s1.test')
-        test2 = self.loadFile(taskpath + '/s2.test')
-        testlabels = open(taskpath + '/labels.test').read().splitlines()
+        test1 = self.loadFile(os.path.join(taskpath, 's1.test'))
+        test2 = self.loadFile(os.path.join(taskpath, 's2.test'))
+        testlabels = open(os.path.join(taskpath, 'labels.test')).read().splitlines()
 
         # sort data (by s2 first) to reduce padding
         sorted_train = sorted(zip(train2, train1, trainlabels), key=lambda z:(len(z[0]), len(z[1]), z[2]))
@@ -80,7 +80,8 @@ class SNLIEval(object):
             self.X[key] = np.vstack(enc_input)
             self.y[key] = [int(x[0])-1 for x in mylabels] # we are zero-indexed so -1
 
-        config_classifier = {'nclasses':3, 'seed':self.seed, 'usepytorch':params.usepytorch, 'cudaEfficient': True}
+        config_classifier = {'nclasses':3, 'seed':self.seed, 'usepytorch':params.usepytorch, 'cudaEfficient': True,\
+                            'classifier':params.classifier, 'nhid': params.nhid}
         clf = SplitClassifier(self.X, self.y, config_classifier)
         devacc, testacc = clf.run()
         logging.debug('Dev acc : {0} Test acc : {1} for SNLI\n'.format(devacc, testacc))
