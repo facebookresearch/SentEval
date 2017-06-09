@@ -28,7 +28,7 @@ To get all the transfer tasks datasets, run (in data/) :
 ```bash
 ./get_transfer_data.bash
 ```
-This will automatically download and preprocess the datasets, and put them in /data/senteval_data.
+This will automatically download and preprocess the datasets, and put them in data/senteval_data.
 
 WARNING : Downloading the [MRPC](https://www.microsoft.com/en-us/download/details.aspx?id=52398) dataset requires the "[cabextract](https://www.cabextract.org.uk/#install)" command line (sudo apt-get/yum/brew install cabextract) to extract the provided Microsoft-specific MSI file.
 
