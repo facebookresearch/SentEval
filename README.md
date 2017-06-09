@@ -13,7 +13,7 @@ This code is written in python. The dependencies are :
 
 ## Tasks
 
-See [here](https://arxiv.org/pdf/1705.02364.pdf) for a detailed description of the available tasks.
+SentEval allows you to evaluate fixed-size sentence representations as features for the following tasks ([more details on the tasks](https://arxiv.org/pdf/1705.02364.pdf)).
 * Binary classification : [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (movie review), [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (product review), [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (subjectivity status), [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (opinion-polarity), [SST](https://nlp.stanford.edu/sentiment/index.html) (Stanford sentiment analysis)
 * Multi-class classification : [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/) (question-type classification), [SST](http://www.aclweb.org/anthology/P13-1045) (fine-grained Stanford sentiment analysis)
 * Entailment (NLI) : [SNLI](https://nlp.stanford.edu/projects/snli/) (caption-based NLI), [MultiNLI](https://www.nyu.edu/projects/bowman/multinli/) (Multi-genre NLI), [SICK](http://clic.cimec.unitn.it/composes/sick.html) (Sentences Involving Compositional Knowledge, entailment)
