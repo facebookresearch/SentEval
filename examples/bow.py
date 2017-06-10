@@ -43,16 +43,13 @@ def batcher(batch, params):
     embeddings = []
     
     for sent in batch:
-        sentvec = np.zeros(params.emb_dim)
-        nbwords = 0
+        sentvec = []
         for word in sent:
             if word in params.word_vec:
-                sentvec += params.word_vec[word]
-                nbwords += 1
-        if nbwords == 0:
-            sentvec = params.word_vec['.']
-            nbwords += 1
-        sentvec /= nbwords
+                sentvec.append(params.word_vec[word])
+        if not sentvec:
+            sentvec.append(params.word_vec['.'])
+        sentvec = np.mean(sentvec, 0)
         embeddings.append(sentvec)
 
     embeddings = np.vstack(embeddings)

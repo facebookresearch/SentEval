@@ -20,10 +20,8 @@ def create_dictionary(sentences, threshold=0):
     words = {}
     for s in sentences:
         for word in s:
-            if word in words:
-                words[word] += 1
-            else:
-                words[word] = 1
+            words[word] = words.get(word, 0) + 1
+            
     if threshold > 0:
         newwords = {}
         for word in words:
@@ -54,14 +52,13 @@ def get_batch(batch_sentences, index_pad = 1e9 + 2):
 # Get word vectors from vocabulary (glove, word2vec, fasttext ..)
 def get_wordvec(path_to_vec, word2id):
     word_vec = {}
-    n_found = 0
+
     with open(path_to_vec) as f:
         # if word2vec or fasttext file : skip first line "next(f)"
         for line in f:
             word = line.split(' ', 1)[0]
             if word in word2id:
                 word_vec[word] = np.array(list(map(float, line.split(' ', 1)[1].split(' '))))
-                n_found += 1
                 
-    logging.info('Found {0} words with word vectors, out of {1} words'.format(n_found, len(word2id)))                
+    logging.info('Found {0} words with word vectors, out of {1} words'.format(len(word_vec), len(word2id)))                
     return word_vec

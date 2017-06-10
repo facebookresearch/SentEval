@@ -1,6 +1,6 @@
 # SentEval
 
-SentEval is a library for evaluating the quality of sentence embeddings as features for a broad and diverse set of "transfer" tasks. It is aimed to ease the study and the development of better general-purpose fixed-size sentence representations (see [InferSent](https://arxiv.org/pdf/1705.02364.pdf) for a comparison of existing methods).
+SentEval is a library for evaluating the quality of sentence embeddings as features for a broad and diverse set of "transfer" tasks. It is aimed to ease the study and the development of better general-purpose fixed-size sentence representations.
 
 ## Dependencies
 
@@ -13,7 +13,7 @@ This code is written in python. The dependencies are :
 
 ## Tasks
 
-SentEval allows you to evaluate fixed-size sentence representations as features for the following tasks ([more details on the tasks](https://arxiv.org/pdf/1705.02364.pdf)).
+SentEval allows you to evaluate your sentence embeddings as features for the following tasks :
 * Binary classification : [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (movie review), [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (product review), [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (subjectivity status), [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (opinion-polarity), [SST](https://nlp.stanford.edu/sentiment/index.html) (Stanford sentiment analysis)
 * Multi-class classification : [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/) (question-type classification), [SST](http://www.aclweb.org/anthology/P13-1045) (fine-grained Stanford sentiment analysis)
 * Entailment (NLI) : [SNLI](https://nlp.stanford.edu/projects/snli/) (caption-based NLI), [MultiNLI](https://www.nyu.edu/projects/bowman/multinli/) (Multi-genre NLI), [SICK](http://clic.cimec.unitn.it/composes/sick.html) (Sentences Involving Compositional Knowledge, entailment)
@@ -21,6 +21,7 @@ SentEval allows you to evaluate fixed-size sentence representations as features 
 * Paraphrase detection : [MRPC](https://aclweb.org/aclwiki/index.php?title=Paraphrase_Identification_(State_of_the_art)) (Microsoft Research Paraphrase Corpus)
 * Caption-Image retrieval : [COCO](http://mscoco.org/) dataset (with ResNet-101 2048d image embeddings)
 
+[more details on the tasks](https://arxiv.org/pdf/1705.02364.pdf)
 
 ## Download datasets
 To get all the transfer tasks datasets, run (in data/) :
@@ -42,9 +43,9 @@ To get GloVe embeddings, run (in examples/):
 ./get_glove.bash
 ```
 
-To reproduce the results for avg(GloVe) vectors, run :  
+To reproduce the results for avg(GloVe) vectors, run (in examples/):  
 ```bash
-python examples/bow.py
+python bow.py
 ```
 
 Logistic regression in pytorch is quite fast, though for inner cross-validation it takes a bit of time to converge since it has to learn a model k * k_inner * #grid.
