@@ -34,7 +34,7 @@ MRPC='https://download.microsoft.com/download/D/4/6/D46FF87A-F6B9-4252-AA8B-3604
 mkdir -p $data_path/SST/binary
 for split in train dev test
 do
-    curl -o $data_path/SST/binary/sentiment-$split $SST/sentiment-$split
+    curl -Lo $data_path/SST/binary/sentiment-$split $SST/sentiment-$split
 done
 
 
@@ -45,7 +45,7 @@ done
 # STS14
 echo $data_path/STS
 mkdir $data_path/STS
-curl -o $data_path/data_sts.zip $STS14
+curl -Lo $data_path/data_sts.zip $STS14
 unzip $data_path/data_sts.zip -d $data_path
 mv $data_path/sts-en-test-gs-2014 $data_path/STS/STS14
 rm $data_path/data_sts.zip
@@ -60,7 +60,7 @@ do
 done
 
 # STSBenchmark
-curl -o $data_path/Stsbenchmark.tar.gz $STSBenchmark
+curl -Lo $data_path/Stsbenchmark.tar.gz $STSBenchmark
 tar -zxvf $data_path/Stsbenchmark.tar.gz -C $data_path
 rm $data_path/Stsbenchmark.tar.gz
 mv $data_path/stsbenchmark $data_path/STS/STSBenchmark
@@ -85,7 +85,7 @@ mkdir $data_path/TREC
 for split in train_5500 TREC_10
 do
     urlname=$TREC/$split.label
-    curl -o $data_path/TREC/$split.label $urlname
+    curl -Lo $data_path/TREC/$split.label $urlname
 done
 
 
@@ -97,7 +97,7 @@ mkdir $data_path/SICK
 for split in train trial test_annotated
 do
     urlname=$SICK/sick_$split.zip
-    curl -o $data_path/SICK/sick_$split.zip $urlname
+    curl -Lo $data_path/SICK/sick_$split.zip $urlname
     unzip $data_path/SICK/sick_$split.zip -d $data_path/SICK/
     rm $data_path/SICK/readme.txt
     rm $data_path/SICK/sick_$split.zip
@@ -122,7 +122,7 @@ done
 
 ### download MR CR SUBJ MPQA
 # Download and unzip file
-curl -o $data_path/data_classif.zip $BINCLASSIF
+curl -Lo $data_path/data_classif.zip $BINCLASSIF
 unzip $data_path/data_classif.zip -d $data_path/data_bin_classif
 rm $data_path/data_classif.zip
 
@@ -151,7 +151,7 @@ rm -r $data_path/data_bin_classif
 
 ### download SNLI
 mkdir $data_path/SNLI
-curl -o $data_path/SNLI/snli_1.0.zip $SNLI
+curl -Lo $data_path/SNLI/snli_1.0.zip $SNLI
 unzip $data_path/SNLI/snli_1.0.zip -d $data_path/SNLI
 rm $data_path/SNLI/snli_1.0.zip
 rm -r $data_path/SNLI/__MACOSX
@@ -175,7 +175,7 @@ rm -r $data_path/SNLI/snli_1.0
 mkdir $data_path/COCO
 for split in train valid test
 do
-    curl -o $data_path/COCO/$split.pkl $COCO/$split.pkl
+    curl -Lo $data_path/COCO/$split.pkl $COCO/$split.pkl
 done
 
 
@@ -189,7 +189,7 @@ sudo yum install cabextract
 sudo brew install cabextract
 
 mkdir $data_path/MRPC
-curl -o $data_path/MRPC/MSRParaphraseCorpus.msi $MRPC
+curl -Lo $data_path/MRPC/MSRParaphraseCorpus.msi $MRPC
 cabextract $data_path/MRPC/MSRParaphraseCorpus.msi -d $data_path/MRPC
 # ****HACK**** renaming files
 cat $data_path/MRPC/_2DEC3DBE877E4DB192D17C0256E90F1D | tr -d $'\r' > $data_path/MRPC/msr_paraphrase_train.txt

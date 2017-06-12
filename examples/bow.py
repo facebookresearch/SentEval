@@ -16,7 +16,7 @@ from exutil import dotdict
 import data
 
 # Set PATHs
-PATH_TO_SENTEVAL = '/home/aconneau/notebooks/senteval/'
+PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data/senteval_data/'
 PATH_TO_GLOVE = 'glove/glove.840B.300d.txt'
                 
@@ -59,7 +59,6 @@ def batcher(batch, params):
 def prepare(params, samples):
     _, params.word2id = data.create_dictionary(samples)
     params.word_vec = data.get_wordvec(PATH_TO_GLOVE, params.word2id)
-    params.emb_dim = len(params.word_vec[params.word_vec.keys()[0]])
     return
 
 
@@ -72,7 +71,7 @@ torch.cuda.set_device(1)
 
 if __name__ == "__main__":
     params_senteval.model = None # No model here, just for illustration purposes
-    se = senteval.SentEval(batcher, prepare, params_senteval)
+    se = senteval.SentEval(batcher, prepare, params_senteval)#'MR', 'CR', 'SUBJ','MPQA', 
     transfer_tasks = ['MR', 'CR', 'SUBJ','MPQA', 'SST', 'TREC', 'SICKRelatedness',\
                       'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation']
     results = se.eval(transfer_tasks)

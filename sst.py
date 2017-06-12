@@ -59,7 +59,8 @@ class SSTBinaryEval(object):
             sst_embed[key]['y'] = np.array(self.sst_data[key]['y'])
             logging.info('Computed {0} embeddings'.format(key))
 
-        config_classifier = {'nclasses':2, 'seed':self.seed, 'usepytorch':params.usepytorch}
+        config_classifier = {'nclasses':2, 'seed':self.seed, 'usepytorch':params.usepytorch,
+                            'classifier':params.classifier, 'nhid': params.nhid}
         clf = SplitClassifier(X={'train':sst_embed['train']['X'], 'valid':sst_embed['dev']['X'], 'test':sst_embed['test']['X']},
                               y={'train':sst_embed['train']['y'], 'valid':sst_embed['dev']['y'], 'test':sst_embed['test']['y']},
                               config=config_classifier)
