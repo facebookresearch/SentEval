@@ -69,7 +69,8 @@ class TRECEval(object):
         test_embeddings = np.vstack(test_embeddings)
         logging.info('Computed test embeddings')
         
-        config_classifier = {'nclasses':6, 'seed':self.seed, 'usepytorch':params.usepytorch}
+        config_classifier = {'nclasses':6, 'seed':self.seed, 'usepytorch':params.usepytorch,\
+                            'classifier':params.classifier, 'nhid': params.nhid}
         clf = KFoldClassifier({'X':train_embeddings, 'y':np.array(train_labels)},
                               {'X':test_embeddings, 'y':np.array(test_labels)},
                               config_classifier)

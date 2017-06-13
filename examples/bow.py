@@ -63,7 +63,7 @@ def prepare(params, samples):
 
 
 # Set params for SentEval
-params_senteval = {'seed': 1111, 'task_path': PATH_TO_DATA, 'usepytorch': False, 'batch_size': 64,'verbose': 2, 'classifier':'LogReg'}
+params_senteval = {'seed': 1111, 'task_path': PATH_TO_DATA, 'usepytorch': True, 'batch_size': 64,'verbose': 2, 'classifier':'LogReg'}
 params_senteval = dotdict(params_senteval)
 
 # set pytorch cuda device
@@ -71,9 +71,9 @@ torch.cuda.set_device(1)
 
 if __name__ == "__main__":
     params_senteval.model = None # No model here, just for illustration purposes
-    se = senteval.SentEval(batcher, prepare, params_senteval)#'MR', 'CR', 'SUBJ','MPQA', 
-    transfer_tasks = ['MR', 'CR', 'SUBJ','MPQA', 'SST', 'TREC', 'SICKRelatedness',\
-                      'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation']
+    se = senteval.SentEval(batcher, prepare, params_senteval) #'MR', 'CR', 'SUBJ','MPQA', 
+    transfer_tasks = ['ImageAnnotation']
+    # ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SNLI', 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'STS14', 'ImageAnnotation']
     results = se.eval(transfer_tasks)
 
     

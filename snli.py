@@ -20,6 +20,7 @@ from tools.validation import SplitClassifier
 
 class SNLIEval(object):
     def __init__(self, taskpath, seed=1111):
+        logging.debug('***** Transfer task : SNLI Entailment*****\n\n')
         self.seed = seed
         train1 = self.loadFile(os.path.join(taskpath, 's1.train'))
         train2 = self.loadFile(os.path.join(taskpath, 's2.train'))
@@ -60,6 +61,7 @@ class SNLIEval(object):
 
     def run(self, batcher, params):
         self.X, self.y = {}, {}
+        dico_label = {'entailment':0,  'neutral':1, 'contradiction':2}
         for key in self.data:
             if key not in self.X: self.X[key] = []
             if key not in self.y: self.y[key] = []
@@ -78,7 +80,7 @@ class SNLIEval(object):
                 if (ii*params.batch_size) % (20000*params.batch_size) == 0:
                     logging.info("PROGRESS (encoding): %.2f%%" % (100 * ii / n_labels))
             self.X[key] = np.vstack(enc_input)
-            self.y[key] = [int(x[0])-1 for x in mylabels] # we are zero-indexed so -1
+            self.y[key] = [dico_label[y] for y in mylabels] # we are zero-indexed so -1
 
         config_classifier = {'nclasses':3, 'seed':self.seed, 'usepytorch':params.usepytorch, 'cudaEfficient': True,\
                             'classifier':params.classifier, 'nhid': params.nhid}

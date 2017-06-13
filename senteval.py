@@ -35,7 +35,7 @@ class SentEval(object):
         params.verbose = params.verbose or 2
         params.seed = params.seed or 1111
         self.params = params
-        
+                
         self.batcher = batcher
         self.prepare = prepare
         

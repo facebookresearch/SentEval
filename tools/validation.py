@@ -44,7 +44,7 @@ class InnerKFoldClassifier(object):
         self.nhid = config['nhid']
         self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else 'pytorch-' + config['classifier']
 
-        self.k = 3
+        self.k = 10
         
     def run(self):
         logging.info('Training {0} with (inner) {1}-fold cross-validation'.format(self.modelname, self.k))
@@ -110,7 +110,7 @@ class KFoldClassifier(object):
         self.nhid = config['nhid']
         self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else 'pytorch-' + config['classifier']
 
-        self.k = 3
+        self.k = 10
 
     def run(self):
         # cross-validation
