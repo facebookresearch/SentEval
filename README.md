@@ -54,10 +54,8 @@ As required by SentEval, this script implements two functions : **batcher** (req
 
 To evaluate your own sentence embedding method, you will need to implement two functions : 
 
-1. **batcher**
-2. **prepare**
-
-where *batcher* will be given a minibatch of text sentences and must transform it into embeddings, while *prepare* sees the whole dataset of each task and can construct the word vocabulary, the dictionary of word vectors etc.
+1. **batcher** (transforms a minibatch of text sentences into sentence embeddings)
+2. **prepare** (sees the whole dataset of each task and can construct the word vocabulary, the dictionary of word vectors etc)
 
 ### 1.) batcher(batch, params)
 ```
