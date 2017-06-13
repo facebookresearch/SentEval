@@ -46,6 +46,9 @@ class SentEval(object):
         if not params.usepytorch and params.classifier == 'MLP':
             assert False, 'No MLP implemented in scikit-learn'        
         
+        self.list_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SICKRelatedness',\
+                      'SICKEntailment', 'STSBenchmark', 'STS14', 'SNLI', 'ImageAnnotation']        
+        
         # Set up logger
         logging_level = logging.WARNING if params.verbose==0\
                    else logging.INFO if params.verbose==1\
@@ -67,6 +70,7 @@ class SentEval(object):
             self.results = {x:self.eval(x) for x in name}
             return self.results
 
+        assert name in self.list_tasks, str(name) + ' not in ' + str(self.list_tasks)
         if name == 'CR':
             self.evaluation = CREval(self.params.task_path + '/CR', seed=self.params.seed)
         elif name == 'MR':
@@ -93,7 +97,7 @@ class SentEval(object):
             self.evaluation = STS14Eval(self.params.task_path + '/STS/STS14', seed=self.params.seed)
         elif name == 'ImageAnnotation':
             self.evaluation = ImageAnnotationEval(self.params.task_path + '/COCO', seed=self.params.seed)
-        
+
         self.params.current_task = name
         self.evaluation.do_prepare(self.params, self.prepare)
         

@@ -44,14 +44,14 @@ class InnerKFoldClassifier(object):
         self.nhid = config['nhid']
         self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else 'pytorch-' + config['classifier']
 
-        self.k = 5
+        self.k = 3
         
     def run(self):
         logging.info('Training {0} with (inner) {1}-fold cross-validation'.format(self.modelname, self.k))
 
         regs = [10**t for t in range(-5,-1)] if self.usepytorch else [2**t for t in range(-2,4,1)]
         skf = StratifiedKFold(n_splits=self.k, shuffle=True, random_state=1111)
-        innerskf = StratifiedKFold(n_splits=3, shuffle=True, random_state=1111)
+        innerskf = StratifiedKFold(n_splits=5, shuffle=True, random_state=1111)
         count = 0
         for train_idx, test_idx in skf.split(self.X, self.y):
             count += 1

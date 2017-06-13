@@ -184,9 +184,9 @@ done
 ### download MRPC
 # This extraction needs "cabextract" to extract the MSI file
 
-sudo apt-get install cabextract
-sudo yum install cabextract
-sudo brew install cabextract
+# sudo apt-get install cabextract
+# sudo yum install cabextract
+# sudo brew install cabextract
 
 mkdir $data_path/MRPC
 curl -Lo $data_path/MRPC/MSRParaphraseCorpus.msi $MRPC
