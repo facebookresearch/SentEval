@@ -72,8 +72,7 @@ torch.cuda.set_device(1)
 if __name__ == "__main__":
     params_senteval.model = None # No model here, just for illustration purposes
     se = senteval.SentEval(batcher, prepare, params_senteval) #'MR', 'CR', 'SUBJ','MPQA', 
-    transfer_tasks = ['ImageAnnotation']
-    # ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SNLI', 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'STS14', 'ImageAnnotation']
+    transfer_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SNLI', 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'STS14', 'ImageAnnotation']
     results = se.eval(transfer_tasks)
 
     
