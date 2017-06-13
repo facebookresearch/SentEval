@@ -65,7 +65,7 @@ batcher(batch, params)
 * *params* : senteval parameters (note that "prepare" outputs are stored in params).
 * *output* : numpy array of sentence embeddings (of size params.batch_size)
 
-In bow.py, batcher is used to compute the mean of the word vectors for each sentence in the batch using params.word_vec.
+*Example* : in bow.py, batcher is used to compute the mean of the word vectors for each sentence in the batch using params.word_vec.
 
 ### 2.) prepare(params, samples)
 
@@ -78,7 +78,7 @@ prepare(params, samples)
 * *params* : senteval parameters (note that "prepare" outputs are stored in params).
 * *output* : None. Any "output" computed in this function is stored in "params" and can be further used by *batcher*.
 
-In bow.py, prepare is is used to build the vocabulary of words and construct the "params.word_vect* dictionary of word vectors.
+*Example* : in bow.py, prepare is is used to build the vocabulary of words and construct the "params.word_vect* dictionary of word vectors.
 
 ### 3.) evaluation on transfer tasks
 
@@ -89,6 +89,7 @@ After having implemented the batch and prepare function for your own sentence em
 import senteval
 se = senteval.SentEval(batcher, prepare, params_senteval)
 ```
+(to import senteval, you can either add senteval path to your pythonpath or use sys.path.insert)
 2) define the set of transfer tasks on which you want SentEval to perform evaluation and run the evaluation : 
 ```python
 transfer_tasks = ['SST', 'SNLI']
