@@ -90,6 +90,7 @@ import senteval
 se = senteval.SentEval(batcher, prepare, params_senteval)
 ```
 (to import senteval, you can either add senteval path to your pythonpath or use sys.path.insert)
+
 2) define the set of transfer tasks on which you want SentEval to perform evaluation and run the evaluation : 
 ```python
 transfer_tasks = ['SST', 'SNLI']
