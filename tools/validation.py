@@ -178,8 +178,7 @@ class SplitClassifier(object):
         self.usepytorch = config['usepytorch']
         self.classifier = config['classifier']
         self.nhid = config['nhid']
-        if 'cudaEfficient' not in config:
-            self.cudaEfficient = False
+        self.cudaEfficient = False if 'cudaEfficient' not in config else config['cudaEfficient']
         self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else 'pytorch-' + config['classifier']
         
     def run(self):
