@@ -50,6 +50,13 @@ python bow.py
 
 As required by SentEval, this script implements two functions : **batcher** (required), and **prepare** (optional) that turn text sentences into sentence embeddings. Then SentEval takes care of the evaluation on the transfer tasks using the embeddings as features.
 
+### examples/infersent.py
+
+To get the InferSent model, download our model and run infersent.py (in examples/):
+```bash
+curl -Lo examples/infersent.pickle https://s3.amazonaws.com/senteval/infersent/infersent.pickle
+```
+
 ## How SentEval works
 
 To evaluate your own sentence embedding method, you will need to implement two functions : 

@@ -8,9 +8,7 @@
 
 import sys
 import numpy as np
-
 import torch
-from torch.autograd import Variable
 
 from exutil import dotdict
 import data
@@ -26,9 +24,9 @@ import senteval
 
 
 """
-Note : 
+Note: 
 
-The user has to implement two functions :
+The user has to implement two functions:
     1) "batcher" : transforms a batch of sentences into sentence embeddings.
         i) takes as input a "batch", and "params".
         ii) outputs a numpy array of sentence embeddings
@@ -63,10 +61,10 @@ def prepare(params, samples):
 
 
 # Set params for SentEval
-params_senteval = {'seed': 1111, 'task_path': PATH_TO_DATA, 'usepytorch': True, 'batch_size': 64,'verbose': 2, 'classifier':'LogReg'}
+params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': False}
 params_senteval = dotdict(params_senteval)
 
-# set pytorch cuda device
+# set gpu device
 torch.cuda.set_device(1)
 
 if __name__ == "__main__":

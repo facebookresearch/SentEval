@@ -6,34 +6,28 @@
 # of patent rights can be found in the PATENTS file in the same directory.
 #
 
+"""
+Example of file to compare skipthought vectors with our InferSent model
+"""
+
 import sys
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
 import torch
-from torch.autograd import Variable
-
-import data
 from exutil import dotdict
 
-# get path to SentEval
-import getpass
-username = getpass.getuser()
 
 # Set PATHs
-PATH_TO_SKIPTHOUGHT = '/home/aconneau/notebooks/sentence2vec/skipthought/'
-PATH_TO_SENTEVAL = '/home/{0}/fbsource/fbcode/experimental/deeplearning/dkiela/senteval/'.format(username)
-PATH_TO_DATA = '/mnt/vol/gfsai-east/ai-group/users/aconneau/projects/sentence-encoding/transfer-tasks-automatic/'
+PATH_TO_SENTEVAL = '../'
+PATH_TO_DATA = '../data/senteval_data/'
+PATH_TO_SKIPTHOUGHT = ''
+assert PATH_TO_SKIPTHOUGHT != '', 'Download skipthought and 
 
-
+# import skipthought and Senteval
 sys.path.insert(0, PATH_TO_SKIPTHOUGHT)
-import skipthoughts
-                
-# get path to SentEval
-import getpass
-username = getpass.getuser()
-# import SentEval
 sys.path.insert(0, PATH_TO_SENTEVAL)
+import skipthoughts
 import senteval
 
 
@@ -50,19 +44,16 @@ def prepare(params, samples):
 # Set params for SentEval
 params_senteval = {'usepytorch':True,
                    'task_path':PATH_TO_DATA,
-                   'seed':1111,
                    'batch_size':512}
 params_senteval = dotdict(params_senteval)
-torch.cuda.set_device(2)
+torch.cuda.set_device(1)
 
 
 
 if __name__ == "__main__":
     params_senteval.encoder = skipthoughts.load_model()
     se = senteval.SentEval(batcher, prepare, params_senteval)
-    #se.eval(['TREC'])
-    se.eval(['MR'])
-    # se.eval(['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
+    se.eval(['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
 
     
     
