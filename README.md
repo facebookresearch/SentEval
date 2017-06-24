@@ -52,9 +52,10 @@ As required by SentEval, this script implements two functions : **batcher** (req
 
 ### examples/infersent.py
 
-To get the InferSent model, download our model and run infersent.py (in examples/):
+To get the InferSent model and reproduce our results, download our best models and run infersent.py (in examples/):
 ```bash
-curl -Lo examples/infersent.pickle https://s3.amazonaws.com/senteval/infersent/infersent.pickle
+curl -Lo encoder/infersent.allnli.pickle https://s3.amazonaws.com/senteval/infersent/infersent.allnli.pickle
+curl -Lo encoder/infersent.snli.pickle https://s3.amazonaws.com/senteval/infersent/infersent.snli.pickle
 ```
 
 ## How SentEval works
