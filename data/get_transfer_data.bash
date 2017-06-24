@@ -86,6 +86,8 @@ for split in train_5500 TREC_10
 do
     urlname=$TREC/$split.label
     curl -Lo $data_path/TREC/$split.label $urlname
+    sed -i -e "s/\`//g" $data_path/TREC/$split.label
+    sed -i -e "s/'//g" $data_path/TREC/$split.label
 done
 
 

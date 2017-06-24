@@ -140,7 +140,21 @@ class BLSTMEncoder(nn.Module):
         
         # filters words without glove vectors
         for i in range(len(sentences)):
-            s_f = [word if word in self.word_vec else '<p>' for word in sentences[i]]
+            s_f = [word for word in sentences[i] if word in self.word_vec]
+            
+            if False:
+                s_f = []
+                prev_is_pad = False
+                for word in sentences[i]:
+                    if word in self.word_vec:
+                        s_f.append(word)
+                    else:
+                        if not prev_is_pad:
+                            s_f.append('<p>')
+                            prev_is_pad = True
+                        else:
+                            prev_is_pad = False
+                        
             if not s_f:
                 import warnings
                 warnings.warn('No words in "{0}" (idx={1}) have glove vectors. Replacing by "</s>"..'.format(sentences[i], i))

@@ -8,6 +8,7 @@
 
 import sys
 import numpy as np
+import logging
 import torch
 
 from exutil import dotdict
@@ -36,6 +37,12 @@ The user has to implement two functions:
 """
 
 
+def prepare(params, samples):
+    _, params.word2id = data.create_dictionary(samples)
+    params.word_vec = data.get_wordvec(PATH_TO_GLOVE, params.word2id)
+    return
+
+
 def batcher(batch, params):
     batch = [sent if sent!=[] else ['.'] for sent in batch]
     embeddings = []
@@ -52,12 +59,6 @@ def batcher(batch, params):
 
     embeddings = np.vstack(embeddings)
     return embeddings
-            
-
-def prepare(params, samples):
-    _, params.word2id = data.create_dictionary(samples)
-    params.word_vec = data.get_wordvec(PATH_TO_GLOVE, params.word2id)
-    return
 
 
 # Set params for SentEval
@@ -67,9 +68,12 @@ params_senteval = dotdict(params_senteval)
 # set gpu device
 torch.cuda.set_device(1)
 
+# Set up logger
+logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.INFO)
+
 if __name__ == "__main__":
     se = senteval.SentEval(batcher, prepare, params_senteval)
-    transfer_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SNLI', 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'STS14', 'ImageAnnotation']
+    transfer_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'STS14']
     results = se.eval(transfer_tasks)
 
     

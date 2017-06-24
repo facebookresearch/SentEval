@@ -21,7 +21,7 @@ from torch.autograd import Variable
 import torch.optim as optim
 
 class PyTorchClassifier(object):
-    def __init__(self, inputdim, nclasses, l2reg=0., batch_size=64, seed=1111, cudaEfficient=False):
+    def __init__(self, inputdim, nclasses, l2reg=0., batch_size=64, seed=1111, cudaEfficient=False, nepoches=4, maxepoch=200):
         # fix seed
         np.random.seed(seed)
         torch.manual_seed(seed)
@@ -32,6 +32,8 @@ class PyTorchClassifier(object):
         self.l2reg = l2reg
         self.batch_size = batch_size
         self.cudaEfficient = cudaEfficient
+        self.nepoches = nepoches
+        self.maxepoch = maxepoch
     
     def prepare_split(self, X, y, validation_data=None, validation_split=None):
         # Preparing validation data
@@ -59,9 +61,8 @@ class PyTorchClassifier(object):
 
         return trainX, trainy, devX, devy
 
-    def fit(self, X, y, validation_data=None, validation_split=None, early_stop=True, maxepoch=200):
+    def fit(self, X, y, validation_data=None, validation_split=None, early_stop=True):
         self.nepoch = 0
-        self.maxepoch = maxepoch
         bestaccuracy = -1
         stop_train = False
         early_stop_count = 0
@@ -71,7 +72,7 @@ class PyTorchClassifier(object):
         
         # Training
         while not stop_train and self.nepoch<=self.maxepoch:
-            self.trainepoch(trainX, trainy, nepoches=4)
+            self.trainepoch(trainX, trainy, nepoches=self.nepoches)
             accuracy = self.score(devX, devy)
             if accuracy > bestaccuracy:
                 bestaccuracy = accuracy

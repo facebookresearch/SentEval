@@ -9,6 +9,7 @@
 """
 Example of file to compare skipthought vectors with our InferSent model
 """
+import logging
 
 import sys
 reload(sys)  
@@ -31,14 +32,14 @@ import skipthoughts
 import senteval
 
 
+def prepare(params, samples):
+    return
+
 def batcher(batch, params):
     embeddings = skipthoughts.encode(params.encoder, [unicode(' '.join(sent), errors="ignore")\
                                      if sent!=[] else '.' for sent in batch],\
                                      verbose=False, use_eos=True)
     return embeddings
-
-def prepare(params, samples):
-    return
 
 
 # Set params for SentEval
@@ -46,9 +47,12 @@ params_senteval = {'usepytorch':True,
                    'task_path':PATH_TO_DATA,
                    'batch_size':512}
 params_senteval = dotdict(params_senteval)
+
+# set gpu device
 torch.cuda.set_device(1)
 
-
+# Set up logger
+logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.INFO)
 
 if __name__ == "__main__":
     params_senteval.encoder = skipthoughts.load_model()

@@ -20,10 +20,6 @@ from sts import STS14Eval, STSBenchmarkEval
 from sst import SSTBinaryEval
 from rank import ImageAnnotationEval
 
-import logging, sys
-
-logging.basicConfig(filename='test_log.log',level=logging.DEBUG,\
-      format='%(asctime)s -- %(name)s -- %(levelname)s -- %(message)s')
 
 class SentEval(object):
     def __init__(self, batcher, prepare, params):
@@ -32,7 +28,6 @@ class SentEval(object):
         params.classifier = params.classifier or 'LogReg'
         params.nhid = params.nhid or 0
         params.batch_size = params.batch_size or 128
-        params.verbose = params.verbose or 2
         params.seed = params.seed or 1111
         self.params = params
                 
@@ -49,20 +44,6 @@ class SentEval(object):
         self.list_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SICKRelatedness',\
                       'SICKEntailment', 'STSBenchmark', 'STS14', 'SNLI', 'ImageAnnotation']        
         
-        # Set up logger
-        logging_level = logging.WARNING if params.verbose==0\
-                   else logging.INFO if params.verbose==1\
-                   else logging.DEBUG
-        logging.basicConfig(stream=sys.stdout, level=logging_level,\
-                  format='%(asctime)s -- %(levelname)s -- %(message)s')
-        # set up logging to console
-        console = logging.StreamHandler()
-        console.setLevel(logging_level)
-        # set a format which is simpler for console use
-        formatter = logging.Formatter('%(asctime)s -- %(levelname)s -- %(message)s')
-        console.setFormatter(formatter)
-        # add the handler to the root logger
-        logging.getLogger().addHandler(console)
 
     def eval(self, name):
         ''' evaluate on evaluation [name], either takes string or list of strings '''

@@ -180,6 +180,8 @@ class SplitClassifier(object):
         self.nhid = config['nhid']
         self.cudaEfficient = False if 'cudaEfficient' not in config else config['cudaEfficient']
         self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else 'pytorch-' + config['classifier']
+        self.nepoches = None if 'nepoches' not in config else config['nepoches']
+        self.maxepoch = None if 'maxepoch' not in config else config['maxepoch']
         
     def run(self):
         logging.info('Training {0} with standard validation..'.format(self.modelname))
@@ -188,9 +190,14 @@ class SplitClassifier(object):
         for reg in regs:
             if self.usepytorch:
                 if self.classifier == 'LogReg':
-                    clf = LogReg(inputdim=self.featdim, nclasses=self.nclasses, l2reg=reg, seed=self.seed, cudaEfficient=self.cudaEfficient)
+                    clf = LogReg(inputdim=self.featdim, nclasses=self.nclasses, l2reg=reg,\
+                                 seed=self.seed, cudaEfficient=self.cudaEfficient)
                 elif self.classifier == 'MLP':
-                    clf = MLP(inputdim=self.featdim, hiddendim=self.nhid, nclasses=self.nclasses, l2reg=reg, seed=self.seed, cudaEfficient=self.cudaEfficient)
+                    clf = MLP(inputdim=self.featdim, hiddendim=self.nhid, nclasses=self.nclasses,\
+                              l2reg=reg, seed=self.seed, cudaEfficient=self.cudaEfficient)
+                # small hack : MultiNLI/SNLI specific
+                if self.nepoches: clf.nepoches = self.nepoches
+                if self.maxepoch: clf.maxepoch = self.maxepoch
                 clf.fit(self.X['train'], self.y['train'], validation_data=(self.X['valid'], self.y['valid']))
             else:
                 clf = LogisticRegression(C=reg, random_state=self.seed)
@@ -204,9 +211,14 @@ class SplitClassifier(object):
         logging.info('Evaluating...')
         if self.usepytorch:
             if self.classifier == 'LogReg':
-                clf = LogReg(inputdim = self.featdim, nclasses=self.nclasses, l2reg=optreg, seed=self.seed, cudaEfficient=self.cudaEfficient)
+                clf = LogReg(inputdim = self.featdim, nclasses=self.nclasses, l2reg=optreg,\
+                             seed=self.seed, cudaEfficient=self.cudaEfficient)
             elif self.classifier == 'MLP':
-                clf = MLP(inputdim = self.featdim, hiddendim=self.nhid, nclasses=self.nclasses, l2reg=optreg, seed=self.seed, cudaEfficient=self.cudaEfficient)
+                clf = MLP(inputdim = self.featdim, hiddendim=self.nhid, nclasses=self.nclasses,\
+                          l2reg=optreg, seed=self.seed, cudaEfficient=self.cudaEfficient)
+            # small hack : MultiNLI/SNLI specific
+            if self.nepoches: clf.nepoches = self.nepoches
+            if self.maxepoch: clf.maxepoch = self.maxepoch
             devacc = clf.fit(self.X['train'], self.y['train'], validation_data=(self.X['valid'], self.y['valid']))
         else:
             clf = LogisticRegression(C=optreg, random_state=self.seed)
