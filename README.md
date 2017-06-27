@@ -52,7 +52,7 @@ As required by SentEval, this script implements two functions: **prepare** (opti
 
 ### examples/infersent.py
 
-To get the **[InferSent](www.github.com/facebookresearch/InferSent)** model and reproduce our results, download our best models and run infersent.py (in examples/):
+To get the **[InferSent](https://www.github.com/facebookresearch/InferSent)** model and reproduce our results, download our best models and run infersent.py (in examples/):
 ```bash
 curl -Lo encoder/infersent.allnli.pickle https://s3.amazonaws.com/senteval/infersent/infersent.allnli.pickle
 curl -Lo encoder/infersent.snli.pickle https://s3.amazonaws.com/senteval/infersent/infersent.snli.pickle
