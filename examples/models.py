@@ -28,19 +28,11 @@ class BLSTMEncoder(nn.Module):
         self.use_cuda = config['use_cuda']
         
         self.enc_lstm = nn.LSTM(self.word_emb_dim, self.enc_lstm_dim, 1, bidirectional=True, dropout=self.dpout_model)
-        self.init_lstm = Variable(torch.FloatTensor(2, self.bsize, self.enc_lstm_dim).zero_()).cuda()
-        if self.use_cuda:
-            self.init_lstm = self.init_lstm.cuda()
     
     def forward(self, sent_tuple):
         # sent_len [max_len, ..., min_len] (batch) | sent Variable(seqlen x batch x worddim)
 
         sent, sent_len = sent_tuple        
-        
-        if sent.size(1) != self.init_lstm.size(1):
-            self.init_lstm = Variable(torch.FloatTensor(2, sent.size(1), self.enc_lstm_dim).zero_())
-            if self.use_cuda:
-                self.init_lstm = self.init_lstm.cuda()
         
         # Sort by length (keep idx)
         sent_len, idx_sort = np.sort(sent_len)[::-1], np.argsort(-sent_len)
@@ -51,7 +43,7 @@ class BLSTMEncoder(nn.Module):
         
         # Handling padding in Recurrent Networks
         sent_packed = nn.utils.rnn.pack_padded_sequence(sent, sent_len)
-        sent_output = self.enc_lstm(sent_packed, (self.init_lstm, self.init_lstm))[0] #seqlen x batch x 2*nhid
+        sent_output = self.enc_lstm(sent_packed)[0] #seqlen x batch x 2*nhid
         sent_output = nn.utils.rnn.pad_packed_sequence(sent_output)[0]
         
         # Un-sort by length
@@ -208,11 +200,9 @@ class BLSTMEncoder(nn.Module):
             warnings.warn('No words in "{0}" have glove vectors. Replacing by "<s> </s>"..'.format(sent))
         batch = Variable(self.get_batch(sent), volatile=True)
         
-        init_lstm = Variable(torch.FloatTensor(2, 1, self.enc_lstm_dim).zero_())
         if self.use_cuda:
-            init_lstm = init_lstm.cuda()
             batch = batch.cuda()
-        output = self.enc_lstm(batch, (init_lstm, init_lstm))[0]
+        output = self.enc_lstm(batch)[0]
         output, idxs = torch.max(output, 0)
         #output, idxs = output.squeeze(), idxs.squeeze()
         idxs = idxs.data.cpu().numpy()
