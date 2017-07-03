@@ -18,7 +18,7 @@ from tools.validation import KFoldClassifier
 
 class TRECEval(object):
     def __init__(self, task_path, seed=1111):
-        logging.debug('***** Transfer task : TREC *****\n\n')
+        logging.info('***** Transfer task : TREC *****\n\n')
         self.seed = seed
         self.train = self.loadFile(os.path.join(task_path, 'train_5500.label'))
         self.test = self.loadFile(os.path.join(task_path, 'TREC_10.label'))
@@ -69,7 +69,7 @@ class TRECEval(object):
         logging.info('Computed test embeddings')
         
         config_classifier = {'nclasses':6, 'seed':self.seed, 'usepytorch':params.usepytorch,\
-                            'classifier':params.classifier, 'nhid': params.nhid}
+                            'classifier':params.classifier, 'nhid': params.nhid, 'kfold': params.kfold}
         clf = KFoldClassifier({'X':train_embeddings, 'y':np.array(train_labels)},
                               {'X':test_embeddings, 'y':np.array(test_labels)},
                               config_classifier)

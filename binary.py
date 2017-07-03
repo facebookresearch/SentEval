@@ -47,7 +47,7 @@ class BinaryClassifierEval(object):
         logging.info('Generated sentence embeddings')
 
         config_classifier = {'nclasses':2, 'seed':self.seed, 'usepytorch':params.usepytorch,\
-                             'classifier':params.classifier, 'nhid': params.nhid}
+                             'classifier':params.classifier, 'nhid': params.nhid, 'kfold': params.kfold}
         clf = InnerKFoldClassifier(enc_input, np.array(sorted_labels), config_classifier)
         devacc, testacc = clf.run()
         logging.debug('Dev acc : {0} Test acc : {1}\n'.format(devacc, testacc))

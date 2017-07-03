@@ -51,7 +51,7 @@ params_senteval = dotdict(params_senteval)
 torch.cuda.set_device(1)
 
 # Set up logger
-logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
     params_senteval.encoder = skipthoughts.load_model()

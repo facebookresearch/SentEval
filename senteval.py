@@ -28,6 +28,7 @@ class SentEval(object):
         params.nhid = params.nhid or 0
         params.batch_size = params.batch_size or 128
         params.seed = params.seed or 1111
+        params.kfold = params.kfold or 5
         self.params = params
                 
         self.batcher = batcher

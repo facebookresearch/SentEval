@@ -43,14 +43,14 @@ class InnerKFoldClassifier(object):
         self.nhid = config['nhid']
         self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else 'pytorch-' + config['classifier']
 
-        self.k = 10
+        self.k = 5 if 'kfold' not in config else config['kfold']
         
     def run(self):
         logging.info('Training {0} with (inner) {1}-fold cross-validation'.format(self.modelname, self.k))
 
         regs = [10**t for t in range(-5,-1)] if self.usepytorch else [2**t for t in range(-2,4,1)]
         skf = StratifiedKFold(n_splits=self.k, shuffle=True, random_state=1111)
-        innerskf = StratifiedKFold(n_splits=5, shuffle=True, random_state=1111)
+        innerskf = StratifiedKFold(n_splits=self.k, shuffle=True, random_state=1111)
         count = 0
         for train_idx, test_idx in skf.split(self.X, self.y):
             count += 1
@@ -72,7 +72,7 @@ class InnerKFoldClassifier(object):
                         clf = LogisticRegression(C=reg, random_state=self.seed)
                         clf.fit(X_in_train, y_in_train)
                     regscores.append(clf.score(X_in_test, y_in_test))
-                scores.append(round(100*np.mean(regscores),2))
+                scores.append(round(100*np.mean(regscores), 2))
             optreg = regs[np.argmax(scores)]
             logging.info('Best param found at split {0}: l2reg = {1} with score {2}'.format(count, optreg, np.max(scores)))
             self.devresults.append(np.max(scores))
@@ -109,7 +109,7 @@ class KFoldClassifier(object):
         self.nhid = config['nhid']
         self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else 'pytorch-' + config['classifier']
 
-        self.k = 10
+        self.k = 5 if 'kfold' not in config else config['kfold']
 
     def run(self):
         # cross-validation

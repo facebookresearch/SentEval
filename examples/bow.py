@@ -61,14 +61,14 @@ def batcher(batch, params):
 
 
 # Set params for SentEval
-params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': False}
+params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': False, 'kfold':5}
 params_senteval = dotdict(params_senteval)
 
 # set gpu device
-torch.cuda.set_device(1)
+torch.cuda.set_device(0)
 
 # Set up logger
-logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
     se = senteval.SentEval(batcher, prepare, params_senteval)

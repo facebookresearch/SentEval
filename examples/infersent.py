@@ -44,15 +44,12 @@ Evaluation of trained model on Transfer Tasks (SentEval)
 # define transfer tasks
 transfer_tasks = ['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness',\
                   'SICKEntailment', 'MRPC', 'STS14']
-transfer_tasks = ['STSBenchmark']
+
 # define senteval params
-params_senteval = dotdict({'usepytorch': True,
-                           'task_path': PATH_TO_DATA,
-                           'seed':1111,
-                           })
+params_senteval = dotdict({'usepytorch': True, 'task_path': PATH_TO_DATA, 'seed':1111, 'kfold': 10})
 
 # Set up logger
-logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
     # Load model

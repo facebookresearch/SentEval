@@ -20,7 +20,7 @@ from sklearn.metrics import f1_score
         
 class MRPCEval(object):
     def __init__(self, task_path, seed=1111):
-        logging.debug('***** Transfer task : MRPC *****\n\n')
+        logging.info('***** Transfer task : MRPC *****\n\n')
         self.seed = seed
         train = self.loadFile(os.path.join(task_path, 'msr_paraphrase_train.txt'))
         test = self.loadFile(os.path.join(task_path, 'msr_paraphrase_test.txt'))
@@ -87,7 +87,7 @@ class MRPCEval(object):
         testY = mrpc_embed['test']['y']
         
         config_classifier = {'nclasses':2, 'seed':self.seed, 'usepytorch':params.usepytorch,\
-                            'classifier':params.classifier, 'nhid': params.nhid}
+                            'classifier':params.classifier, 'nhid': params.nhid, 'kfold': params.kfold}
         clf = KFoldClassifier(train={'X':trainF, 'y':trainY}, test={'X':testF, 'y':testY},\
                               config=config_classifier)
         devacc, testacc, yhat = clf.run()
