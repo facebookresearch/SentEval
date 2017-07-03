@@ -181,10 +181,12 @@ class SplitClassifier(object):
         self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else 'pytorch-' + config['classifier']
         self.nepoches = None if 'nepoches' not in config else config['nepoches']
         self.maxepoch = None if 'maxepoch' not in config else config['maxepoch']
+        self.noreg = False if 'noreg' not in config else config['noreg']
         
     def run(self):
         logging.info('Training {0} with standard validation..'.format(self.modelname))
         regs = [10**t for t in range(-5,-1)] if self.usepytorch else [2**t for t in range(-2,4,1)]
+        if self.noreg : regs=[0.]
         scores = []
         for reg in regs:
             if self.usepytorch:

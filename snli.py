@@ -82,7 +82,7 @@ class SNLIEval(object):
             self.y[key] = [dico_label[y] for y in mylabels] # we are zero-indexed so -1
 
         config_classifier = {'nclasses':3, 'seed':self.seed, 'usepytorch':params.usepytorch, 'cudaEfficient': True,\
-                            'classifier':params.classifier, 'nhid': params.nhid, 'maxepoch':15, 'nepoches':1}
+                            'classifier':params.classifier, 'nhid': params.nhid, 'maxepoch':15, 'nepoches':1, 'noreg':True}
         clf = SplitClassifier(self.X, self.y, config_classifier)
         devacc, testacc = clf.run()
         logging.debug('Dev acc : {0} Test acc : {1} for SNLI\n'.format(devacc, testacc))
