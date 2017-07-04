@@ -85,30 +85,5 @@ class SentEval(object):
         self.results = self.evaluation.run(self.batcher, self.params)
         
         return self.results
-    
-    def microavg(self, tasks, evaltype='dev'):
-        assert evaltype in ['dev', 'test'], "eval type must be in ['dev', 'test']"
-        metrics = ['acc', 'ntest'] if evaltype=='test' else ['devacc', 'ndev']
-        micro, nsamples = 0, 0
-        
-        for task in tasks:
-            micro += self.results[task][metrics[0]] * self.results[task][metrics[1]]
-            nsamples += self.results[task][metrics[1]]
-        micro /= nsamples
-        
-        return micro
-    
-    def macroavg(self, tasks, evaltype='dev'):
-        assert evaltype in ['dev', 'test'], "eval type must be in ['dev', 'test']"
-        metrics = ['acc'] if evaltype=='test' else ['devacc']
-        macro = 0
-        
-        for task in tasks:
-            macro += self.results[task][metrics[0]]
-        macro /= len(tasks)
-        
-        return macro
-    
-    
-    
-    
+
+

@@ -6,7 +6,7 @@
 #
 
 '''
-Binary classifier and corresponding datasets
+Binary classifier and corresponding datasets : MR, CR, SUBJ, MPQA
 '''
 
 import codecs

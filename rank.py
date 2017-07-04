@@ -6,7 +6,7 @@
 #
 
 '''
-Image Annotation/Retrieval with COCO
+Image-Caption Retrieval with COCO dataset
 '''
 
 import os
