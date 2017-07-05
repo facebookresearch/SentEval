@@ -165,8 +165,8 @@ class LogReg(PyTorchClassifier):
 MLP with Pytorch
 """
 class MLP(PyTorchClassifier):
-    def __init__(self, inputdim, hiddendim, nclasses, l2reg=0., batch_size=64, seed=1111):
-        super(self.__class__, self).__init__(inputdim, nclasses, l2reg, batch_size, seed)
+    def __init__(self, inputdim, hiddendim, nclasses, l2reg=0., batch_size=64, seed=1111, cudaEfficient=False):
+        super(self.__class__, self).__init__(inputdim, nclasses, l2reg, batch_size, seed, cudaEfficient)
 
         self.hiddendim = hiddendim
 
