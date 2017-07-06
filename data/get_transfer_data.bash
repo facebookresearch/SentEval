@@ -23,7 +23,17 @@ COCO='https://s3.amazonaws.com/senteval/coco_r101_feat'
 # MRPC is a special case (we use "cabextract" to extract the msi file on Linux, see below)
 MRPC='https://download.microsoft.com/download/D/4/6/D46FF87A-F6B9-4252-AA8B-3604ED519838/MSRParaphraseCorpus.msi'
 
+# STS 2012, 2013, 2014, 2015, 2016 
+declare -A STS_tasks
+declare -A STS_paths
+declare -A STS_subdirs
 
+STS_tasks=(["STS12"]="MSRpar MSRvid SMTeuroparl surprise.OnWN surprise.SMTnews" ["STS13"]="FNWN headlines OnWN" ["STS14"]="deft-forum deft-news headlines OnWN images tweet-news" ["STS15"]="answers-forums answers-students belief headlines images" ["STS16"]="answer-answer headlines plagiarism postediting question-question")
+
+STS_paths=(["STS12"]="http://ixa2.si.ehu.es/stswiki/images/4/40/STS2012-en-test.zip" ["STS13"]="http://ixa2.si.ehu.es/stswiki/images/2/2f/STS2013-en-test.zip" ["STS14"]="http://ixa2.si.ehu.es/stswiki/images/8/8c/STS2014-en-test.zip" ["STS15"]="http://ixa2.si.ehu.es/stswiki/images/d/da/STS2015-en-test.zip"
+["STS16"]="http://ixa2.si.ehu.es/stswiki/images/9/98/STS2016-en-test.zip")
+
+STS_subdirs=(["STS12"]="test-gold" ["STS13"]="test-gs" ["STS14"]="sts-en-test-gs-2014" ["STS15"]="test_evaluation_task2a" ["STS16"]="sts2016-english-with-gs-v1.0")
 
 
 
@@ -38,27 +48,35 @@ done
 
 
 
+### STS datasets
 
-### STS2014 and STSBenchmark (http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark)
-
-# STS14
-echo $data_path/STS
+# STS12, STS13, STS14, STS15, STS16
 mkdir $data_path/STS
-curl -Lo $data_path/data_sts.zip $STS14
-unzip $data_path/data_sts.zip -d $data_path
-mv $data_path/sts-en-test-gs-2014 $data_path/STS/STS14
-rm $data_path/data_sts.zip
 
-for sts_task in deft-forum deft-news headlines OnWN images tweet-news
+for task in "${!STS_tasks[@]}"; #"${!STS_tasks[@]}"; 
 do
-    fname=STS.input.$sts_task.txt
-    cut -f1 $data_path/STS/STS14/$fname | ./tokenizer.sed > $data_path/STS/STS14/tmp1
-    cut -f2 $data_path/STS/STS14/$fname | ./tokenizer.sed > $data_path/STS/STS14/tmp2
-    paste $data_path/STS/STS14/tmp1 $data_path/STS/STS14/tmp2 > $data_path/STS/STS14/$fname
-    rm $data_path/STS/STS14/tmp1 $data_path/STS/STS14/tmp2
+    fpath=${STS_paths[$task]}
+    echo $fpath
+    curl -Lo $data_path/STS/data_$task.zip $fpath
+    unzip $data_path/STS/data_$task.zip -d $data_path/STS
+    mv $data_path/STS/${STS_subdirs[$task]} $data_path/STS/$task-en-test
+    rm $data_path/STS/data_$task.zip
+    
+    for sts_task in ${STS_tasks[$task]}
+    do
+        infname=STS*.input.$sts_task.txt
+        outfname=STS.input.$sts_task.txt
+        cut -f1 $data_path/STS/$task-en-test/$infname | $preprocess_exec > $data_path/STS/$task-en-test/tmp1
+        cut -f2 $data_path/STS/$task-en-test/$infname | $preprocess_exec > $data_path/STS/$task-en-test/tmp2
+        paste $data_path/STS/$task-en-test/tmp1 $data_path/STS/$task-en-test/tmp2 > $data_path/STS/$task-en-test/$outfname
+        rm $data_path/STS/$task-en-test/tmp1 $data_path/STS/$task-en-test/tmp2
+    done
+    
 done
 
-# STSBenchmark
+
+# STSBenchmark (http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark)
+
 curl -Lo $data_path/Stsbenchmark.tar.gz $STSBenchmark
 tar -zxvf $data_path/Stsbenchmark.tar.gz -C $data_path
 rm $data_path/Stsbenchmark.tar.gz
