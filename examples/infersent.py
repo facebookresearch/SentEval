@@ -22,9 +22,6 @@ assert os.path.isfile(MODEL_PATH) and os.path.isfile(GLOVE_PATH), 'Set MODEL and
 sys.path.insert(0, PATH_SENTEVAL)
 import senteval
 
-# set gpu device
-torch.cuda.set_device(0)
-
 
 def prepare(params, samples):
     params.infersent.build_vocab([' '.join(s) for s in samples], tokenize=False) 
@@ -46,7 +43,7 @@ transfer_tasks = ['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness',\
                   'SICKEntailment', 'MRPC', 'STS14']
 
 # define senteval params
-params_senteval = dotdict({'usepytorch': True, 'task_path': PATH_TO_DATA, 'seed':1111, 'kfold': 10})
+params_senteval = dotdict({'usepytorch': False, 'task_path': PATH_TO_DATA, 'seed':1111, 'kfold': 5})
 
 # Set up logger
 logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
@@ -54,7 +51,6 @@ logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 if __name__ == "__main__":
     # Load model
     params_senteval.infersent = torch.load(MODEL_PATH)
-    params_senteval.infersent.use_cuda = True
     params_senteval.infersent.set_glove_path(GLOVE_PATH)
 
     se = senteval.SentEval(batcher, prepare, params_senteval)
