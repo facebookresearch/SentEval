@@ -43,7 +43,7 @@ transfer_tasks = ['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness',\
                   'SICKEntailment', 'MRPC', 'STS14']
 
 # define senteval params
-params_senteval = dotdict({'usepytorch': False, 'task_path': PATH_TO_DATA, 'seed':1111, 'kfold': 5})
+params_senteval = dotdict({'usepytorch': True, 'task_path': PATH_TO_DATA, 'seed':1111, 'kfold': 5})
 
 # Set up logger
 logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
