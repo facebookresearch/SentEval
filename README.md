@@ -2,6 +2,8 @@
 
 SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks (more details [here](https://arxiv.org/abs/1705.02364)). Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
 
+*news*: Added STS2012, STS2013 (-SMT), STS2014, STS2015 and STS2016.
+
 ## Dependencies
 
 This code is written in python. The dependencies are:
@@ -17,7 +19,8 @@ SentEval allows you to evaluate your sentence embeddings as features for the fol
 * Binary classification: [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (movie review), [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (product review), [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (subjectivity status), [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm) (opinion-polarity), [SST](https://nlp.stanford.edu/sentiment/index.html) (Stanford sentiment analysis)
 * Multi-class classification: [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/) (question-type classification), [SST](http://www.aclweb.org/anthology/P13-1045) (fine-grained Stanford sentiment analysis)
 * Entailment (NLI): [SNLI](https://nlp.stanford.edu/projects/snli/) (caption-based NLI), [MultiNLI](https://www.nyu.edu/projects/bowman/multinli/) (Multi-genre NLI), [SICK](http://clic.cimec.unitn.it/composes/sick.html) (Sentences Involving Compositional Knowledge, entailment)
-* Semantic Textual Similarity: [STSBenchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results), [STS14](http://alt.qcri.org/semeval2014/task10/), [SICK](http://clic.cimec.unitn.it/composes/sick.html) (relatedness)
+* Semantic Textual Similarity: [STS12](https://www.cs.york.ac.uk/semeval-2012/task6/), [STS13](http://ixa2.si.ehu.es/sts/) (-SMT), [STS14](http://alt.qcri.org/semeval2014/task10/), [STS15](http://alt.qcri.org/semeval2015/task2/), [STS16](http://alt.qcri.org/semeval2016/task1/)
+* Semantic Relatedness: [STSBenchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results), [SICK](http://clic.cimec.unitn.it/composes/sick.html)
 * Paraphrase detection: [MRPC](https://aclweb.org/aclwiki/index.php?title=Paraphrase_Identification_(State_of_the_art)) (Microsoft Research Paraphrase Corpus)
 * Caption-Image retrieval: [COCO](http://mscoco.org/) dataset (with ResNet-101 2048d image embeddings)
 
@@ -109,7 +112,9 @@ results = se.eval(transfer_tasks)
 ```
 The current list of available tasks is:
 ```python
-['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SNLI', 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'STS14', 'ImageCaptionRetrieval']
+['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SNLI',
+'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'ImageCaptionRetrieval',
+'STS12', 'STS13', 'STS14', 'STS15', 'STS16']
 ```
 ## SentEval parameters
 SentEval has several parameters (only task_path is required):
