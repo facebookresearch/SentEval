@@ -15,7 +15,7 @@ from snli import SNLIEval
 from trec import TRECEval
 from sick import SICKRelatednessEval, SICKEntailmentEval
 from mrpc import MRPCEval
-from sts import STS14Eval, STSBenchmarkEval
+from sts import STS12Eval, STS13Eval, STS14Eval, STS15Eval, STS16Eval, STSBenchmarkEval
 from sst import SSTBinaryEval
 from rank import ImageCaptionRetrievalEval
 
@@ -42,7 +42,8 @@ class SentEval(object):
             assert False, 'No MLP implemented in scikit-learn'        
         
         self.list_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SICKRelatedness',\
-                      'SICKEntailment', 'STSBenchmark', 'STS14', 'SNLI', 'ImageCaptionRetrieval']        
+                      'SICKEntailment', 'STSBenchmark', 'SNLI', 'ImageCaptionRetrieval',\
+                          'STS12', 'STS13', 'STS14', 'STS15', 'STS16']        
         
 
     def eval(self, name):
@@ -74,8 +75,9 @@ class SentEval(object):
             self.evaluation = SICKEntailmentEval(self.params.task_path + '/SICK', seed=self.params.seed)
         elif name == 'SNLI':
             self.evaluation = SNLIEval(self.params.task_path + '/SNLI', seed=self.params.seed)
-        elif name == 'STS14':
-            self.evaluation = STS14Eval(self.params.task_path + '/STS/STS14', seed=self.params.seed)
+        elif name in ['STS12', 'STS13', 'STS14', 'STS15', 'STS16']:
+            fpath = name + '-en-test'
+            self.evaluation = eval(name + 'Eval')(self.params.task_path + '/STS/' + fpath, seed=self.params.seed)
         elif name == 'ImageCaptionRetrieval':
             self.evaluation = ImageCaptionRetrievalEval(self.params.task_path + '/COCO', seed=self.params.seed)
 

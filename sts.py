@@ -6,7 +6,7 @@
 #
 
 '''
-STS-2014 (unsupervised) and STS-benchmark (supervised) tasks
+STS-{2012,2013,2014,2015,2016} (unsupervised) and STS-benchmark (supervised) tasks
 '''
 
 import os
@@ -19,18 +19,20 @@ from utils import cosine
 from sick import SICKRelatednessEval
 
 
-class STS14Eval(object):
-    def __init__(self, taskpath, seed=1111):
-        logging.debug('***** Transfer task : STS14 *****\n\n')
-        self.seed = seed
+class STSEval(object):
+        
+    def loadFile(self, fpath):
         self.data = {}
         self.samples = []
-        self.datasets = ['deft-forum', 'deft-news', 'headlines', 'images', 'OnWN', 'tweet-news']
+        
         for dataset in self.datasets:
-            sent1, sent2 = zip(*[l.split("\t") for l in open(taskpath + '/STS.input.%s.txt' % dataset).read().splitlines()])
-            gs_scores = [float(x) for x in open(taskpath + '/STS.gs.%s.txt' % dataset).read().splitlines()]
-            sent1 = [s.split() for s in sent1]
-            sent2 = [s.split() for s in sent2]
+            sent1, sent2 = zip(*[l.split("\t") for l in open(fpath + '/STS.input.%s.txt' % dataset).read().splitlines()])
+            raw_scores = np.array([x for x in open(fpath + '/STS.gs.%s.txt' % dataset).read().splitlines()])
+            not_empty_idx = raw_scores != ''
+
+            gs_scores = [float(x) for x in raw_scores[not_empty_idx]]
+            sent1 = np.array([s.split() for s in sent1])[not_empty_idx]
+            sent2 = np.array([s.split() for s in sent2])[not_empty_idx]
             # sort data by length to minimize padding in batcher
             sorted_data = sorted(zip(sent1, sent2, gs_scores), key=lambda z:(len(z[0]), len(z[1]), z[2]))
             sent1, sent2, gs_scores = map(list, zip(*sorted_data))
@@ -60,15 +62,58 @@ class STS14Eval(object):
                         sys_score = cosine(np.nan_to_num(enc1[kk]), np.nan_to_num(enc2[kk]))
                         sys_scores.append(sys_score)
 
-            results[dataset] = {'pearson': pearsonr(sys_scores, gs_scores), 'spearman': spearmanr(sys_scores, gs_scores)}
-            logging.debug('{0} : pearson = {1}, spearman = {2}'.format(dataset, results[dataset]['pearson'], results[dataset]['spearman']))
-        avg_pearson = np.mean([results[dset]['pearson'][0] for dset in results.keys()])
-        avg_spearman = np.mean([results[dset]['spearman'][0] for dset in results.keys()])
-        results['all'] = {'pearson': avg_pearson, 'spearman': avg_spearman}
-        logging.debug('Results (all) : Pearson = {0}, Spearman = {1}\n'.format(results['all']['pearson'], results['all']['spearman']))
+            results[dataset] = {'pearson': pearsonr(sys_scores, gs_scores), 'spearman': spearmanr(sys_scores, gs_scores),\
+                                'nsamples': len(sys_scores)}
+            logging.debug('%s : pearson = %.4f, spearman = %.4f' % (dataset, results[dataset]['pearson'][0], results[dataset]['spearman'][0]))
+            
+        weights = [results[dset]['nsamples'] for dset in results.keys()]
+        list_prs = np.array([results[dset]['pearson'][0] for dset in results.keys()])
+        list_spr = np.array([results[dset]['spearman'][0] for dset in results.keys()])
+        
+        wavg_pearson = np.average(list_prs, weights=weights)
+        wavg_spearman = np.average(list_spr, weights=weights)
+
+        results['all'] = {'pearson': wavg_pearson, 'spearman': wavg_spearman}
+        logging.debug('ALL (weighted average) : Pearson = %.4f, Spearman = %.4f\n' %(results['all']['pearson'], results['all']['spearman']))
 
         return results
 
+class STS12Eval(STSEval):
+    def __init__(self, taskpath, seed=1111):
+        logging.debug('***** Transfer task : STS12 *****\n\n')
+        self.seed = seed
+        self.datasets = ['MSRpar', 'MSRvid', 'SMTeuroparl', 'surprise.OnWN', 'surprise.SMTnews']
+        self.loadFile(taskpath)    
+    
+class STS13Eval(STSEval):
+    def __init__(self, taskpath, seed=1111):
+        logging.debug('***** Transfer task : STS13 (-SMT) *****\n\n') # SMT removed due to LICENSE issue
+        self.seed = seed
+        self.datasets = ['FNWN', 'headlines', 'OnWN']
+        self.loadFile(taskpath)
+        
+class STS14Eval(STSEval):
+    def __init__(self, taskpath, seed=1111):
+        logging.debug('***** Transfer task : STS14 *****\n\n')
+        self.seed = seed
+        self.datasets = ['deft-forum', 'deft-news', 'headlines', 'images', 'OnWN', 'tweet-news']
+        self.loadFile(taskpath)
+        
+class STS15Eval(STSEval):
+    def __init__(self, taskpath, seed=1111):
+        logging.debug('***** Transfer task : STS15 *****\n\n')
+        self.seed = seed
+        self.datasets = ['answers-forums', 'answers-students', 'belief', 'headlines', 'images']
+        self.loadFile(taskpath)
+        
+class STS16Eval(STSEval):
+    def __init__(self, taskpath, seed=1111):
+        logging.debug('***** Transfer task : STS16 *****\n\n')
+        self.seed = seed
+        self.datasets = ['answer-answer', 'headlines', 'plagiarism', 'postediting', 'question-question']
+        self.loadFile(taskpath)        
+        
+        
     
 class STSBenchmarkEval(SICKRelatednessEval):
     def __init__(self, task_path, seed=1111):

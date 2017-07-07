@@ -64,12 +64,21 @@ do
     
     for sts_task in ${STS_tasks[$task]}
     do
-        infname=STS*.input.$sts_task.txt
-        outfname=STS.input.$sts_task.txt
-        cut -f1 $data_path/STS/$task-en-test/$infname | $preprocess_exec > $data_path/STS/$task-en-test/tmp1
-        cut -f2 $data_path/STS/$task-en-test/$infname | $preprocess_exec > $data_path/STS/$task-en-test/tmp2
-        paste $data_path/STS/$task-en-test/tmp1 $data_path/STS/$task-en-test/tmp2 > $data_path/STS/$task-en-test/$outfname
-        rm $data_path/STS/$task-en-test/tmp1 $data_path/STS/$task-en-test/tmp2
+        fname=STS.input.$sts_task.txt
+        task_path=$data_path/STS/$task-en-test/
+        
+        if [ "$task" = "STS16" ] ; then
+            echo 'Handling STS2016'
+            mv $task_path/STS2016.input.$sts_task.txt $task_path/$fname
+            mv $task_path/STS2016.gs.$sts_task.txt $task_path/STS.gs.$sts_task.txt
+        fi
+        
+        
+        
+        cut -f1 $task_path/$fname | $preprocess_exec > $task_path/tmp1
+        cut -f2 $task_path/$fname | $preprocess_exec > $task_path/tmp2
+        paste $task_path/tmp1 $task_path/tmp2 > $task_path/$fname
+        rm $task_path/tmp1 $task_path/tmp2
     done
     
 done
