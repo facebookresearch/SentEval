@@ -70,11 +70,15 @@ class STSEval(object):
         list_prs = np.array([results[dset]['pearson'][0] for dset in results.keys()])
         list_spr = np.array([results[dset]['spearman'][0] for dset in results.keys()])
         
+        avg_pearson = np.average(list_prs)
+        avg_spearman = np.average(list_spr)
         wavg_pearson = np.average(list_prs, weights=weights)
         wavg_spearman = np.average(list_spr, weights=weights)
 
-        results['all'] = {'pearson': wavg_pearson, 'spearman': wavg_spearman}
-        logging.debug('ALL (weighted average) : Pearson = %.4f, Spearman = %.4f\n' %(results['all']['pearson'], results['all']['spearman']))
+        results['all'] = {'pearson': {'mean':avg_pearson, 'wmean':wavg_pearson},\
+                          'spearman': {'mean':avg_spearman, 'wmean':wavg_spearman}}
+        logging.debug('ALL (weighted average) : Pearson = %.4f, Spearman = %.4f' %(wavg_pearson, wavg_spearman))
+        logging.debug('ALL (average) : Pearson = %.4f, Spearman = %.4f\n' %(avg_pearson, avg_spearman))
 
         return results
 
