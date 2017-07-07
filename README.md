@@ -2,7 +2,7 @@
 
 SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks (more details [here](https://arxiv.org/abs/1705.02364)). Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
 
-*news*: Added STS2012, STS2013 (-SMT), STS2014, STS2015 and STS2016.
+*news: Added STS2012, STS2013 (-SMT), STS2014, STS2015 and STS2016.*
 
 ## Dependencies
 
