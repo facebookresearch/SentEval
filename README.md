@@ -83,7 +83,7 @@ prepare(params, samples)
 *Example*: in bow.py, prepare is is used to build the vocabulary of words and construct the "params.word_vect* dictionary of word vectors.
 
 
-### 2.) batcher(batch, params)
+### 2.) batcher(params, batch)
 ```
 batcher(params, batch)
 ```
