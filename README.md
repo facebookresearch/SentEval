@@ -101,7 +101,7 @@ After having implemented the batch and prepare function for your own sentence en
 1) to perform the actual evaluation, first import senteval and define a SentEval object:
 ```python
 import senteval
-se = senteval.SentEval(batcher, prepare, params_senteval)
+se = senteval.SentEval(params, batcher, prepare)
 ```
 (to import senteval, you can either add senteval path to your pythonpath or use sys.path.insert)
 
