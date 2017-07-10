@@ -42,7 +42,7 @@ def prepare(params, samples):
     return
 
 
-def batcher(batch, params):
+def batcher(params, batch):
     batch = [sent if sent!=[] else ['.'] for sent in batch]
     embeddings = []
     
@@ -71,7 +71,7 @@ torch.cuda.set_device(0)
 logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
-    se = senteval.SentEval(batcher, prepare, params_senteval)
+    se = senteval.SentEval(params_senteval, batcher, prepare)
     transfer_tasks = ['MR', 'CR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'STS14']
     results = se.eval(transfer_tasks)
 

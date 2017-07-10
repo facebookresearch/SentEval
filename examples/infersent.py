@@ -26,7 +26,7 @@ import senteval
 def prepare(params, samples):
     params.infersent.build_vocab([' '.join(s) for s in samples], tokenize=False) 
 
-def batcher(batch, params):
+def batcher(params, batch):
     # batch contains list of words
     sentences = [' '.join(s) for s in batch]
     embeddings = params.infersent.encode(sentences, bsize=params.batch_size, tokenize=False)
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     params_senteval.infersent = torch.load(MODEL_PATH)
     params_senteval.infersent.set_glove_path(GLOVE_PATH)
 
-    se = senteval.SentEval(batcher, prepare, params_senteval)
+    se = senteval.SentEval(params_senteval, batcher, prepare)
     results_transfer = se.eval(transfer_tasks)
 
     print results_transfer

@@ -40,13 +40,6 @@ def create_dictionary(sentences, threshold=0):
     
     return id2word, word2id
 
-# Get batch
-def get_batch(batch_sentences, index_pad = 1e9 + 2):
-    lengths = np.array([sentence.size(0) for sentence in batch_sentences])
-    batch   =  torch.LongTensor(lengths.max(), len(batch_sentences)).fill_(int(index_pad))
-    for i in xrange(len(batch_sentences)):
-        batch[:lengths[i], i] = torch.LongTensor(batch_sentences[i])
-    return batch, lengths
 
 # Get word vectors from vocabulary (glove, word2vec, fasttext ..)
 def get_wordvec(path_to_vec, word2id):

@@ -32,7 +32,7 @@ class BinaryClassifierEval(object):
         with codecs.open(fpath, 'rb', 'latin-1') as f:
             return [line.encode('utf-8').split() for line in f.read().splitlines()]
 
-    def run(self, batcher, params):
+    def run(self, params, batcher):
         enc_input = []
         # Sort to reduce padding
         sorted_corpus = sorted(zip(self.samples, self.labels), key=lambda z:(len(z[0]), z[1]))
@@ -41,7 +41,7 @@ class BinaryClassifierEval(object):
         logging.info('Generating sentence embeddings')
         for ii in range(0, self.n_samples, params.batch_size):
             batch = sorted_samples[ii:ii + params.batch_size]
-            embeddings = batcher(batch, params)
+            embeddings = batcher(params, batch)
             enc_input.append(embeddings)
         enc_input = np.vstack(enc_input)
         logging.info('Generated sentence embeddings')

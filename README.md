@@ -29,7 +29,7 @@ SentEval allows you to evaluate your sentence embeddings as features for the fol
 ## Download datasets
 To get all the transfer tasks datasets, run (in data/):
 ```bash
-./get_transfer_data.bash
+./get_transfer_data_ptb.bash
 ```
 This will automatically download and preprocess the datasets, and put them in data/senteval_data.
 
@@ -85,7 +85,7 @@ prepare(params, samples)
 
 ### 2.) batcher(batch, params)
 ```
-batcher(batch, params)
+batcher(params, batch)
 ```
 * *batch*: numpy array of text sentences (of size params.batch_size)
 * *params*: senteval parameters (note that "prepare" outputs are stored in params).

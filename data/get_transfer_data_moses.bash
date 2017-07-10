@@ -5,15 +5,29 @@
 # LICENSE file in the root directory of this source tree. 
 #
 
+#
+# Download and tokenize data with MOSES tokenizer
+#
+
 data_path=senteval_data
 preprocess_exec=./tokenizer.sed
+
+# Get MOSES
+echo 'Cloning Moses github repository (for tokenization scripts)...'
+git clone https://github.com/moses-smt/mosesdecoder.git
+SCRIPTS=mosesdecoder/scripts
+TOKENIZER=$SCRIPTS/tokenizer/tokenizer.perl
+
+if [ ! -d "$SCRIPTS" ]; then
+    echo "Please set SCRIPTS variable correctly to point to Moses scripts."
+    exit
+fi
 
 mkdir $data_path
 
 TREC='http://cogcomp.cs.illinois.edu/Data/QA/QC'
 SICK='http://alt.qcri.org/semeval2014/task1/data/uploads'
 BINCLASSIF='http://www.stanford.edu/~sidaw/projects/datasmall_NB_ACL12.zip'
-STS14='http://alt.qcri.org/semeval2014/task10/data/uploads/sts-en-gs-2014.zip'
 SST='https://raw.githubusercontent.com/YingyuLiang/SIF/master/data'
 STSBenchmark='http://ixa2.si.ehu.es/stswiki/images/4/48/Stsbenchmark.tar.gz'
 SNLI='https://nlp.stanford.edu/projects/snli/snli_1.0.zip'
@@ -75,8 +89,8 @@ do
         
         
         
-        cut -f1 $task_path/$fname | $preprocess_exec > $task_path/tmp1
-        cut -f2 $task_path/$fname | $preprocess_exec > $task_path/tmp2
+        cut -f1 $task_path/$fname | $TOKENIZER -threads 8 -l en -no-escape > $task_path/tmp1
+        cut -f2 $task_path/$fname | $TOKENIZER -threads 8 -l en -no-escape > $task_path/tmp2
         paste $task_path/tmp1 $task_path/tmp2 > $task_path/$fname
         rm $task_path/tmp1 $task_path/tmp2
     done
@@ -96,8 +110,8 @@ do
     fname=sts-$split.csv
     fdir=$data_path/STS/STSBenchmark
     cut -f1,2,3,4,5 $fdir/$fname > $fdir/tmp1
-    cut -f6 $fdir/$fname | $preprocess_exec > $fdir/tmp2
-    cut -f7 $fdir/$fname | $preprocess_exec > $fdir/tmp3
+    cut -f6 $fdir/$fname | $TOKENIZER -threads 8 -l en -no-escape > $fdir/tmp2
+    cut -f7 $fdir/$fname | $TOKENIZER -threads 8 -l en -no-escape > $fdir/tmp3
     paste $fdir/tmp1 $fdir/tmp2 $fdir/tmp3 > $fdir/$fname
     rm $fdir/tmp1 $fdir/tmp2 $fdir/tmp3
 done
@@ -136,8 +150,8 @@ do
     fname=$data_path/SICK/SICK_$split.txt
     cut -f1 $fname | sed '1d' > $data_path/SICK/tmp1
     cut -f4,5 $fname | sed '1d' > $data_path/SICK/tmp45
-    cut -f2 $fname | sed '1d' | $preprocess_exec > $data_path/SICK/tmp2
-    cut -f3 $fname | sed '1d' | $preprocess_exec > $data_path/SICK/tmp3
+    cut -f2 $fname | sed '1d' | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SICK/tmp2
+    cut -f3 $fname | sed '1d' | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SICK/tmp3
     head -n 1 $fname > $data_path/SICK/tmp0
     paste $data_path/SICK/tmp1 $data_path/SICK/tmp2 $data_path/SICK/tmp3 $data_path/SICK/tmp45 >> $data_path/SICK/tmp0
     mv $data_path/SICK/tmp0 $fname
@@ -156,23 +170,23 @@ rm $data_path/data_classif.zip
 
 # MR
 mkdir $data_path/MR
-cat $data_path/data_bin_classif/data/rt10662/rt-polarity.pos | $preprocess_exec > $data_path/MR/rt-polarity.pos
-cat $data_path/data_bin_classif/data/rt10662/rt-polarity.neg | $preprocess_exec > $data_path/MR/rt-polarity.neg
+cat $data_path/data_bin_classif/data/rt10662/rt-polarity.pos | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MR/rt-polarity.pos
+cat $data_path/data_bin_classif/data/rt10662/rt-polarity.neg | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MR/rt-polarity.neg
 
 # CR
 mkdir $data_path/CR
-cat $data_path/data_bin_classif/data/customerr/custrev.pos | $preprocess_exec > $data_path/CR/custrev.pos
-cat $data_path/data_bin_classif/data/customerr/custrev.neg | $preprocess_exec > $data_path/CR/custrev.neg
+cat $data_path/data_bin_classif/data/customerr/custrev.pos | $TOKENIZER -threads 8 -l en -no-escape > $data_path/CR/custrev.pos
+cat $data_path/data_bin_classif/data/customerr/custrev.neg | $TOKENIZER -threads 8 -l en -no-escape > $data_path/CR/custrev.neg
 
 # SUBJ
 mkdir $data_path/SUBJ
-cat $data_path/data_bin_classif/data/subj/subj.subjective | $preprocess_exec > $data_path/SUBJ/subj.subjective
-cat $data_path/data_bin_classif/data/subj/subj.objective | $preprocess_exec > $data_path/SUBJ/subj.objective
+cat $data_path/data_bin_classif/data/subj/subj.subjective | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SUBJ/subj.subjective
+cat $data_path/data_bin_classif/data/subj/subj.objective | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SUBJ/subj.objective
 
 # MPQA
 mkdir $data_path/MPQA
-cat $data_path/data_bin_classif/data/mpqa/mpqa.pos | $preprocess_exec > $data_path/MPQA/mpqa.pos
-cat $data_path/data_bin_classif/data/mpqa/mpqa.neg | $preprocess_exec > $data_path/MPQA/mpqa.neg
+cat $data_path/data_bin_classif/data/mpqa/mpqa.pos | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MPQA/mpqa.pos
+cat $data_path/data_bin_classif/data/mpqa/mpqa.neg | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MPQA/mpqa.neg
 
 # CLEAN-UP
 rm -r $data_path/data_bin_classif
@@ -189,8 +203,8 @@ do
     fpath=$data_path/SNLI/$split.snli.txt
     awk '{ if ( $1 != "-" ) { print $0; } }' $data_path/SNLI/snli_1.0/snli_1.0_$split.txt | cut -f 1,6,7 | sed '1d' > $fpath
     cut -f1 $fpath > $data_path/SNLI/labels.$split
-    cut -f2 $fpath | $preprocess_exec > $data_path/SNLI/s1.$split
-    cut -f3 $fpath | $preprocess_exec > $data_path/SNLI/s2.$split
+    cut -f2 $fpath | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SNLI/s1.$split
+    cut -f3 $fpath | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SNLI/s2.$split
     rm $fpath
 done
 rm -r $data_path/SNLI/snli_1.0
@@ -229,10 +243,12 @@ for split in train test
 do
     fname=$data_path/MRPC/msr_paraphrase_$split.txt
     cut -f1,2,3 $fname | sed '1d' > $data_path/MRPC/tmp1
-    cut -f4 $fname | sed '1d' | $preprocess_exec > $data_path/MRPC/tmp2
-    cut -f5 $fname | sed '1d' | $preprocess_exec > $data_path/MRPC/tmp3
+    cut -f4 $fname | sed '1d' | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MRPC/tmp2
+    cut -f5 $fname | sed '1d' | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MRPC/tmp3
     head -n 1 $fname > $data_path/MRPC/tmp4
     paste $data_path/MRPC/tmp1 $data_path/MRPC/tmp2 $data_path/MRPC/tmp3 >> $data_path/MRPC/tmp4
     mv $data_path/MRPC/tmp4 $fname
     rm $data_path/MRPC/tmp1 $data_path/MRPC/tmp2 $data_path/MRPC/tmp3
 done
+
+rm -rf mosesdecoder

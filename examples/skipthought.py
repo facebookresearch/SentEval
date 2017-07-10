@@ -22,7 +22,7 @@ from exutil import dotdict
 PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data/senteval_data/'
 PATH_TO_SKIPTHOUGHT = ''
-assert PATH_TO_SKIPTHOUGHT != '', 'Download skipthought and 
+assert PATH_TO_SKIPTHOUGHT != '', 'Download skipthought and set correct PATH'
 
 # import skipthought and Senteval
 sys.path.insert(0, PATH_TO_SKIPTHOUGHT)
@@ -34,7 +34,7 @@ import senteval
 def prepare(params, samples):
     return
 
-def batcher(batch, params):
+def batcher(params, batch):
     embeddings = skipthoughts.encode(params.encoder, [unicode(' '.join(sent), errors="ignore")\
                                      if sent!=[] else '.' for sent in batch],\
                                      verbose=False, use_eos=True)
@@ -55,7 +55,7 @@ logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
     params_senteval.encoder = skipthoughts.load_model()
-    se = senteval.SentEval(batcher, prepare, params_senteval)
+    se = senteval.SentEval(params_senteval, batcher, prepare)
     se.eval(['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
 
     

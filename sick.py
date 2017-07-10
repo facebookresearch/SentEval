@@ -51,7 +51,7 @@ class SICKRelatednessEval(object):
         return sick_data
     
     
-    def run(self, batcher, params):
+    def run(self, params, batcher):
         sick_embed = {'train':{}, 'dev':{}, 'test':{}}
                       
         for key in self.sick_data:  
@@ -70,7 +70,7 @@ class SICKRelatednessEval(object):
                 sick_embed[key][txt_type] = []
                 for ii in range(0, len(self.sick_data[key]['y']), params.batch_size):
                     batch = self.sick_data[key][txt_type][ii:ii + params.batch_size]
-                    embeddings = batcher(batch, params)
+                    embeddings = batcher(params, batch)
                     sick_embed[key][txt_type].append(embeddings)
                 sick_embed[key][txt_type] = np.vstack(sick_embed[key][txt_type])
             sick_embed[key]['y'] = np.array(self.sick_data[key]['y'])
@@ -151,7 +151,7 @@ class SICKEntailmentEval(SICKRelatednessEval):
         sick_data['y'] = [label2id[s] for s in sick_data['y']]
         return sick_data
     
-    def run(self, batcher, params):
+    def run(self, params, batcher):
         sick_embed = {'train':{}, 'dev':{}, 'test':{}}
                       
         for key in self.sick_data:  
@@ -170,7 +170,7 @@ class SICKEntailmentEval(SICKRelatednessEval):
                 sick_embed[key][txt_type] = []
                 for ii in range(0, len(self.sick_data[key]['y']), params.batch_size):
                     batch = self.sick_data[key][txt_type][ii:ii + params.batch_size]
-                    embeddings = batcher(batch, params)
+                    embeddings = batcher(params, batch)
                     sick_embed[key][txt_type].append(embeddings)
                 sick_embed[key][txt_type] = np.vstack(sick_embed[key][txt_type])
             logging.info('Computed {0} embeddings'.format(key))

@@ -44,7 +44,7 @@ class STSEval(object):
     def do_prepare(self, params, prepare):
         return prepare(params, self.samples)
 
-    def run(self, batcher, params):
+    def run(self, params, batcher):
         results = {}
         for dataset in self.datasets:
             sys_scores = []
@@ -55,8 +55,8 @@ class STSEval(object):
                 
                 # we assume that the get_batch function already throws out the faulty ones
                 if len(batch1) == len(batch2) and len(batch1) > 0:
-                    enc1 = batcher(batch1, params)
-                    enc2 = batcher(batch2, params)
+                    enc1 = batcher(params, batch1)
+                    enc2 = batcher(params, batch2)
 
                     for kk in range(enc2.shape[0]):
                         sys_score = cosine(np.nan_to_num(enc1[kk]), np.nan_to_num(enc2[kk]))

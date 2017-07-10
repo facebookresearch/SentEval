@@ -39,7 +39,7 @@ class SSTBinaryEval(object):
         return sst_data
     
 
-    def run(self, batcher, params):
+    def run(self, params, batcher):
         sst_embed = {'train':{}, 'dev':{}, 'test':{}}
                       
         for key in self.sst_data:  
@@ -52,7 +52,7 @@ class SSTBinaryEval(object):
             sst_embed[key]['X'] = []
             for ii in range(0, len(self.sst_data[key]['y']), params.batch_size):
                 batch = self.sst_data[key]['X'][ii:ii + params.batch_size]
-                embeddings = batcher(batch, params)
+                embeddings = batcher(params, batch)
                 sst_embed[key]['X'].append(embeddings)
             sst_embed[key]['X'] = np.vstack(sst_embed[key]['X'])
             sst_embed[key]['y'] = np.array(self.sst_data[key]['y'])

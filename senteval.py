@@ -21,7 +21,7 @@ from rank import ImageCaptionRetrievalEval
 
 
 class SentEval(object):
-    def __init__(self, batcher, prepare, params):
+    def __init__(self, params, batcher, prepare=None):
         # setting default parameters
         params.usepytorch = True if 'usepytorch' not in params else params.usepytorch
         params.classifier = params.classifier or 'LogReg'
@@ -32,7 +32,13 @@ class SentEval(object):
         self.params = params
                 
         self.batcher = batcher
-        self.prepare = prepare
+        
+        if prepare:
+            self.prepare = prepare
+        else:
+            def prepare(params, samples):
+                pass
+            self.prepare = prepare
         
         # sanity check
         assert params.classifier in ['LogReg', 'MLP']
@@ -84,7 +90,7 @@ class SentEval(object):
         self.params.current_task = name
         self.evaluation.do_prepare(self.params, self.prepare)
         
-        self.results = self.evaluation.run(self.batcher, self.params)
+        self.results = self.evaluation.run(self.params, self.batcher)
         
         return self.results
 
