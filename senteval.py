@@ -36,9 +36,7 @@ class SentEval(object):
         if prepare:
             self.prepare = prepare
         else:
-            def prepare(params, samples):
-                pass
-            self.prepare = prepare
+            self.prepare = lambda x,y: None
         
         # sanity check
         assert params.classifier in ['LogReg', 'MLP']
