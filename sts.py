@@ -19,6 +19,7 @@ from utils import cosine
 from sick import SICKRelatednessEval
 
 
+
 class STSEval(object):
         
     def loadFile(self, fpath):
@@ -42,7 +43,12 @@ class STSEval(object):
         
 
     def do_prepare(self, params, prepare):
+        if similarity in params:
+            self.similarity = similarity
+        else: # Default similarity is cosine
+            self.similarity = lambda s1,s2: cosine(np.nan_to_num(s1), np.nan_to_num(s2))
         return prepare(params, self.samples)
+    
 
     def run(self, params, batcher):
         results = {}
@@ -59,7 +65,7 @@ class STSEval(object):
                     enc2 = batcher(params, batch2)
 
                     for kk in range(enc2.shape[0]):
-                        sys_score = cosine(np.nan_to_num(enc1[kk]), np.nan_to_num(enc2[kk]))
+                        sys_score = self.similarity (enc1[kk], enc2[kk])
                         sys_scores.append(sys_score)
 
             results[dataset] = {'pearson': pearsonr(sys_scores, gs_scores), 'spearman': spearmanr(sys_scores, gs_scores),\
