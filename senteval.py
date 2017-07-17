@@ -24,15 +24,14 @@ class SentEval(object):
     def __init__(self, params, batcher, prepare=None):
         # setting default parameters
         params.usepytorch = True if 'usepytorch' not in params else params.usepytorch
-        params.classifier = params.classifier or 'LogReg'
-        params.nhid = params.nhid or 0
-        params.batch_size = params.batch_size or 128
-        params.seed = params.seed or 1111
-        params.kfold = params.kfold or 5
+        params.classifier = 'LogReg' if 'classifier' not in params else params.classifier
+        params.nhid = 0 if 'nhid' not in params else params.nhid
+        params.batch_size = 128 if 'batch_size' not in params else params.batch_size
+        params.seed = 1111 if 'seed' not in params else params.seed
+        params.kfold = 5 if 'kfold' not in params else params.kfold
         self.params = params
-                
+
         self.batcher = batcher
-        
         if prepare:
             self.prepare = prepare
         else:
