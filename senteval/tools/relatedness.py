@@ -2,12 +2,13 @@
 # All rights reserved.
 #
 # This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree. 
+# LICENSE file in the root directory of this source tree.
 #
 
 """
 Semantic Relatedness (supervised) with Pytorch
 """
+from __future__ import absolute_import, division, unicode_literals
 
 import logging
 import copy
@@ -27,14 +28,15 @@ class RelatednessPytorch(object):
         # fix seed
         np.random.seed(config['seed'])
         torch.manual_seed(config['seed'])
-        torch.cuda.manual_seed(config['seed'])
-        
-        
+
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(config['seed'])
+
         self.train = train
         self.valid = valid
         self.test = test
         self.devscores = devscores
-        
+
         self.inputdim = train['X'].shape[1]
         self.nclasses = config['nclasses']
         self.seed = config['seed']
@@ -42,40 +44,53 @@ class RelatednessPytorch(object):
         self.batch_size = 64
         self.maxepoch = 1000
         self.early_stop = True
-        
+
         self.model = nn.Sequential(
             nn.Linear(self.inputdim, self.nclasses),
             nn.Softmax(),
-            ).cuda()
-        self.loss_fn = nn.MSELoss().cuda()
+            )
+        self.loss_fn = nn.MSELoss()
+
+        if torch.cuda.is_available():
+            self.model = self.model.coda()
+            self.loss_fn = self.loss_fn.cuda()
+
         self.loss_fn.size_average = False
-        self.optimizer = optim.Adam(self.model.parameters(), weight_decay=self.l2reg)  
-    
+        self.optimizer = optim.Adam(self.model.parameters(), weight_decay=self.l2reg)
+
     def prepare_data(self, trainX, trainy, devX, devy, testX, testy):
         # Transform probs to log-probs for KL-divergence
-        trainX = torch.FloatTensor(trainX).cuda()
-        trainy = torch.FloatTensor(trainy).cuda()
-        devX = torch.FloatTensor(devX).cuda()
-        devy = torch.FloatTensor(devy).cuda()
-        testX = torch.FloatTensor(testX).cuda()
-        testY = torch.FloatTensor(testy).cuda()
+        if torch.cuda.is_available():
+            trainX = torch.FloatTensor(trainX).cuda()
+            trainy = torch.FloatTensor(trainy).cuda()
+            devX = torch.FloatTensor(devX).cuda()
+            devy = torch.FloatTensor(devy).cuda()
+            testX = torch.FloatTensor(testX).cuda()
+            testY = torch.FloatTensor(testy).cuda()
+        else:
+            trainX = torch.FloatTensor(trainX)
+            trainy = torch.FloatTensor(trainy)
+            devX = torch.FloatTensor(devX)
+            devy = torch.FloatTensor(devy)
+            testX = torch.FloatTensor(testX)
+            testY = torch.FloatTensor(testy)
         import pdb
         # pdb.set_trace()
-        
+
         return trainX, trainy, devX, devy, testX, testy
-    
+
     def run(self):
         self.nepoch = 0
         bestpr = -1
         early_stop_count = 0
         r = np.arange(1,6)
         stop_train = False
-        
+
         # Preparing data
         trainX, trainy, devX, devy, testX, testy = self.prepare_data(self.train['X'], self.train['y'], \
                                                        self.valid['X'], self.valid['y'], \
                                                        self.test['X'], self.test['y'])
-        
+
         # Training
         while not stop_train and self.nepoch<=self.maxepoch:
             self.trainepoch(trainX, trainy, nepoches=50)
@@ -90,7 +105,7 @@ class RelatednessPytorch(object):
                     stop_train = True
                 early_stop_count += 1
         self.model = bestmodel
-        
+
         yhat = np.dot(self.predict_proba(testX), r)
 
         return bestpr, yhat
@@ -102,7 +117,10 @@ class RelatednessPytorch(object):
             all_costs   = []
             for i in range(0, len(X), self.batch_size):
                 # forward
-                idx = torch.cuda.LongTensor(permutation[i:i + self.batch_size])
+                if torch.cuda.is_available():
+                    idx = torch.cuda.LongTensor(permutation[i:i + self.batch_size])
+                else:
+                    idx = torch.LongTensor(permutation[i:i + self.batch_size])
                 Xbatch = Variable(X.index_select(0,idx))
                 ybatch = Variable(y.index_select(0,idx))
                 output = self.model(Xbatch)
@@ -115,7 +133,7 @@ class RelatednessPytorch(object):
                 # Update parameters
                 self.optimizer.step()
         self.nepoch += nepoches
-    
+
     def predict_proba(self, devX):
         self.model.eval()
         probas = []

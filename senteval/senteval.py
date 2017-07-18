@@ -2,7 +2,7 @@
 # All rights reserved.
 #
 # This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree. 
+# LICENSE file in the root directory of this source tree.
 #
 
 '''
@@ -10,6 +10,8 @@
 Generic sentence evaluation scripts wrapper
 
 '''
+from __future__ import absolute_import, division, unicode_literals
+
 from binary import CREval, MREval, MPQAEval, SUBJEval
 from snli import SNLIEval
 from trec import TRECEval
@@ -36,18 +38,17 @@ class SentEval(object):
             self.prepare = prepare
         else:
             self.prepare = lambda x,y: None
-        
+
         # sanity check
         assert params.classifier in ['LogReg', 'MLP']
         if params.classifier == 'MLP':
             assert params.nhid>0, 'When using an MLP, you need to set params.nhid>0'
         if not params.usepytorch and params.classifier == 'MLP':
-            assert False, 'No MLP implemented in scikit-learn'        
-        
+            assert False, 'No MLP implemented in scikit-learn'
+
         self.list_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SICKRelatedness',\
                       'SICKEntailment', 'STSBenchmark', 'SNLI', 'ImageCaptionRetrieval',\
-                          'STS12', 'STS13', 'STS14', 'STS15', 'STS16']        
-        
+                          'STS12', 'STS13', 'STS14', 'STS15', 'STS16']
 
     def eval(self, name):
         ''' evaluate on evaluation [name], either takes string or list of strings '''
@@ -86,9 +87,9 @@ class SentEval(object):
 
         self.params.current_task = name
         self.evaluation.do_prepare(self.params, self.prepare)
-        
+
         self.results = self.evaluation.run(self.params, self.batcher)
-        
+
         return self.results
 
 

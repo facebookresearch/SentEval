@@ -2,8 +2,10 @@
 # All rights reserved.
 #
 # This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree. 
+# LICENSE file in the root directory of this source tree.
 #
+
+from __future__ import absolute_import, division, unicode_literals
 
 """
 Example of file to compare skipthought vectors with our InferSent model
@@ -11,7 +13,7 @@ Example of file to compare skipthought vectors with our InferSent model
 import logging
 
 import sys
-reload(sys)  
+reload(sys)
 sys.setdefaultencoding('utf8')
 
 import torch
@@ -19,7 +21,7 @@ from exutil import dotdict
 
 
 # Set PATHs
-PATH_TO_SENTEVAL = '../'
+PATH_TO_SENTEVAL = '../senteval'
 PATH_TO_DATA = '../data/senteval_data/'
 PATH_TO_SKIPTHOUGHT = ''
 assert PATH_TO_SKIPTHOUGHT != '', 'Download skipthought and set correct PATH'
@@ -58,9 +60,9 @@ if __name__ == "__main__":
     se = senteval.SentEval(params_senteval, batcher, prepare)
     se.eval(['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness', 'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
 
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+

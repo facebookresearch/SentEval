@@ -2,7 +2,7 @@
 # All rights reserved.
 #
 # This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree. 
+# LICENSE file in the root directory of this source tree.
 #
 
 """
@@ -12,6 +12,7 @@ Validation and classification
 (train, dev, test) :  split classifier
 
 """
+from __future__ import absolute_import, division, unicode_literals
 
 import logging
 
@@ -22,7 +23,7 @@ assert(sklearn.__version__>="0.18.0"), "need to update sklearn to version >= 0.1
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold
 
-from classifier import LogReg, MLP
+from .classifier import LogReg, MLP
 
 
 # Pytorch version
@@ -44,7 +45,7 @@ class InnerKFoldClassifier(object):
         self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else 'pytorch-' + config['classifier']
 
         self.k = 5 if 'kfold' not in config else config['kfold']
-        
+
     def run(self):
         logging.info('Training {0} with (inner) {1}-fold cross-validation'.format(self.modelname, self.k))
 
@@ -86,9 +87,9 @@ class InnerKFoldClassifier(object):
             else:
                 clf = LogisticRegression(C=optreg, random_state=self.seed)
                 clf.fit(X_train, y_train)
-                
+
             self.testresults.append(round(100*clf.score(X_test, y_test),2))
-            
+
         devaccuracy = round(np.mean(self.devresults), 2) # TODO
         testaccuracy = round(np.mean(self.testresults), 2)
         return devaccuracy, testaccuracy
@@ -139,13 +140,13 @@ class KFoldClassifier(object):
                 scanscores.append(score)
             # Append mean score
             scores.append(round(100*np.mean(scanscores),2))
-        
+
         # evaluation
         logging.info([('reg:'+str(regs[idx]), scores[idx]) for idx in range(len(scores))])
         optreg = regs[np.argmax(scores)]
         devaccuracy = np.max(scores)
         logging.info('Cross-validation : best param found is reg = {0} with score {1}'.format(optreg, devaccuracy))
-        
+
         logging.info('Evaluating...')
         if self.usepytorch:
             if self.classifier == 'LogReg':
@@ -157,13 +158,13 @@ class KFoldClassifier(object):
             clf = LogisticRegression(C=optreg, random_state=self.seed)
             clf.fit(self.train['X'], self.train['y'])
         yhat = clf.predict(self.test['X'])
-        
+
         testaccuracy = clf.score(self.test['X'], self.test['y'])
         testaccuracy = round(100*testaccuracy, 2)
-        
+
         return devaccuracy, testaccuracy, yhat
-        
-    
+
+
 class SplitClassifier(object):
     """
     (train, valid, test) split classifier.
@@ -182,7 +183,7 @@ class SplitClassifier(object):
         self.nepoches = None if 'nepoches' not in config else config['nepoches']
         self.maxepoch = None if 'maxepoch' not in config else config['maxepoch']
         self.noreg = False if 'noreg' not in config else config['noreg']
-        
+
     def run(self):
         logging.info('Training {0} with standard validation..'.format(self.modelname))
         regs = [10**t for t in range(-5,-1)] if self.usepytorch else [2**t for t in range(-2,4,1)]
@@ -207,7 +208,7 @@ class SplitClassifier(object):
         logging.info([('reg:'+str(regs[idx]), scores[idx]) for idx in range(len(scores))])
         optreg = regs[np.argmax(scores)]
         devaccuracy = np.max(scores)
-        logging.info('Validation : best param found is reg = {0} with score {1}'.format(optreg, devaccuracy))               
+        logging.info('Validation : best param found is reg = {0} with score {1}'.format(optreg, devaccuracy))
         clf = LogisticRegression(C=optreg, random_state=self.seed)
         logging.info('Evaluating...')
         if self.usepytorch:
@@ -224,9 +225,8 @@ class SplitClassifier(object):
         else:
             clf = LogisticRegression(C=optreg, random_state=self.seed)
             clf.fit(self.X['train'], self.y['train'])
-            
+
         testaccuracy = clf.score(self.X['test'], self.y['test'])
         testaccuracy = round(100*testaccuracy, 2)
         return devaccuracy, testaccuracy
-    
-    
+
