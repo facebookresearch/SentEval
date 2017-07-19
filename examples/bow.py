@@ -16,13 +16,13 @@ import data
 import torch
 
 # Set PATHs
-PATH_TO_SENTEVAL = '../senteval'
+PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data/senteval_data'
 PATH_TO_GLOVE = 'glove/glove.840B.300d.txt'
 
 # import SentEval
 sys.path.insert(0, PATH_TO_SENTEVAL)
-import senteval
+from senteval.senteval import SentEval
 
 
 """
@@ -55,7 +55,7 @@ def batcher(params, batch):
             if word in params.word_vec:
                 sentvec.append(params.word_vec[word])
         if not sentvec:
-            vec = np.zeros(len(params.word_vec.values()[0]))
+            vec = np.zeros(len(list(params.word_vec.values())[0]))
             sentvec.append(vec)
         sentvec = np.mean(sentvec, 0)
         embeddings.append(sentvec)
@@ -72,7 +72,7 @@ params_senteval = dotdict(params_senteval)
 logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
-    se = senteval.SentEval(params_senteval, batcher, prepare)
+    se = SentEval(params_senteval, batcher, prepare)
     transfer_tasks = ['MR', 'CR', 'MPQA', 'SUBJ', 'SST', 'TREC',
                       'MRPC', 'SICKEntailment', 'SICKRelatedness',
                       'STSBenchmark', 'STS14']

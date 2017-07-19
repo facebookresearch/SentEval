@@ -16,7 +16,7 @@ import logging
 
 # Set PATHs
 GLOVE_PATH = 'glove/glove.840B.300d.txt'
-PATH_SENTEVAL = '../senteval'
+PATH_SENTEVAL = '../'
 PATH_TO_DATA = '../data/senteval_data/'
 MODEL_PATH = 'infersent.allnli.pickle'
 
@@ -25,7 +25,7 @@ assert os.path.isfile(MODEL_PATH) and os.path.isfile(GLOVE_PATH), \
 
 # import senteval
 sys.path.insert(0, PATH_SENTEVAL)
-import senteval
+from senteval.senteval import SentEval
 
 
 def prepare(params, samples):
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     params_senteval.infersent = torch.load(MODEL_PATH)
     params_senteval.infersent.set_glove_path(GLOVE_PATH)
 
-    se = senteval.SentEval(params_senteval, batcher, prepare)
+    se = SentEval(params_senteval, batcher, prepare)
     results_transfer = se.eval(transfer_tasks)
 
     print(results_transfer)

@@ -26,7 +26,7 @@ assert PATH_TO_SKIPTHOUGHT != '', 'Download skipthought and set correct PATH'
 sys.path.insert(0, PATH_TO_SKIPTHOUGHT)
 sys.path.insert(0, PATH_TO_SENTEVAL)
 import skipthoughts
-import senteval
+from senteval.senteval import SentEval
 
 
 def prepare(params, samples):
@@ -51,6 +51,6 @@ logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
     params_senteval.encoder = skipthoughts.load_model()
-    se = senteval.SentEval(params_senteval, batcher, prepare)
+    se = SentEval(params_senteval, batcher, prepare)
     se.eval(['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness',
              'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])

@@ -19,7 +19,7 @@ try:
 except ImportError:
     import pickle
 
-from tools.ranking import ImageSentenceRankingPytorch
+from senteval.tools.ranking import ImageSentenceRankingPytorch
 
 
 class ImageCaptionRetrievalEval(object):
