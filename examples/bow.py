@@ -35,7 +35,7 @@ The user has to implement two functions:
         i) outputs of "prepare" are stored in "params" that batcher will use.
 """
 
-
+# consider the option of lower-casing or not for bow.
 def prepare(params, samples):
     _, params.word2id = data.create_dictionary(samples)
     params.word_vec = data.get_wordvec(PATH_TO_GLOVE, params.word2id)
@@ -52,7 +52,8 @@ def batcher(params, batch):
             if word in params.word_vec:
                 sentvec.append(params.word_vec[word])
         if not sentvec:
-            sentvec.append(params.word_vec['.'])
+            vec = np.zeros(len(params.word_vec.values()[0]))
+            sentvec.append(vec)
         sentvec = np.mean(sentvec, 0)
         embeddings.append(sentvec)
 
