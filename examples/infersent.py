@@ -25,7 +25,7 @@ assert os.path.isfile(MODEL_PATH) and os.path.isfile(GLOVE_PATH), \
 
 # import senteval
 sys.path.insert(0, PATH_SENTEVAL)
-from senteval.senteval import SentEval
+import senteval
 
 
 def prepare(params, samples):
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     params_senteval.infersent = torch.load(MODEL_PATH)
     params_senteval.infersent.set_glove_path(GLOVE_PATH)
 
-    se = SentEval(params_senteval, batcher, prepare)
+    se = senteval.SentEval(params_senteval, batcher, prepare)
     results_transfer = se.eval(transfer_tasks)
 
     print(results_transfer)
