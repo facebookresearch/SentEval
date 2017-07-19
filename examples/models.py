@@ -9,6 +9,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import numpy as np
 import time
+import io
 
 import torch
 from torch.autograd import Variable
@@ -92,7 +93,7 @@ class BLSTMEncoder(nn.Module):
             you need to set_glove_path(glove_path)'
         # create word_vec with glove vectors
         word_vec = {}
-        with open(self.glove_path) as f:
+        with io.open(self.glove_path) as f:
             for line in f:
                 word, vec = line.split(' ', 1)
                 if word in word_dict:
@@ -107,7 +108,7 @@ class BLSTMEncoder(nn.Module):
         # create word_vec with k first glove vectors
         k = 0
         word_vec = {}
-        with open(self.glove_path) as f:
+        with io.open(self.glove_path) as f:
             for line in f:
                 word, vec = line.split(' ', 1)
                 if k <= K:

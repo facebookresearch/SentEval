@@ -17,7 +17,7 @@ sys.setdefaultencoding('utf8')
 
 
 # Set PATHs
-PATH_TO_SENTEVAL = '../senteval'
+PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data/senteval_data/'
 PATH_TO_SKIPTHOUGHT = ''
 assert PATH_TO_SKIPTHOUGHT != '', 'Download skipthought and set correct PATH'
