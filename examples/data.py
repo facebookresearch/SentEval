@@ -5,8 +5,11 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-import logging
+from __future__ import absolute_import, division, unicode_literals
+
+import io
 import numpy as np
+import logging
 
 
 # Create dictionary
@@ -40,7 +43,7 @@ def create_dictionary(sentences, threshold=0):
 def get_wordvec(path_to_vec, word2id):
     word_vec = {}
 
-    with open(path_to_vec) as f:
+    with io.open(path_to_vec, 'r', encoding='utf-8') as f:
         # if word2vec or fasttext file : skip first line "next(f)"
         for line in f:
             word, vec = line.split(' ', 1)

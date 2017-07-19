@@ -8,10 +8,12 @@
 '''
 MRPC : Microsoft Research Paraphrase (detection) Corpus
 '''
+from __future__ import absolute_import, division, unicode_literals
 
 import os
 import logging
 import numpy as np
+import io
 
 from tools.validation import KFoldClassifier
 
@@ -37,7 +39,7 @@ class MRPCEval(object):
 
     def loadFile(self, fpath):
         mrpc_data = {'X_A': [], 'X_B': [], 'y': []}
-        with open(fpath, 'rb') as f:
+        with io.open(fpath, 'r', encoding='utf-8') as f:
             for line in f:
                 text = line.strip().split('\t')
                 mrpc_data['X_A'].append(text[3].split())
@@ -94,8 +96,9 @@ class MRPCEval(object):
         clf = KFoldClassifier(train={'X': trainF, 'y': trainY},
                               test={'X': testF, 'y': testY},
                               config=config_classifier)
+
         devacc, testacc, yhat = clf.run()
-        testf1 = round(100*f1_score(testY, yhat),2)
+        testf1 = round(100*f1_score(testY, yhat), 2)
         logging.debug('Dev acc : {0} Test acc {1}; Test F1 {2} for MRPC.\n'
                       .format(devacc, testacc, testf1))
         return {'devacc': devacc, 'acc': testacc, 'f1': testf1,

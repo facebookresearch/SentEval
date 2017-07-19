@@ -5,15 +5,18 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+from __future__ import absolute_import, division, unicode_literals
+
 import sys
 import os
 import torch
 from exutil import dotdict
 import logging
 
+
 # Set PATHs
 GLOVE_PATH = 'glove/glove.840B.300d.txt'
-PATH_SENTEVAL = '../'
+PATH_SENTEVAL = '../senteval'
 PATH_TO_DATA = '../data/senteval_data/'
 MODEL_PATH = 'infersent.allnli.pickle'
 

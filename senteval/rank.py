@@ -8,11 +8,16 @@
 '''
 Image-Caption Retrieval with COCO dataset
 '''
+from __future__ import absolute_import, division, unicode_literals
 
 import os
 import logging
-import cPickle
 import numpy as np
+
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 from tools.ranking import ImageSentenceRankingPytorch
 
@@ -39,7 +44,8 @@ class ImageCaptionRetrievalEval(object):
             list_sent = []
             list_img_feat = []
             with open(os.path.join(fpath, split + '.pkl')) as f:
-                cocodata = cPickle.load(f)
+                cocodata = pickle.load(f)
+
             for imgkey in range(len(cocodata['features'])):
                 assert len(cocodata['image_to_caption_ids'][imgkey]) >= 5, \
                        cocodata['image_to_caption_ids'][imgkey]

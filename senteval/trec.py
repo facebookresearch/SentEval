@@ -9,7 +9,10 @@
 TREC question-type classification
 '''
 
+from __future__ import absolute_import, division, unicode_literals
+
 import os
+import io
 import logging
 import numpy as np
 
@@ -31,7 +34,7 @@ class TRECEval(object):
         trec_data = {'X': [], 'y': []}
         tgt2idx = {'ABBR': 0, 'DESC': 1, 'ENTY': 2,
                    'HUM': 3, 'LOC': 4, 'NUM': 5}
-        with open(fpath, 'rb') as f:
+        with io.open(fpath, 'r', encoding='latin-1') as f:
             for line in f:
                 target, sample = line.strip().split(':', 1)
                 sample = sample.split(' ', 1)[1].split()

@@ -9,7 +9,10 @@
 SST - binary classification
 '''
 
+from __future__ import absolute_import, division, unicode_literals
+
 import os
+import io
 import logging
 import numpy as np
 
@@ -33,7 +36,7 @@ class SSTBinaryEval(object):
 
     def loadFile(self, fpath):
         sst_data = {'X': [], 'y': []}
-        with open(fpath, 'rb') as f:
+        with io.open(fpath, 'r', encoding='utf-8') as f:
             for line in f:
                 sample = line.strip().split('\t')
                 sst_data['y'].append(int(sample[1]))
@@ -43,6 +46,7 @@ class SSTBinaryEval(object):
     def run(self, params, batcher):
         sst_embed = {'train': {}, 'dev': {}, 'test': {}}
         bsize = params.batch_size
+
         for key in self.sst_data:
             logging.info('Computing embedding for {0}'.format(key))
             # Sort to reduce padding

@@ -8,8 +8,10 @@
 '''
 SICK Relatedness and Entailment
 '''
+from __future__ import absolute_import, division, unicode_literals
 
 import os
+import io
 import logging
 import numpy as np
 
@@ -40,7 +42,7 @@ class SICKRelatednessEval(object):
     def loadFile(self, fpath):
         skipFirstLine = True
         sick_data = {'X_A': [], 'X_B': [], 'y': []}
-        with open(fpath, 'rb') as f:
+        with io.open(fpath, 'r', encoding='utf-8') as f:
             for line in f:
                 if skipFirstLine:
                     skipFirstLine = False
@@ -56,6 +58,7 @@ class SICKRelatednessEval(object):
     def run(self, params, batcher):
         sick_embed = {'train': {}, 'dev': {}, 'test': {}}
         bsize = params.batch_size
+
         for key in self.sick_data:
             logging.info('Computing embedding for {0}'.format(key))
             # Sort to reduce padding
@@ -142,7 +145,7 @@ class SICKEntailmentEval(SICKRelatednessEval):
         label2id = {'CONTRADICTION': 0, 'NEUTRAL': 1, 'ENTAILMENT': 2}
         skipFirstLine = True
         sick_data = {'X_A': [], 'X_B': [], 'y': []}
-        with open(fpath, 'rb') as f:
+        with io.open(fpath, 'r', encoding='utf-8') as f:
             for line in f:
                 if skipFirstLine:
                     skipFirstLine = False
@@ -157,6 +160,7 @@ class SICKEntailmentEval(SICKRelatednessEval):
     def run(self, params, batcher):
         sick_embed = {'train': {}, 'dev': {}, 'test': {}}
         bsize = params.batch_size
+
         for key in self.sick_data:
             logging.info('Computing embedding for {0}'.format(key))
             # Sort to reduce padding

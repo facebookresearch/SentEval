@@ -8,10 +8,11 @@
 '''
 SNLI - Entailment
 '''
-from __future__ import division
+from __future__ import absolute_import, division, unicode_literals
 
 import codecs
 import os
+import io
 import logging
 import numpy as np
 
@@ -24,18 +25,19 @@ class SNLIEval(object):
         self.seed = seed
         train1 = self.loadFile(os.path.join(taskpath, 's1.train'))
         train2 = self.loadFile(os.path.join(taskpath, 's2.train'))
-        trainlabels = open(os.path.join(taskpath, 'labels.train')) \
-            .read().splitlines()
+
+        trainlabels = io.open(os.path.join(taskpath, 'labels.train'),
+                              encoding='utf-8').read().splitlines()
 
         valid1 = self.loadFile(os.path.join(taskpath, 's1.dev'))
         valid2 = self.loadFile(os.path.join(taskpath, 's2.dev'))
-        validlabels = open(os.path.join(taskpath, 'labels.dev')) \
-            .read().splitlines()
+        validlabels = io.open(os.path.join(taskpath, 'labels.dev'),
+                              encoding='utf-8').read().splitlines()
 
         test1 = self.loadFile(os.path.join(taskpath, 's1.test'))
         test2 = self.loadFile(os.path.join(taskpath, 's2.test'))
-        testlabels = open(os.path.join(taskpath, 'labels.test')) \
-            .read().splitlines()
+        testlabels = io.open(os.path.join(taskpath, 'labels.test'),
+                             encoding='utf-8').read().splitlines()
 
         # sort data (by s2 first) to reduce padding
         sorted_train = sorted(zip(train2, train1, trainlabels),

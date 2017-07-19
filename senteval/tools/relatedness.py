@@ -8,6 +8,7 @@
 """
 Semantic Relatedness (supervised) with Pytorch
 """
+from __future__ import absolute_import, division, unicode_literals
 
 import copy
 import numpy as np
@@ -26,6 +27,7 @@ class RelatednessPytorch(object):
         # fix seed
         np.random.seed(config['seed'])
         torch.manual_seed(config['seed'])
+        assert torch.cuda.is_available(), 'torch.cuda required for Relatedness'
         torch.cuda.manual_seed(config['seed'])
 
         self.train = train
@@ -44,8 +46,13 @@ class RelatednessPytorch(object):
         self.model = nn.Sequential(
             nn.Linear(self.inputdim, self.nclasses),
             nn.Softmax(),
-            ).cuda()
-        self.loss_fn = nn.MSELoss().cuda()
+            )
+        self.loss_fn = nn.MSELoss()
+
+        if torch.cuda.is_available():
+            self.model = self.model.coda()
+            self.loss_fn = self.loss_fn.cuda()
+
         self.loss_fn.size_average = False
         self.optimizer = optim.Adam(self.model.parameters(),
                                     weight_decay=self.l2reg)

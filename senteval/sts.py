@@ -10,7 +10,10 @@ STS-{2012,2013,2014,2015,2016} (unsupervised) and
 STS-benchmark (supervised) tasks
 '''
 
+from __future__ import absolute_import, division, unicode_literals
+
 import os
+import io
 import numpy as np
 import logging
 
@@ -27,10 +30,11 @@ class STSEval(object):
 
         for dataset in self.datasets:
             sent1, sent2 = zip(*[l.split("\t") for l in
-                               open(fpath + '/STS.input.%s.txt' % dataset)
-                               .read().splitlines()])
-            raw_scores = np.array([x for x in open(fpath +
-                                   '/STS.gs.%s.txt' % dataset)
+                               io.open(fpath + '/STS.input.%s.txt' % dataset,
+                                       encoding='utf8').read().splitlines()])
+            raw_scores = np.array([x for x in
+                                   io.open(fpath + '/STS.gs.%s.txt' % dataset,
+                                           encoding='utf8')
                                    .read().splitlines()])
             not_empty_idx = raw_scores != ''
 
@@ -157,7 +161,7 @@ class STSBenchmarkEval(SICKRelatednessEval):
 
     def loadFile(self, fpath):
         sick_data = {'X_A': [], 'X_B': [], 'y': []}
-        with open(fpath, 'rb') as f:
+        with io.open(fpath, 'r', encoding='utf-8') as f:
             for line in f:
                 text = line.strip().split('\t')
                 sick_data['X_A'].append(text[5].split())

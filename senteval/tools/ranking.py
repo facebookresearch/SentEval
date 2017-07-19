@@ -8,7 +8,7 @@
 """
 Image Annotation/Search for COCO with Pytorch
 """
-
+from __future__ import absolute_import, division, unicode_literals
 
 import logging
 import copy
@@ -148,7 +148,7 @@ class ImageSentenceRankingPytorch(object):
                               self.test['sentfeat'], self.test['imgfeat'])
 
         # Training
-        while not stop_train and self.nepoch<=self.maxepoch:
+        while not stop_train and self.nepoch <= self.maxepoch:
             logging.info('start epoch')
             self.trainepoch(trainTxt, trainImg, devTxt, devImg, nepoches=1)
             logging.info('Epoch {0} finished'.format(self.nepoch))
@@ -230,7 +230,7 @@ class ImageSentenceRankingPytorch(object):
             all_costs = []
             for i in range(0, len(trainTxt), self.batch_size):
                 # forward
-                if i%(self.batch_size*500)==0 and i>0:
+                if i % (self.batch_size*500) == 0 and i > 0:
                     logging.info('samples : {0}'.format(i))
                     r1_i2t, r5_i2t, r10_i2t, medr_i2t = self.i2t(devImg,
                                                                  devTxt)
@@ -324,7 +324,6 @@ class ImageSentenceRankingPytorch(object):
                 Variable(captions[i:i + self.batch_size], volatile=True)))
         img_embed = torch.cat(img_embed, 0).data
         sent_embed = torch.cat(sent_embed, 0).data
-
 
         npts = img_embed.size(0) / 5
         index_list = []
