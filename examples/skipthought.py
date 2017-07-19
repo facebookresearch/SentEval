@@ -5,18 +5,19 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+from __future__ import absolute_import, division, unicode_literals
+
 """
 Example of file to compare skipthought vectors with our InferSent model
 """
 import logging
-import torch
 from exutil import dotdict
 import sys
 sys.setdefaultencoding('utf8')
 
 
 # Set PATHs
-PATH_TO_SENTEVAL = '../'
+PATH_TO_SENTEVAL = '../senteval'
 PATH_TO_DATA = '../data/senteval_data/'
 PATH_TO_SKIPTHOUGHT = ''
 assert PATH_TO_SKIPTHOUGHT != '', 'Download skipthought and set correct PATH'
@@ -31,7 +32,6 @@ import senteval
 def prepare(params, samples):
     return
 
-
 def batcher(params, batch):
     embeddings = skipthoughts.encode(params.encoder,
                                      [str(' '.join(sent), errors="ignore")
@@ -45,9 +45,6 @@ params_senteval = {'usepytorch': True,
                    'task_path': PATH_TO_DATA,
                    'batch_size': 512}
 params_senteval = dotdict(params_senteval)
-
-# set gpu device
-torch.cuda.set_device(1)
 
 # Set up logger
 logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)

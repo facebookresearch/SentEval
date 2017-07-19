@@ -8,8 +8,9 @@
 '''
 Binary classifier and corresponding datasets : MR, CR, SUBJ, MPQA
 '''
+from __future__ import absolute_import, division, unicode_literals
 
-import codecs
+import io
 import os
 import numpy as np
 import logging
@@ -30,9 +31,8 @@ class BinaryClassifierEval(object):
         # Those output will be further used by "batcher".
 
     def loadFile(self, fpath):
-        with codecs.open(fpath, 'rb', 'latin-1') as f:
-            return [line.encode('utf-8').split() for line in
-                    f.read().splitlines()]
+        with io.open(fpath, 'r', encoding='latin-1') as f:
+            return [line.split() for line in f.read().splitlines()]
 
     def run(self, params, batcher):
         enc_input = []

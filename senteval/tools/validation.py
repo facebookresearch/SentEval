@@ -12,10 +12,11 @@ Validation and classification
 (train, dev, test) :  split classifier
 
 """
+from __future__ import absolute_import, division, unicode_literals
 
 import logging
 import numpy as np
-from classifier import LogReg, MLP
+from .classifier import LogReg, MLP
 
 import sklearn
 assert(sklearn.__version__ >= "0.18.0"), \

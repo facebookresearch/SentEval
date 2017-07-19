@@ -5,18 +5,22 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+from __future__ import absolute_import, division, unicode_literals
+
 import sys
 import numpy as np
 import logging
 
 from exutil import dotdict
 import data
+import torch
 
 # Set PATHs
-PATH_TO_SENTEVAL = '../'
-PATH_TO_DATA = '../data/senteval_data/'
+PATH_TO_SENTEVAL = '../senteval'
+PATH_TO_DATA = '../data/senteval_data'
 PATH_TO_GLOVE = 'glove/glove.840B.300d.txt'
 
+# import SentEval
 sys.path.insert(0, PATH_TO_SENTEVAL)
 import senteval
 

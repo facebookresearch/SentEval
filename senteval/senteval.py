@@ -10,6 +10,8 @@
 Generic sentence evaluation scripts wrapper
 
 '''
+from __future__ import absolute_import, division, unicode_literals
+
 from binary import CREval, MREval, MPQAEval, SUBJEval
 from snli import SNLIEval
 from trec import TRECEval
@@ -44,7 +46,7 @@ class SentEval(object):
         # sanity check
         assert params.classifier in ['LogReg', 'MLP']
         if params.classifier == 'MLP':
-            assert params.nhid>0, 'When using an MLP, \
+            assert params.nhid > 0, 'When using an MLP, \
                 you need to set params.nhid>0'
         if not params.usepytorch and params.classifier == 'MLP':
             assert False, 'No MLP implemented in scikit-learn'
