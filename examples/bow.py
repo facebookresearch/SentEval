@@ -16,7 +16,7 @@ import data
 import torch
 
 # Set PATHs
-PATH_TO_SENTEVAL = '../senteval'
+PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data/senteval_data'
 PATH_TO_GLOVE = 'glove/glove.840B.300d.txt'
 
@@ -55,7 +55,7 @@ def batcher(params, batch):
             if word in params.word_vec:
                 sentvec.append(params.word_vec[word])
         if not sentvec:
-            vec = np.zeros(len(params.word_vec.values()[0]))
+            vec = np.zeros(len(next(params.word_vec.values())))
             sentvec.append(vec)
         sentvec = np.mean(sentvec, 0)
         embeddings.append(sentvec)

@@ -16,7 +16,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import logging
 import numpy as np
-from .classifier import LogReg, MLP
+from senteval.tools.classifier import LogReg, MLP
 
 import sklearn
 assert(sklearn.__version__ >= "0.18.0"), \
