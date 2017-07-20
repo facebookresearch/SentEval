@@ -50,7 +50,7 @@ class RelatednessPytorch(object):
         self.loss_fn = nn.MSELoss()
 
         if torch.cuda.is_available():
-            self.model = self.model.coda()
+            self.model = self.model.cuda()
             self.loss_fn = self.loss_fn.cuda()
 
         self.loss_fn.size_average = False
