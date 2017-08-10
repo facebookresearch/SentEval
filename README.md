@@ -29,7 +29,7 @@ To get all the transfer tasks datasets, run (in data/):
 ```bash
 ./get_transfer_data_ptb.bash
 ```
-This will automatically download and preprocess the datasets, and put them in data/senteval_data.
+This will automatically download and preprocess the datasets, and put them in data/senteval_data (warning: for MacOS users, you may have to use p7zip instead of unzip).
 
 WARNING: Extracting the [MRPC](https://www.microsoft.com/en-us/download/details.aspx?id=52398) MSI file requires the "[cabextract](https://www.cabextract.org.uk/#install)" command line (i.e *apt-get/yum install cabextract*).
 
