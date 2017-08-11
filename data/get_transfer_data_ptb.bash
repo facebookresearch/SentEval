@@ -10,7 +10,7 @@
 #
 
 data_path=senteval_data
-preprocess_exec=./tokenizer.sed
+preprocess_exec="sed -f tokenizer.sed"
 
 mkdir $data_path
 
