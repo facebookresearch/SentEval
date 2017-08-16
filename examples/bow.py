@@ -42,6 +42,7 @@ The user has to implement two functions:
 def prepare(params, samples):
     _, params.word2id = data.create_dictionary(samples)
     params.word_vec = data.get_wordvec(PATH_TO_GLOVE, params.word2id)
+    params.wvec_dim = 300
     return
 
 
@@ -55,7 +56,7 @@ def batcher(params, batch):
             if word in params.word_vec:
                 sentvec.append(params.word_vec[word])
         if not sentvec:
-            vec = np.zeros(len(next(params.word_vec.values())))
+            vec = np.zeros(params.wvec_dim)
             sentvec.append(vec)
         sentvec = np.mean(sentvec, 0)
         embeddings.append(sentvec)

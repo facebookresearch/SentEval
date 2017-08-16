@@ -46,31 +46,31 @@ class COCOProjNet(nn.Module):
         sentc = sentc.view(-1, self.sentdim)
 
         imgproj = self.imgproj(img)
-        imgproj = imgproj / torch.sqrt(torch.pow(imgproj, 2).sum(1)).expand_as(imgproj)
+        imgproj = imgproj / torch.sqrt(torch.pow(imgproj, 2).sum(1, keepdim=True)).expand_as(imgproj)
         imgcproj = self.imgproj(imgc)
-        imgcproj = imgcproj / torch.sqrt(torch.pow(imgcproj, 2).sum(1)).expand_as(imgcproj)
+        imgcproj = imgcproj / torch.sqrt(torch.pow(imgcproj, 2).sum(1, keepdim=True)).expand_as(imgcproj)
         sentproj = self.sentproj(sent)
-        sentproj = sentproj / torch.sqrt(torch.pow(sentproj, 2).sum(1)).expand_as(sentproj)
+        sentproj = sentproj / torch.sqrt(torch.pow(sentproj, 2).sum(1, keepdim=True)).expand_as(sentproj)
         sentcproj = self.sentproj(sentc)
-        sentcproj = sentcproj / torch.sqrt(torch.pow(sentcproj, 2).sum(1)).expand_as(sentcproj)
+        sentcproj = sentcproj / torch.sqrt(torch.pow(sentcproj, 2).sum(1, keepdim=True)).expand_as(sentcproj)
         # (bsize*ncontrast, projdim)
 
-        anchor1 = torch.sum((imgproj*sentproj), 1).squeeze(1)
-        anchor2 = torch.sum((sentproj*imgproj), 1).squeeze(1)
-        img_sentc = torch.sum((imgproj*sentcproj), 1).squeeze(1)
-        sent_imgc = torch.sum((sentproj*imgcproj), 1).squeeze(1)
+        anchor1 = torch.sum((imgproj*sentproj), 1)
+        anchor2 = torch.sum((sentproj*imgproj), 1)
+        img_sentc = torch.sum((imgproj*sentcproj), 1)
+        sent_imgc = torch.sum((sentproj*imgcproj), 1)
 
         # (bsize*ncontrast)
         return anchor1, anchor2, img_sentc, sent_imgc
 
     def proj_sentence(self, sent):
         output = self.sentproj(sent)
-        output = output / torch.sqrt(torch.pow(output, 2).sum(1)).expand_as(output)
+        output = output / torch.sqrt(torch.pow(output, 2).sum(1, keepdim=True)).expand_as(output)
         return output # (bsize, projdim)
 
     def proj_image(self, img):
         output = self.imgproj(img)
-        output = output / torch.sqrt(torch.pow(output, 2).sum(1)).expand_as(output)
+        output = output / torch.sqrt(torch.pow(output, 2).sum(1, keepdim=True)).expand_as(output)
         return output # (bsize, projdim)
 
 
@@ -286,7 +286,7 @@ class ImageSentenceRankingPytorch(object):
         img_embed = torch.cat(img_embed, 0).data
         sent_embed = torch.cat(sent_embed, 0).data
 
-        npts = img_embed.size(0) / 5
+        npts = int(img_embed.size(0) / 5)
         idxs = torch.cuda.LongTensor(range(0, len(img_embed), 5))
         ims = img_embed.index_select(0, idxs)
 
@@ -325,9 +325,9 @@ class ImageSentenceRankingPytorch(object):
         img_embed = torch.cat(img_embed, 0).data
         sent_embed = torch.cat(sent_embed, 0).data
 
-        npts = img_embed.size(0) / 5
+        npts = int(img_embed.size(0) / 5)
         index_list = []
-
+        
         ranks = np.zeros(npts)
         for index in range(npts):
 
