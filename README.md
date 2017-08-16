@@ -7,7 +7,7 @@ SentEval is a library for evaluating the quality of sentence embeddings. We asse
 This code is written in python. The dependencies are:
 
 * Python 2.7 (with recent versions of [NumPy](http://www.numpy.org/)/[SciPy](http://www.scipy.org/))
-* [Pytorch](http://pytorch.org/) >= 0.12
+* [Pytorch](http://pytorch.org/) >= 0.2 (**recent new pytorch version**)
 * [scikit-learn](http://scikit-learn.org/stable/index.html)>=0.18.0
 
 
