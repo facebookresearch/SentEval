@@ -1,0 +1,7 @@
+data/senteval_data
+examples/glove
+.idea/
+examples/__pycache__/
+senteval/__pycache__/
+senteval/tools/__pycache__/
+
