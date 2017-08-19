@@ -107,7 +107,7 @@ class RelatednessPytorch(object):
             all_costs = []
             for i in range(0, len(X), self.batch_size):
                 # forward
-                idx = torch.cuda.LongTensor(permutation[i:i + self.batch_size])
+                idx = torch.from_numpy(permutation[i:i + self.batch_size]).long().cuda()
                 Xbatch = Variable(X.index_select(0, idx))
                 ybatch = Variable(y.index_select(0, idx))
                 output = self.model(Xbatch)
