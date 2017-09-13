@@ -63,7 +63,7 @@ class SNLIEval(object):
 
     def loadFile(self, fpath):
         with codecs.open(fpath, 'rb', 'latin-1') as f:
-            return [line.encode('utf-8').split() for line in
+            return [line.split() for line in
                     f.read().splitlines()]
 
     def run(self, params, batcher):
