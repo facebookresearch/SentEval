@@ -19,7 +19,7 @@ SentEval allows you to evaluate your sentence embeddings as features for the fol
 * Entailment (NLI): [SNLI](https://nlp.stanford.edu/projects/snli/) (caption-based NLI), [MultiNLI](https://www.nyu.edu/projects/bowman/multinli/) (Multi-genre NLI), [SICK](http://clic.cimec.unitn.it/composes/sick.html) (Sentences Involving Compositional Knowledge, entailment)
 * Semantic Textual Similarity: [STS12](https://www.cs.york.ac.uk/semeval-2012/task6/), [STS13](http://ixa2.si.ehu.es/sts/) (-SMT), [STS14](http://alt.qcri.org/semeval2014/task10/), [STS15](http://alt.qcri.org/semeval2015/task2/), [STS16](http://alt.qcri.org/semeval2016/task1/)
 * Semantic Relatedness: [STSBenchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results), [SICK](http://clic.cimec.unitn.it/composes/sick.html)
-* Paraphrase detection: [MRPC](https://aclweb.org/aclwiki/index.php?title=Paraphrase_Identification_(State_of_the_art)) (Microsoft Research Paraphrase Corpus)
+* Paraphrase detection: [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art)) (Microsoft Research Paraphrase Corpus)
 * Caption-Image retrieval: [COCO](http://mscoco.org/) dataset (with ResNet-101 2048d image embeddings)
 
 [more details on the tasks](https://arxiv.org/pdf/1705.02364.pdf)
