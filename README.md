@@ -10,7 +10,6 @@ This code is written in python. The dependencies are:
 * [Pytorch](http://pytorch.org/) >= 0.2 (**recent new pytorch version**)
 * [scikit-learn](http://scikit-learn.org/stable/index.html)>=0.18.0
 
-
 ## Tasks
 
 SentEval allows you to evaluate your sentence embeddings as features for the following tasks:
@@ -101,7 +100,7 @@ After having implemented the batch and prepare function for your own sentence en
 import senteval
 se = senteval.SentEval(params, batcher, prepare)
 ```
-(to import senteval, you can either add senteval path to your pythonpath or use sys.path.insert)
+(to import senteval, you can either add senteval path to your pythonpath, use sys.path.insert or "*pip install git+https://github.com/facebookresearch/SentEval*")
 
 2) define the set of transfer tasks on which you want SentEval to perform evaluation and run the evaluation: 
 ```python
