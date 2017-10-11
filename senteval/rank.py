@@ -69,8 +69,7 @@ class ImageCaptionRetrievalEval(object):
             logging.info('Computing embedding for {0}'.format(key))
             # Sort to reduce padding
             self.coco_data[key]['sent'] = np.array(self.coco_data[key]['sent'])
-            self.coco_data[key]['sent'] = np.sort(self.coco_data[key]['sent'])
-            idx_sort = np.argsort(self.coco_data[key]['sent'])
+            self.coco_data[key]['sent'], idx_sort = np.sort(self.coco_data[key]['sent']), np.argsort(self.coco_data[key]['sent'])
             idx_unsort = np.argsort(idx_sort)
 
             coco_embed[key]['X'] = []
