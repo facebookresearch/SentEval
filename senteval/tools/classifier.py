@@ -19,6 +19,7 @@ import torch
 from torch import nn
 from torch.autograd import Variable
 import torch.optim as optim
+import torch.nn.functional as F
 
 
 class PyTorchClassifier(object):
@@ -150,12 +151,11 @@ class PyTorchClassifier(object):
         probas = []
         for i in range(0, len(devX), self.batch_size):
             Xbatch = Variable(devX[i:i + self.batch_size], volatile=True)
+            vals = F.softmax(self.model(Xbatch).data.cpu().numpy())
             if not probas:
-                probas = self.model(Xbatch).data.cpu().numpy()
+                probas = vals
             else:
-                probas = np.concatenate(probas,
-                                        self.model(Xbatch).data.cpu().numpy(),
-                                        axis=0)
+                probas = np.concatenate(probas, vals, axis=0)
         return probas
 
 
