@@ -187,7 +187,7 @@ which takes longer but will produce better and comparable results.
 
 ## References
 
-Please considering citing [[1]](https://arxiv.org/abs/1705.02364) [[2]](https://arxiv.org/abs/1707.06320) if using this code for evaluating sentence embedding methods.
+Please considering citing [[1]](https://arxiv.org/abs/1705.02364) if using this code for evaluating sentence embedding methods.
 
 ### Supervised Learning of Universal Sentence Representations from Natural Language Inference Data
 
@@ -198,19 +198,6 @@ Please considering citing [[1]](https://arxiv.org/abs/1705.02364) [[2]](https://
   title={Supervised Learning of Universal Sentence Representations from Natural Language Inference Data},
   author={Conneau, Alexis and Kiela, Douwe and Schwenk, Holger and Barrault, Loic and Bordes, Antoine},
   journal={arXiv preprint arXiv:1705.02364},
-  year={2017}
-}
-```
-
-### Learning Visually Grounded Sentence Representations
-
-[2] D. Kiela, A. Conneau, A. Jabri, M. Nickel, [*Learning Visually Grounded Sentence Representations*](https://arxiv.org/abs/1707.06320)
-
-```
-@article{kiela2017learning,
-  title={Learning Visually Grounded Sentence Representations},
-  author={Kiela, Douwe and Conneau, Alexis and Jabri, Allan and Nickel, Maximilian},
-  journal={arXiv preprint arXiv:1707.06320},
   year={2017}
 }
 ```
