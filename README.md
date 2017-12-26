@@ -25,7 +25,7 @@ This code is written in python. The dependencies are:
 SentEval allows you to evaluate your sentence embeddings as features for the following tasks:
 
 | Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
-|----------	|------------------------------	|-----------	|----------	|----------------	|---------------	|
+|----------	|------------------------------	|-----------:|----------:|----------------	|---------------	|
 | [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| movie review                 	| 11k     	| 11k    	| 1 | 1 |
 | [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| product review               	| 4k      	| 4k     	| 1 | 1 |
 | [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| subjectivity status          	| 10k     	| 10k    	| 1 | 1 |
