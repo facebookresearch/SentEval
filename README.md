@@ -1,6 +1,6 @@
-# SentEval - evaluation tool for sentence embeddings
+# SentEval: evaluation toolkit for sentence embeddings
 
-SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. SentEval currently includes **17 tasks**. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
+SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. **SentEval currently includes 17 tasks**. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
 
 
 **SentEval recent fixes (12/26):**
@@ -130,7 +130,7 @@ params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
 params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
-You can choose *nhid=0* (Logistic Regression) or *nhid>0* (MLP) and define the parameters for training.
+You can choose **nhid=0** (Logistic Regression) or **nhid>0** (MLP) and define the parameters for training.
 
 3) Create an instance of the class SE:
 ```python
