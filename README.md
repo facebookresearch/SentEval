@@ -119,16 +119,13 @@ batcher(params, batch)
 
 After having implemented the batch and prepare function for your own sentence encoder,
 
-1) to perform the actual evaluation, first import senteval and set parameters:
+1) to perform the actual evaluation, first import senteval and set its parameters:
 ```python
 import senteval
 params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
-params['classifier'] = {'nhid': 0, 'optim': 'adam',
-                                 'tenacity': 5, 'epoch_size': 4,
-                                 'max_epoch': 200, 'dropout': 0.}
 ```
 
-2) You can set the parameters of your classifier as follows (see below for more information):
+2) (optional) set the parameters of the classifier (when applicable):
 ```python
 params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
