@@ -128,19 +128,19 @@ params['classifier'] = {'nhid': 0, 'optim': 'adam',
                                  'max_epoch': 200, 'dropout': 0.}
 ```
 
-1bis) You can set the parameters of your classifier as follows (see below for more information):
+2) You can set the parameters of your classifier as follows (see below for more information):
 ```python
 params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
 You can choose *nhid=0* (Logistic Regression) or *nhid>0* (MLP) and define the parameters for training.
 
-2) Create an instance of the class SE:
+3) Create an instance of the class SE:
 ```python
 se = senteval.engine.SE(params, batcher, prepare)
 ```
 
-3) define the set of transfer tasks and run the evaluation:
+4) define the set of transfer tasks and run the evaluation:
 ```python
 transfer_tasks = ['MR', 'SICKEntailment', 'STS14', 'STSBenchmark']
 results = se.eval(transfer_tasks)
