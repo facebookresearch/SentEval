@@ -24,7 +24,7 @@ This code is written in python. The dependencies are:
 
 SentEval allows you to evaluate your sentence embeddings as features for the following tasks:
 
-| Task     	| Type                         	| n train 	| n test 	| needs_train 	| set_classifier |
+| Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
 |----------	|------------------------------	|-----------	|----------	|----------------	|---------------	|
 | [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| movie review                 	| 11k     	| 11k    	| 1 | 1 |
 | [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| product review               	| 4k      	| 4k     	| 1 | 1 |
@@ -44,7 +44,7 @@ SentEval allows you to evaluate your sentence embeddings as features for the fol
 | [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art)) | paraphrase detection  | 4.1k | 1.7k | 1 | 1 |
 | [COCO](http://mscoco.org/)     	| image-caption retrieval      	| 567k    	| 5*1k   	| 1 | 0 |
 
-where *needs_train* means a model with parameters is learned on top of the sentence embeddings, and *set_classifier* means it is possible to define the parameters of the classifier in the case of a classification task (see below).
+where **needs_train** means a model with parameters is learned on top of the sentence embeddings, and **set_classifier** means you can define the parameters of the classifier in the case of a classification task (see below).
 
 Note: COCO comes with ResNet-101 2048d image embeddings. [More details on the tasks.](https://arxiv.org/pdf/1705.02364.pdf)
 
