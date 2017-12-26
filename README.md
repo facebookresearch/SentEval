@@ -34,14 +34,14 @@ SentEval allows you to evaluate your sentence embeddings as features for the fol
 | [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| 6k      	| 500    	| 1 | 1 |
 | [SICK-E](http://clic.cimec.unitn.it/composes/sick.html)   	| recognizing textual entailment 	| 4.5k    	| 4.9k   	| 1 | 1 |
 | [SNLI](https://nlp.stanford.edu/projects/snli/)     	| natural language inference   	| 550k    	| 9.8k   	| 1 | 1 |
+| [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art)) | paraphrase detection  | 4.1k | 1.7k | 1 | 1 |
 | [STS 2012](https://www.cs.york.ac.uk/semeval-2012/task6/) 	| semantic textual similarity  	| N/A     	| 3.1k   	| 0  | 0 |
 | [STS 2013](http://ixa2.si.ehu.es/sts/) 	| semantic textual similarity  	| N/A     	| 1.5k   	| 0  | 0 |
 | [STS 2014](http://alt.qcri.org/semeval2014/task10/) 	| semantic textual similarity  	| N/A     	| 3.7k   	| 0  | 0 |
 | [STS 2015](http://alt.qcri.org/semeval2015/task2/) 	| semantic textual similarity  	| N/A     	| 8.5k   	| 0  | 0 |
 | [STS 2016](http://alt.qcri.org/semeval2016/task1/) 	| semantic textual similarity  	| N/A     	| 9.2k   	| 0  | 0 |
 | [STS B](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results)    	| semantic textual similarity  	| 5.7k    	| 1.4k   	| 1 | 0 |
-| [SICK-R](http://clic.cimec.unitn.it/composes/sick.html)   	| semantic relatedness| 4.5k    	| 4.9k   	| 1 | 0 |
-| [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art)) | paraphrase detection  | 4.1k | 1.7k | 1 | 1 |
+| [SICK-R](http://clic.cimec.unitn.it/composes/sick.html)   	| semantic textual similarity | 4.5k    	| 4.9k   	| 1 | 0 |
 | [COCO](http://mscoco.org/)     	| image-caption retrieval      	| 567k    	| 5*1k   	| 1 | 0 |
 
 where **needs_train** means a model with parameters is learned on top of the sentence embeddings, and **set_classifier** means you can define the parameters of the classifier in the case of a classification task (see below).
