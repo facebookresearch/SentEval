@@ -32,7 +32,7 @@ SentEval allows you to evaluate your sentence embeddings as features for the fol
 | [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| opinion-polarity  | 11k     	| 11k    	| 1 | 1 |
 | [SST](https://nlp.stanford.edu/sentiment/index.html)      	| (binary) sentiment analysis  	| 67k     	| 1.8k   	| 1 | 1 |
 | [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| 6k      	| 0.5k    	| 1 | 1 |
-| [SICK-E](http://clic.cimec.unitn.it/composes/sick.html)   	| recognizing textual entailment 	| 4.5k    	| 4.9k   	| 1 | 1 |
+| [SICK-E](http://clic.cimec.unitn.it/composes/sick.html)   	| natural language inference 	| 4.5k    	| 4.9k   	| 1 | 1 |
 | [SNLI](https://nlp.stanford.edu/projects/snli/)     	| natural language inference   	| 550k    	| 9.8k   	| 1 | 1 |
 | [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art)) | paraphrase detection  | 4.1k | 1.7k | 1 | 1 |
 | [STS 2012](https://www.cs.york.ac.uk/semeval-2012/task6/) 	| semantic textual similarity  	| N/A     	| 3.1k   	| 0  | 0 |
