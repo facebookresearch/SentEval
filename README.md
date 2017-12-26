@@ -133,6 +133,8 @@ params['classifier'] = {'nhid': 0, 'optim': 'adam',
 params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
+You can choose *nhid=0* (Logistic Regression) or *nhid>0* (MLP) and define the parameters for training.
+
 2) Create an instance of the class SE:
 ```python
 se = senteval.engine.SE(params, batcher, prepare)
