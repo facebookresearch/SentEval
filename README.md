@@ -25,13 +25,13 @@ This code is written in python. The dependencies are:
 SentEval allows you to evaluate your sentence embeddings as features for the following tasks:
 
 | Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
-|----------	|------------------------------	|-----------:|----------:|----------------	|---------------	|
+|----------	|------------------------------	|-----------:|----------:|:-----------:|:----------:|
 | [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| movie review                 	| 11k     	| 11k    	| 1 | 1 |
 | [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| product review               	| 4k      	| 4k     	| 1 | 1 |
 | [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| subjectivity status          	| 10k     	| 10k    	| 1 | 1 |
 | [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| opinion-polarity  | 11k     	| 11k    	| 1 | 1 |
 | [SST](https://nlp.stanford.edu/sentiment/index.html)      	| (binary) sentiment analysis  	| 67k     	| 1.8k   	| 1 | 1 |
-| [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| 6k      	| 500    	| 1 | 1 |
+| [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| 6k      	| 0.5k    	| 1 | 1 |
 | [SICK-E](http://clic.cimec.unitn.it/composes/sick.html)   	| recognizing textual entailment 	| 4.5k    	| 4.9k   	| 1 | 1 |
 | [SNLI](https://nlp.stanford.edu/projects/snli/)     	| natural language inference   	| 550k    	| 9.8k   	| 1 | 1 |
 | [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art)) | paraphrase detection  | 4.1k | 1.7k | 1 | 1 |
