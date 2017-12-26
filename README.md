@@ -210,4 +210,7 @@ Please considering citing [[1]](https://arxiv.org/abs/1705.02364) [[2]](https://
 }
 ```
 
+## License
+SentEval is BSD-licensed.
+
 Contact: [aconneau@fb.com](mailto:aconneau@fb.com), [dkiela@fb.com](mailto:dkiela@fb.com)
