@@ -76,7 +76,7 @@ class TRECEval(object):
         config_classifier = {'nclasses': 6, 'seed': self.seed,
                              'usepytorch': params.usepytorch,
                              'classifier': params.classifier,
-                             'nhid': params.nhid, 'kfold': params.kfold}
+                             'kfold': params.kfold}
         clf = KFoldClassifier({'X': train_embeddings,
                                'y': np.array(train_labels)},
                               {'X': test_embeddings,

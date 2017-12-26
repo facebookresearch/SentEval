@@ -89,13 +89,12 @@ class MRPCEval(object):
         testF = np.c_[np.abs(testA - testB), testA * testB]
         testY = mrpc_embed['test']['y']
 
-        config_classifier = {'nclasses': 2, 'seed': self.seed,
-                             'usepytorch': params.usepytorch,
-                             'classifier': params.classifier,
-                             'nhid': params.nhid, 'kfold': params.kfold}
+        config = {'nclasses': 2, 'seed': self.seed,
+                  'usepytorch': params.usepytorch,
+                  'classifier': params.classifier,
+                  'nhid': params.nhid, 'kfold': params.kfold}
         clf = KFoldClassifier(train={'X': trainF, 'y': trainY},
-                              test={'X': testF, 'y': testY},
-                              config=config_classifier)
+                              test={'X': testF, 'y': testY}, config=config)
 
         devacc, testacc, yhat = clf.run()
         testf1 = round(100*f1_score(testY, yhat), 2)

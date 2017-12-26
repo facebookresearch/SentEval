@@ -14,16 +14,16 @@ from __future__ import absolute_import, division, unicode_literals
 
 import numpy as np
 import copy
+from senteval import utils
 
 import torch
 from torch import nn
 from torch.autograd import Variable
-import torch.optim as optim
 
 
 class PyTorchClassifier(object):
     def __init__(self, inputdim, nclasses, l2reg=0., batch_size=64, seed=1111,
-                 cudaEfficient=False, nepoches=4, maxepoch=200):
+                 cudaEfficient=False):
         # fix seed
         np.random.seed(seed)
         torch.manual_seed(seed)
@@ -34,8 +34,6 @@ class PyTorchClassifier(object):
         self.l2reg = l2reg
         self.batch_size = batch_size
         self.cudaEfficient = cudaEfficient
-        self.nepoches = nepoches
-        self.maxepoch = maxepoch
 
     def prepare_split(self, X, y, validation_data=None, validation_split=None):
         # Preparing validation data
@@ -75,22 +73,22 @@ class PyTorchClassifier(object):
                                                         validation_split)
 
         # Training
-        while not stop_train and self.nepoch <= self.maxepoch:
-            self.trainepoch(trainX, trainy, nepoches=self.nepoches)
+        while not stop_train and self.nepoch <= self.max_epoch:
+            self.trainepoch(trainX, trainy, epoch_size=self.epoch_size)
             accuracy = self.score(devX, devy)
             if accuracy > bestaccuracy:
                 bestaccuracy = accuracy
                 bestmodel = copy.deepcopy(self.model)
             elif early_stop:
-                if early_stop_count >= 5:
+                if early_stop_count >= self.tenacity:
                     stop_train = True
                 early_stop_count += 1
         self.model = bestmodel
         return bestaccuracy
 
-    def trainepoch(self, X, y, nepoches=1):
+    def trainepoch(self, X, y, epoch_size=1):
         self.model.train()
-        for _ in range(self.nepoch, self.nepoch + nepoches):
+        for _ in range(self.nepoch, self.nepoch + epoch_size):
             permutation = np.random.permutation(len(X))
             all_costs = []
             for i in range(0, len(X), self.batch_size):
@@ -112,7 +110,7 @@ class PyTorchClassifier(object):
                 loss.backward()
                 # Update parameters
                 self.optimizer.step()
-        self.nepoch += nepoches
+        self.nepoch += epoch_size
 
     def score(self, devX, devy):
         self.model.eval()
@@ -160,46 +158,47 @@ class PyTorchClassifier(object):
 
 
 """
-Logistic Regression with Pytorch
+MLP with Pytorch (nhid=0 --> Logistic Regression)
 """
-
-
-class LogReg(PyTorchClassifier):
-    def __init__(self, inputdim, nclasses, l2reg=0., batch_size=64,
-                 seed=1111, cudaEfficient=False):
-        super(self.__class__, self).__init__(inputdim, nclasses, l2reg,
-                                             batch_size, seed, cudaEfficient)
-        self.model = nn.Sequential(
-            nn.Linear(self.inputdim, self.nclasses),
-            ).cuda()
-        self.loss_fn = nn.CrossEntropyLoss().cuda()
-        self.loss_fn.size_average = False
-        self.optimizer = optim.Adam(self.model.parameters(),
-                                    weight_decay=self.l2reg)
-
-
-"""
-MLP with Pytorch
-"""
-
 
 class MLP(PyTorchClassifier):
-    def __init__(self, inputdim, hiddendim, nclasses, l2reg=0., batch_size=64,
+    def __init__(self, params, inputdim, nclasses, l2reg=0., batch_size=64,
                  seed=1111, cudaEfficient=False):
         super(self.__class__, self).__init__(inputdim, nclasses, l2reg,
                                              batch_size, seed, cudaEfficient)
+        """
+        PARAMETERS:
+        -nhid:       number of hidden units (0: Logistic Regression)
+        -optim:      optimizer ("sgd,lr=0.1", "adam", "rmsprop" ..)
+        -tenacity:   how many times dev acc does not increase before stopping
+        -epoch_size: each epoch corresponds to epoch_size pass on the train set
+        -max_epoch:  max number of epoches
+        -dropout:    dropout for MLP
+        """
 
-        self.hiddendim = hiddendim
+        self.nhid = 0 if "nhid" not in params else params["nhid"]
+        self.optim = "adam" if "optim" not in params else params["optim"]
+        self.tenacity = 5 if "tenacity" not in params else params["tenacity"]
+        self.epoch_size = 4 if "epoch_size" not in params else params["epoch_size"]
+        self.max_epoch = 200 if "max_epoch" not in params else params["max_epoch"]
+        self.dropout = 0. if "dropout" not in params else params["dropout"]
+        self.batch_size = 64 if "batch_size" not in params else params["batch_size"]
 
-        self.model = nn.Sequential(
-            nn.Linear(self.inputdim, self.hiddendim),
-            # TODO : add parameter p for dropout
-            nn.Dropout(p=0.25),
-            nn.Tanh(),
-            nn.Linear(self.hiddendim, self.nclasses),
-            ).cuda()
+        if params["nhid"] == 0:
+            self.model = nn.Sequential(
+                nn.Linear(self.inputdim, self.nclasses),
+                ).cuda()
+        else:
+            self.model = nn.Sequential(
+                nn.Linear(self.inputdim, params["nhid"]),
+                nn.Dropout(p=self.dropout),
+                nn.Tanh(),
+                nn.Linear(params["nhid"], self.nclasses),
+                ).cuda()
 
         self.loss_fn = nn.CrossEntropyLoss().cuda()
         self.loss_fn.size_average = False
-        self.optimizer = optim.Adam(self.model.parameters(),
-                                    weight_decay=self.l2reg)
+
+        optim_fn, optim_params = utils.get_optimizer(self.optim)
+        self.optimizer = optim_fn(self.model.parameters(), **optim_params)
+        self.optimizer.param_groups[0]['weight_decay'] = self.l2reg

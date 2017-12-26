@@ -2,7 +2,7 @@
 # All rights reserved.
 #
 # This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree. 
+# LICENSE file in the root directory of this source tree.
 #
 
 #
@@ -16,19 +16,22 @@ preprocess_exec=./tokenizer.sed
 echo 'Cloning Moses github repository (for tokenization scripts)...'
 git clone https://github.com/moses-smt/mosesdecoder.git
 SCRIPTS=mosesdecoder/scripts
-TOKENIZER=$SCRIPTS/tokenizer/tokenizer.perl
+MTOKENIZER=$SCRIPTS/tokenizer/tokenizer.perl
+LOWER=$SCRIPTS/tokenizer/lowercase.perl
 
 if [ ! -d "$SCRIPTS" ]; then
     echo "Please set SCRIPTS variable correctly to point to Moses scripts."
     exit
 fi
 
+PTBTOKENIZER="sed -f tokenizer.sed"
+
 mkdir $data_path
 
 TREC='http://cogcomp.cs.illinois.edu/Data/QA/QC'
 SICK='http://alt.qcri.org/semeval2014/task1/data/uploads'
 BINCLASSIF='http://www.stanford.edu/~sidaw/projects/datasmall_NB_ACL12.zip'
-SST='https://raw.githubusercontent.com/YingyuLiang/SIF/master/data'
+SST='https://raw.githubusercontent.com/PrincetonML/SIF/master/data'
 STSBenchmark='http://ixa2.si.ehu.es/stswiki/images/4/48/Stsbenchmark.tar.gz'
 SNLI='https://nlp.stanford.edu/projects/snli/snli_1.0.zip'
 MULTINLI='https://www.nyu.edu/projects/bowman/multinli/multinli_0.9.zip'
@@ -37,7 +40,7 @@ COCO='https://s3.amazonaws.com/senteval/coco_r101_feat'
 # MRPC is a special case (we use "cabextract" to extract the msi file on Linux, see below)
 MRPC='https://download.microsoft.com/download/D/4/6/D46FF87A-F6B9-4252-AA8B-3604ED519838/MSRParaphraseCorpus.msi'
 
-# STS 2012, 2013, 2014, 2015, 2016 
+# STS 2012, 2013, 2014, 2015, 2016
 declare -A STS_tasks
 declare -A STS_paths
 declare -A STS_subdirs
@@ -67,7 +70,7 @@ done
 # STS12, STS13, STS14, STS15, STS16
 mkdir $data_path/STS
 
-for task in "${!STS_tasks[@]}"; #"${!STS_tasks[@]}"; 
+for task in "${!STS_tasks[@]}"; #"${!STS_tasks[@]}";
 do
     fpath=${STS_paths[$task]}
     echo $fpath
@@ -75,26 +78,26 @@ do
     unzip $data_path/STS/data_$task.zip -d $data_path/STS
     mv $data_path/STS/${STS_subdirs[$task]} $data_path/STS/$task-en-test
     rm $data_path/STS/data_$task.zip
-    
+
     for sts_task in ${STS_tasks[$task]}
     do
         fname=STS.input.$sts_task.txt
         task_path=$data_path/STS/$task-en-test/
-        
+
         if [ "$task" = "STS16" ] ; then
             echo 'Handling STS2016'
             mv $task_path/STS2016.input.$sts_task.txt $task_path/$fname
             mv $task_path/STS2016.gs.$sts_task.txt $task_path/STS.gs.$sts_task.txt
         fi
-        
-        
-        
-        cut -f1 $task_path/$fname | $TOKENIZER -threads 8 -l en -no-escape > $task_path/tmp1
-        cut -f2 $task_path/$fname | $TOKENIZER -threads 8 -l en -no-escape > $task_path/tmp2
+
+
+
+        cut -f1 $task_path/$fname | $MTOKENIZER -threads 8 -l en -no-escape | $LOWER > $task_path/tmp1
+        cut -f2 $task_path/$fname | $MTOKENIZER -threads 8 -l en -no-escape | $LOWER > $task_path/tmp2
         paste $task_path/tmp1 $task_path/tmp2 > $task_path/$fname
         rm $task_path/tmp1 $task_path/tmp2
     done
-    
+
 done
 
 
@@ -110,8 +113,8 @@ do
     fname=sts-$split.csv
     fdir=$data_path/STS/STSBenchmark
     cut -f1,2,3,4,5 $fdir/$fname > $fdir/tmp1
-    cut -f6 $fdir/$fname | $TOKENIZER -threads 8 -l en -no-escape > $fdir/tmp2
-    cut -f7 $fdir/$fname | $TOKENIZER -threads 8 -l en -no-escape > $fdir/tmp3
+    cut -f6 $fdir/$fname | $MTOKENIZER -threads 8 -l en -no-escape | $LOWER > $fdir/tmp2
+    cut -f7 $fdir/$fname | $MTOKENIZER -threads 8 -l en -no-escape | $LOWER > $fdir/tmp3
     paste $fdir/tmp1 $fdir/tmp2 $fdir/tmp3 > $fdir/$fname
     rm $fdir/tmp1 $fdir/tmp2 $fdir/tmp3
 done
@@ -150,8 +153,8 @@ do
     fname=$data_path/SICK/SICK_$split.txt
     cut -f1 $fname | sed '1d' > $data_path/SICK/tmp1
     cut -f4,5 $fname | sed '1d' > $data_path/SICK/tmp45
-    cut -f2 $fname | sed '1d' | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SICK/tmp2
-    cut -f3 $fname | sed '1d' | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SICK/tmp3
+    cut -f2 $fname | sed '1d' | $MTOKENIZER -threads 8 -l en -no-escape > $data_path/SICK/tmp2
+    cut -f3 $fname | sed '1d' | $MTOKENIZER -threads 8 -l en -no-escape > $data_path/SICK/tmp3
     head -n 1 $fname > $data_path/SICK/tmp0
     paste $data_path/SICK/tmp1 $data_path/SICK/tmp2 $data_path/SICK/tmp3 $data_path/SICK/tmp45 >> $data_path/SICK/tmp0
     mv $data_path/SICK/tmp0 $fname
@@ -170,23 +173,23 @@ rm $data_path/data_classif.zip
 
 # MR
 mkdir $data_path/MR
-cat $data_path/data_bin_classif/data/rt10662/rt-polarity.pos | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MR/rt-polarity.pos
-cat $data_path/data_bin_classif/data/rt10662/rt-polarity.neg | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MR/rt-polarity.neg
+cat -v $data_path/data_bin_classif/data/rt10662/rt-polarity.pos | $PTBTOKENIZER > $data_path/MR/rt-polarity.pos
+cat -v $data_path/data_bin_classif/data/rt10662/rt-polarity.neg | $PTBTOKENIZER > $data_path/MR/rt-polarity.neg
 
 # CR
 mkdir $data_path/CR
-cat $data_path/data_bin_classif/data/customerr/custrev.pos | $TOKENIZER -threads 8 -l en -no-escape > $data_path/CR/custrev.pos
-cat $data_path/data_bin_classif/data/customerr/custrev.neg | $TOKENIZER -threads 8 -l en -no-escape > $data_path/CR/custrev.neg
+cat -v $data_path/data_bin_classif/data/customerr/custrev.pos | $PTBTOKENIZER > $data_path/CR/custrev.pos
+cat -v $data_path/data_bin_classif/data/customerr/custrev.neg | $PTBTOKENIZER > $data_path/CR/custrev.neg
 
 # SUBJ
 mkdir $data_path/SUBJ
-cat $data_path/data_bin_classif/data/subj/subj.subjective | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SUBJ/subj.subjective
-cat $data_path/data_bin_classif/data/subj/subj.objective | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SUBJ/subj.objective
+cat -v $data_path/data_bin_classif/data/subj/subj.subjective | $PTBTOKENIZER > $data_path/SUBJ/subj.subjective
+cat -v $data_path/data_bin_classif/data/subj/subj.objective | $PTBTOKENIZER > $data_path/SUBJ/subj.objective
 
 # MPQA
 mkdir $data_path/MPQA
-cat $data_path/data_bin_classif/data/mpqa/mpqa.pos | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MPQA/mpqa.pos
-cat $data_path/data_bin_classif/data/mpqa/mpqa.neg | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MPQA/mpqa.neg
+cat -v $data_path/data_bin_classif/data/mpqa/mpqa.pos | $PTBTOKENIZER > $data_path/MPQA/mpqa.pos
+cat -v $data_path/data_bin_classif/data/mpqa/mpqa.neg | $PTBTOKENIZER > $data_path/MPQA/mpqa.neg
 
 # CLEAN-UP
 rm -r $data_path/data_bin_classif
@@ -203,8 +206,8 @@ do
     fpath=$data_path/SNLI/$split.snli.txt
     awk '{ if ( $1 != "-" ) { print $0; } }' $data_path/SNLI/snli_1.0/snli_1.0_$split.txt | cut -f 1,6,7 | sed '1d' > $fpath
     cut -f1 $fpath > $data_path/SNLI/labels.$split
-    cut -f2 $fpath | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SNLI/s1.$split
-    cut -f3 $fpath | $TOKENIZER -threads 8 -l en -no-escape > $data_path/SNLI/s2.$split
+    cut -f2 $fpath | $PTBTOKENIZER > $data_path/SNLI/s1.$split
+    cut -f3 $fpath | $PTBTOKENIZER > $data_path/SNLI/s2.$split
     rm $fpath
 done
 rm -r $data_path/SNLI/snli_1.0
@@ -243,8 +246,8 @@ for split in train test
 do
     fname=$data_path/MRPC/msr_paraphrase_$split.txt
     cut -f1,2,3 $fname | sed '1d' > $data_path/MRPC/tmp1
-    cut -f4 $fname | sed '1d' | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MRPC/tmp2
-    cut -f5 $fname | sed '1d' | $TOKENIZER -threads 8 -l en -no-escape > $data_path/MRPC/tmp3
+    cut -f4 $fname | sed '1d' | $PTBTOKENIZER > $data_path/MRPC/tmp2
+    cut -f5 $fname | sed '1d' | $PTBTOKENIZER > $data_path/MRPC/tmp3
     head -n 1 $fname > $data_path/MRPC/tmp4
     paste $data_path/MRPC/tmp1 $data_path/MRPC/tmp2 $data_path/MRPC/tmp3 >> $data_path/MRPC/tmp4
     mv $data_path/MRPC/tmp4 $fname

@@ -53,10 +53,7 @@ class STSEval(object):
         if 'similarity' in params:
             self.similarity = params.similarity
         else:  # Default similarity is cosine
-            self.similarity = lambda s1, s2: np.nan_to_num(
-                                                cosine(np.nan_to_num(s1),
-                                                        np.nan_to_num(s2))
-                                             )
+            self.similarity = lambda s1, s2: np.nan_to_num(cosine(np.nan_to_num(s1), np.nan_to_num(s2)))
         return prepare(params, self.samples)
 
     def run(self, params, batcher):

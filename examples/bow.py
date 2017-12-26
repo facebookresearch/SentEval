@@ -11,9 +11,7 @@ import sys
 import numpy as np
 import logging
 
-from exutil import dotdict
 import data
-import torch
 
 # Set PATHs
 PATH_TO_SENTEVAL = '../'
@@ -25,26 +23,11 @@ sys.path.insert(0, PATH_TO_SENTEVAL)
 import senteval
 
 
-"""
-Note:
-
-The user has to implement two functions:
-    1) "batcher" : transforms a batch of sentences into sentence embeddings.
-        i) takes as input a "batch", and "params".
-        ii) outputs a numpy array of sentence embeddings
-        iii) Your sentence encoder should be in "params"
-    2) "prepare" : sees the whole dataset, and can create a vocabulary
-        i) outputs of "prepare" are stored in "params" that batcher will use.
-"""
-
-
-# consider the option of lower-casing or not for bow.
 def prepare(params, samples):
     _, params.word2id = data.create_dictionary(samples)
     params.word_vec = data.get_wordvec(PATH_TO_GLOVE, params.word2id)
     params.wvec_dim = 300
     return
-
 
 def batcher(params, batch):
     batch = [sent if sent != [] else ['.'] for sent in batch]
@@ -66,15 +49,17 @@ def batcher(params, batch):
 
 
 # Set params for SentEval
-params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': False, 'kfold': 5}
-params_senteval = dotdict(params_senteval)
+params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
+params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
+                                 'tenacity': 5, 'epoch_size': 4}
 
 # Set up logger
 logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
-    se = senteval.SentEval(params_senteval, batcher, prepare)
-    transfer_tasks = ['MR', 'CR', 'MPQA', 'SUBJ', 'SST', 'TREC',
-                      'MRPC', 'SICKEntailment', 'SICKRelatedness',
-                      'STSBenchmark', 'STS14']
+    se = senteval.engine.SE(params_senteval, batcher, prepare)
+    transfer_tasks = ['STS12', 'STS13', 'STS14', 'STS15', 'STS16',
+                      'MR', 'CR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC',
+                      'SICKEntailment', 'SICKRelatedness', 'STSBenchmark']
     results = se.eval(transfer_tasks)
+    print(results)

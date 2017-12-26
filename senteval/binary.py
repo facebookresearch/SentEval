@@ -49,12 +49,11 @@ class BinaryClassifierEval(object):
         enc_input = np.vstack(enc_input)
         logging.info('Generated sentence embeddings')
 
-        config_classifier = {'nclasses': 2, 'seed': self.seed,
-                             'usepytorch': params.usepytorch,
-                             'classifier': params.classifier,
-                             'nhid': params.nhid, 'kfold': params.kfold}
-        clf = InnerKFoldClassifier(enc_input, np.array(sorted_labels),
-                                   config_classifier)
+        config = {'nclasses': 2, 'seed': self.seed,
+                  'usepytorch': params.usepytorch,
+                  'classifier': params.classifier,
+                  'nhid': params.nhid, 'kfold': params.kfold}
+        clf = InnerKFoldClassifier(enc_input, np.array(sorted_labels), config)
         devacc, testacc = clf.run()
         logging.debug('Dev acc : {0} Test acc : {1}\n'.format(devacc, testacc))
         return {'devacc': devacc, 'acc': testacc, 'ndev': self.n_samples,

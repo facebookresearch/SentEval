@@ -99,12 +99,12 @@ class SICKRelatednessEval(object):
         testF = np.c_[np.abs(testA - testB), testA * testB]
         testY = self.encode_labels(self.sick_data['test']['y'])
 
-        config_classifier = {'seed': self.seed, 'nclasses': 5}
+        config = {'seed': self.seed, 'nclasses': 5}
         clf = RelatednessPytorch(train={'X': trainF, 'y': trainY},
                                  valid={'X': devF, 'y': devY},
                                  test={'X': testF, 'y': testY},
                                  devscores=self.sick_data['dev']['y'],
-                                 config=config_classifier)
+                                 config=config)
 
         devpr, yhat = clf.run()
 
@@ -200,13 +200,13 @@ class SICKEntailmentEval(SICKRelatednessEval):
         testF = np.c_[np.abs(testA - testB), testA * testB]
         testY = np.array(self.sick_data['test']['y'])
 
-        config_classifier = {'nclasses': 3, 'seed': self.seed,
-                             'usepytorch': params.usepytorch,
-                             'classifier': params.classifier,
-                             'nhid': params.nhid}
+        config = {'nclasses': 3, 'seed': self.seed,
+                  'usepytorch': params.usepytorch,
+                  'classifier': params.classifier,
+                  'nhid': params.nhid}
         clf = SplitClassifier(X={'train': trainF, 'valid': devF, 'test': testF},
                               y={'train': trainY, 'valid': devY, 'test': testY},
-                              config=config_classifier)
+                              config=config)
 
         devacc, testacc = clf.run()
         logging.debug('\nDev acc : {0} Test acc : {1} for \

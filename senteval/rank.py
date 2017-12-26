@@ -82,11 +82,11 @@ class ImageCaptionRetrievalEval(object):
             coco_embed[key]['imgfeat'] = np.array(self.coco_data[key]['imgfeat'])
             logging.info('Computed {0} embeddings'.format(key))
 
-        config_classifier = {'seed': self.seed, 'projdim': 1000, 'margin': 0.2}
+        config = {'seed': self.seed, 'projdim': 1000, 'margin': 0.2}
         clf = ImageSentenceRankingPytorch(train=coco_embed['train'],
                                           valid=coco_embed['dev'],
                                           test=coco_embed['test'],
-                                          config=config_classifier)
+                                          config=config)
 
         bestdevscore, r1_i2t, r5_i2t, r10_i2t, medr_i2t, \
             r1_t2i, r5_t2i, r10_t2i, medr_t2i = clf.run()

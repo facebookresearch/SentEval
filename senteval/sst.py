@@ -66,8 +66,8 @@ class SSTBinaryEval(object):
 
         config_classifier = {'nclasses': 2, 'seed': self.seed,
                              'usepytorch': params.usepytorch,
-                             'classifier': params.classifier,
-                             'nhid': params.nhid}
+                             'classifier': params.classifier}
+
         clf = SplitClassifier(X={'train': sst_embed['train']['X'],
                                  'valid': sst_embed['dev']['X'],
                                  'test': sst_embed['test']['X']},

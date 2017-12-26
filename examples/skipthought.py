@@ -8,10 +8,9 @@
 from __future__ import absolute_import, division, unicode_literals
 
 """
-Example of file to compare skipthought vectors with our InferSent model
+Example of file for SkipThought in SentEval
 """
 import logging
-from exutil import dotdict
 import sys
 sys.setdefaultencoding('utf8')
 
@@ -20,12 +19,13 @@ sys.setdefaultencoding('utf8')
 PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data/senteval_data/'
 PATH_TO_SKIPTHOUGHT = ''
+
 assert PATH_TO_SKIPTHOUGHT != '', 'Download skipthought and set correct PATH'
 
 # import skipthought and Senteval
 sys.path.insert(0, PATH_TO_SKIPTHOUGHT)
-sys.path.insert(0, PATH_TO_SENTEVAL)
 import skipthoughts
+sys.path.insert(0, PATH_TO_SENTEVAL)
 import senteval
 
 
@@ -33,24 +33,26 @@ def prepare(params, samples):
     return
 
 def batcher(params, batch):
-    embeddings = skipthoughts.encode(params.encoder,
-                                     [str(' '.join(sent), errors="ignore")
-                                      if sent!= [] else '.' for sent in batch],
+    batch = [str(' '.join(sent), errors="ignore") if sent != [] else '.' for sent in batch]
+    embeddings = skipthoughts.encode(params.encoder, batch,
                                      verbose=False, use_eos=True)
     return embeddings
 
 
 # Set params for SentEval
-params_senteval = {'usepytorch': True,
-                   'task_path': PATH_TO_DATA,
-                   'batch_size': 512}
-params_senteval = dotdict(params_senteval)
-
+params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10, 'batch_size': 512}
+params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
+                                 'tenacity': 5, 'epoch_size': 4}
 # Set up logger
 logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
+    # Load SkipThought model
     params_senteval.encoder = skipthoughts.load_model()
-    se = senteval.SentEval(params_senteval, batcher, prepare)
-    se.eval(['MR', 'CR', 'SUBJ', 'MPQA', 'SST', 'TREC', 'SICKRelatedness',
-             'SICKEntailment', 'MRPC', 'STS14', 'ImageAnnotation'])
+
+    se = senteval.engine.SE(params_senteval, batcher, prepare)
+    transfer_tasks = ['STS12', 'STS13', 'STS14', 'STS15', 'STS16',
+                      'MR', 'CR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC',
+                      'SICKEntailment', 'SICKRelatedness', 'STSBenchmark']
+    results = se.eval(transfer_tasks)
+    print(results)

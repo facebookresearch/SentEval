@@ -13,6 +13,7 @@ from __future__ import absolute_import, division, unicode_literals
 import codecs
 import os
 import io
+import copy
 import logging
 import numpy as np
 
@@ -93,13 +94,17 @@ class SNLIEval(object):
             self.X[key] = np.vstack(enc_input)
             self.y[key] = [dico_label[y] for y in mylabels]
 
-        config_classifier = {'nclasses': 3, 'seed': self.seed,
-                             'usepytorch': params.usepytorch,
-                             'cudaEfficient': True,
-                             'classifier': params.classifier,
-                             'nhid': params.nhid, 'maxepoch': 15,
-                             'nepoches': 1, 'noreg': True}
-        clf = SplitClassifier(self.X, self.y, config_classifier)
+        config = {'nclasses': 3, 'seed': self.seed,
+                  'usepytorch': params.usepytorch,
+                  'cudaEfficient': True,
+                  'nhid': params.nhid, 'noreg': True}
+
+        config_classifier = copy.deepcopy(params.classifier)
+        config_classifier['max_epoch'] = 15
+        config_classifier['epoch_size'] = 1
+        config['classifier'] = config_classifier
+
+        clf = SplitClassifier(self.X, self.y, config)
         devacc, testacc = clf.run()
         logging.debug('Dev acc : {0} Test acc : {1} for SNLI\n'
                       .format(devacc, testacc))

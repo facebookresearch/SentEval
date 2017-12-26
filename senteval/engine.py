@@ -12,44 +12,38 @@ Generic sentence evaluation scripts wrapper
 '''
 from __future__ import absolute_import, division, unicode_literals
 
+from senteval import utils
 from senteval.binary import CREval, MREval, MPQAEval, SUBJEval
 from senteval.snli import SNLIEval
 from senteval.trec import TRECEval
 from senteval.sick import SICKRelatednessEval, SICKEntailmentEval
 from senteval.mrpc import MRPCEval
-from senteval.sts import STS12Eval, STS13Eval, STS14Eval, STS15Eval, STS16Eval, \
-    STSBenchmarkEval
+from senteval.sts import STS12Eval, STS13Eval, STS14Eval, STS15Eval, STS16Eval, STSBenchmarkEval
 from senteval.sst import SSTBinaryEval
 from senteval.rank import ImageCaptionRetrievalEval
 
 
-class SentEval(object):
+class SE(object):
     def __init__(self, params, batcher, prepare=None):
-        # setting default parameters
-        params.usepytorch = True if 'usepytorch' not in params else \
-            params.usepytorch
-        params.classifier = 'LogReg' if 'classifier' not in params else \
-            params.classifier
-        params.nhid = 0 if 'nhid' not in params else params.nhid
-        params.batch_size = 128 if 'batch_size' not in params else \
-            params.batch_size
+        # parameters
+        params = utils.dotdict(params)
+        params.usepytorch = True if 'usepytorch' not in params else params.usepytorch
         params.seed = 1111 if 'seed' not in params else params.seed
+
+        params.batch_size = 128 if 'batch_size' not in params else params.batch_size
+        params.nhid = 0 if 'nhid' not in params else params.nhid
         params.kfold = 5 if 'kfold' not in params else params.kfold
+
+        if 'classifier' not in params or not params['classifier']:
+            params.classifier = {'nhid': 0}
+
+        assert 'nhid' in params.classifier, 'Set number of hidden units in classifier config!!'
+
         self.params = params
 
+        # batcher and prepare
         self.batcher = batcher
-        if prepare:
-            self.prepare = prepare
-        else:
-            self.prepare = lambda x, y: None
-
-        # sanity check
-        assert params.classifier in ['LogReg', 'MLP']
-        if params.classifier == 'MLP':
-            assert params.nhid > 0, 'When using an MLP, \
-                you need to set params.nhid>0'
-        if not params.usepytorch and params.classifier == 'MLP':
-            assert False, 'No MLP implemented in scikit-learn'
+        self.prepare = prepare if prepare else lambda x, y: None
 
         self.list_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC',
                            'SICKRelatedness', 'SICKEntailment', 'STSBenchmark',
@@ -73,30 +67,24 @@ class SentEval(object):
         elif name == 'SUBJ':
             self.evaluation = SUBJEval(tpath + '/SUBJ', seed=self.params.seed)
         elif name == 'SST':
-            self.evaluation = SSTBinaryEval(tpath + '/SST/binary',
-                                            seed=self.params.seed)
+            self.evaluation = SSTBinaryEval(tpath + '/SST/binary', seed=self.params.seed)
         elif name == 'TREC':
             self.evaluation = TRECEval(tpath + '/TREC', seed=self.params.seed)
         elif name == 'MRPC':
             self.evaluation = MRPCEval(tpath + '/MRPC', seed=self.params.seed)
         elif name == 'SICKRelatedness':
-            self.evaluation = SICKRelatednessEval(tpath + '/SICK',
-                                                  seed=self.params.seed)
+            self.evaluation = SICKRelatednessEval(tpath + '/SICK', seed=self.params.seed)
         elif name == 'STSBenchmark':
-            self.evaluation = STSBenchmarkEval(tpath + '/STS/STSBenchmark',
-                                               seed=self.params.seed)
+            self.evaluation = STSBenchmarkEval(tpath + '/STS/STSBenchmark', seed=self.params.seed)
         elif name == 'SICKEntailment':
-            self.evaluation = SICKEntailmentEval(tpath + '/SICK',
-                                                 seed=self.params.seed)
+            self.evaluation = SICKEntailmentEval(tpath + '/SICK', seed=self.params.seed)
         elif name == 'SNLI':
             self.evaluation = SNLIEval(tpath + '/SNLI', seed=self.params.seed)
         elif name in ['STS12', 'STS13', 'STS14', 'STS15', 'STS16']:
             fpath = name + '-en-test'
-            self.evaluation = eval(name + 'Eval')(tpath + '/STS/' + fpath,
-                                                  seed=self.params.seed)
+            self.evaluation = eval(name + 'Eval')(tpath + '/STS/' + fpath, seed=self.params.seed)
         elif name == 'ImageCaptionRetrieval':
-            self.evaluation = ImageCaptionRetrievalEval(tpath + '/COCO',
-                                                        seed=self.params.seed)
+            self.evaluation = ImageCaptionRetrievalEval(tpath + '/COCO', seed=self.params.seed)
 
         self.params.current_task = name
         self.evaluation.do_prepare(self.params, self.prepare)

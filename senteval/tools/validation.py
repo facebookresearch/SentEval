@@ -16,7 +16,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import logging
 import numpy as np
-from senteval.tools.classifier import LogReg, MLP
+from senteval.tools.classifier import MLP
 
 import sklearn
 assert(sklearn.__version__ >= "0.18.0"), \
@@ -24,6 +24,16 @@ assert(sklearn.__version__ >= "0.18.0"), \
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold
 
+
+def get_classif_name(classifier_config, usepytorch):
+    if not usepytorch:
+        modelname = 'sklearn-LogReg'
+    else:
+        nhid = classifier_config['nhid']
+        optim = 'adam' if 'optim' not in classifier_config else classifier_config['optim']
+        bs = 64 if 'batch_size' not in classifier_config else classifier_config['batch_size']
+        modelname = 'pytorch-MLP-nhid%s-%s-bs%s' % (nhid, optim, bs)
+    return modelname
 
 # Pytorch version
 class InnerKFoldClassifier(object):
@@ -39,10 +49,8 @@ class InnerKFoldClassifier(object):
         self.devresults = []
         self.testresults = []
         self.usepytorch = config['usepytorch']
-        self.classifier = config['classifier']
-        self.nhid = config['nhid']
-        self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else \
-            'pytorch-' + config['classifier']
+        self.classifier_config = config['classifier']
+        self.modelname = get_classif_name(self.classifier_config, self.usepytorch)
 
         self.k = 5 if 'kfold' not in config else config['kfold']
 
@@ -63,22 +71,13 @@ class InnerKFoldClassifier(object):
             scores = []
             for reg in regs:
                 regscores = []
-                for inner_train_idx, inner_test_idx in innerskf.split(X_train,
-                                                                      y_train):
-                    X_in_train, X_in_test = X_train[inner_train_idx], \
-                                            X_train[inner_test_idx]
-                    y_in_train, y_in_test = y_train[inner_train_idx], \
-                                            y_train[inner_test_idx]
+                for inner_train_idx, inner_test_idx in innerskf.split(X_train, y_train):
+                    X_in_train, X_in_test = X_train[inner_train_idx], X_train[inner_test_idx]
+                    y_in_train, y_in_test = y_train[inner_train_idx], y_train[inner_test_idx]
                     if self.usepytorch:
-                        if self.classifier == 'LogReg':
-                            clf = LogReg(inputdim=self.featdim,
-                                         nclasses=self.nclasses,
-                                         l2reg=reg, seed=self.seed)
-                        elif self.classifier == 'MLP':
-                            clf = MLP(inputdim=self.featdim,
-                                      hiddendim=self.nhid,
-                                      nclasses=self.nclasses,
-                                      l2reg=reg, seed=self.seed)
+                        clf = MLP(self.classifier_config, inputdim=self.featdim,
+                                  nclasses=self.nclasses, l2reg=reg,
+                                  seed=self.seed)
                         clf.fit(X_in_train, y_in_train,
                                 validation_data=(X_in_test, y_in_test))
                     else:
@@ -92,13 +91,10 @@ class InnerKFoldClassifier(object):
             self.devresults.append(np.max(scores))
 
             if self.usepytorch:
-                if self.classifier == 'LogReg':
-                    clf = LogReg(inputdim=self.featdim, nclasses=self.nclasses,
-                                 l2reg=optreg, seed=self.seed)
-                elif self.classifier == 'MLP':
-                    clf = MLP(inputdim=self.featdim, hiddendim=self.nhid,
-                              nclasses=self.nclasses, l2reg=optreg,
-                              seed=self.seed)
+                clf = MLP(self.classifier_config, inputdim=self.featdim,
+                          nclasses=self.nclasses, l2reg=optreg,
+                          seed=self.seed)
+
                 clf.fit(X_train, y_train, validation_split=0.05)
             else:
                 clf = LogisticRegression(C=optreg, random_state=self.seed)
@@ -122,10 +118,8 @@ class KFoldClassifier(object):
         self.nclasses = config['nclasses']
         self.seed = config['seed']
         self.usepytorch = config['usepytorch']
-        self.classifier = config['classifier']
-        self.nhid = config['nhid']
-        self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else \
-            'pytorch-' + config['classifier']
+        self.classifier_config = config['classifier']
+        self.modelname = get_classif_name(self.classifier_config, self.usepytorch)
 
         self.k = 5 if 'kfold' not in config else config['kfold']
 
@@ -144,22 +138,15 @@ class KFoldClassifier(object):
             for train_idx, test_idx in skf.split(self.train['X'],
                                                  self.train['y']):
                 # Split data
-                X_train, y_train = self.train['X'][train_idx], \
-                                   self.train['y'][train_idx]
+                X_train, y_train = self.train['X'][train_idx], self.train['y'][train_idx]
 
-                X_test, y_test = self.train['X'][test_idx], \
-                                 self.train['y'][test_idx]
+                X_test, y_test = self.train['X'][test_idx], self.train['y'][test_idx]
 
                 # Train classifier
                 if self.usepytorch:
-                    if self.classifier == 'LogReg':
-                        clf = LogReg(inputdim=self.featdim,
-                                     nclasses=self.nclasses,
-                                     l2reg=reg, seed=self.seed)
-                    elif self.classifier == 'MLP':
-                        clf = MLP(inputdim=self.featdim, hiddendim=self.nhid,
-                                  nclasses=self.nclasses, l2reg=reg,
-                                  seed=self.seed)
+                    clf = MLP(self.classifier_config, inputdim=self.featdim,
+                              nclasses=self.nclasses, l2reg=reg,
+                              seed=self.seed)
                     clf.fit(X_train, y_train, validation_data=(X_test, y_test))
                 else:
                     clf = LogisticRegression(C=reg, random_state=self.seed)
@@ -179,12 +166,9 @@ class KFoldClassifier(object):
 
         logging.info('Evaluating...')
         if self.usepytorch:
-            if self.classifier == 'LogReg':
-                clf = LogReg(inputdim=self.featdim, nclasses=self.nclasses,
-                             l2reg=optreg, seed=self.seed)
-            elif self.classifier == 'MLP':
-                clf = MLP(inputdim=self.featdim, hiddendim=self.nhid,
-                          nclasses=self.nclasses, l2reg=optreg, seed=self.seed)
+            clf = MLP(self.classifier_config, inputdim=self.featdim,
+                      nclasses=self.nclasses, l2reg=optreg,
+                      seed=self.seed)
             clf.fit(self.train['X'], self.train['y'], validation_split=0.05)
         else:
             clf = LogisticRegression(C=optreg, random_state=self.seed)
@@ -208,17 +192,12 @@ class SplitClassifier(object):
         self.featdim = self.X['train'].shape[1]
         self.seed = config['seed']
         self.usepytorch = config['usepytorch']
-        self.classifier = config['classifier']
-        self.nhid = config['nhid']
+        self.classifier_config = config['classifier']
         self.cudaEfficient = False if 'cudaEfficient' not in config else \
             config['cudaEfficient']
-        self.modelname = 'sklearn-LogReg' if not config['usepytorch'] else \
-            'pytorch-' + config['classifier']
-        self.nepoches = None if 'nepoches' not in config else \
-            config['nepoches']
-        self.maxepoch = None if 'maxepoch' not in config else \
-            config['maxepoch']
+        self.modelname = get_classif_name(self.classifier_config, self.usepytorch)
         self.noreg = False if 'noreg' not in config else config['noreg']
+        self.config = config
 
     def run(self):
         logging.info('Training {0} with standard validation..'
@@ -230,19 +209,11 @@ class SplitClassifier(object):
         scores = []
         for reg in regs:
             if self.usepytorch:
-                if self.classifier == 'LogReg':
-                    clf = LogReg(inputdim=self.featdim, nclasses=self.nclasses,
-                                 l2reg=reg, seed=self.seed,
-                                 cudaEfficient=self.cudaEfficient)
-                elif self.classifier == 'MLP':
-                    clf = MLP(inputdim=self.featdim, hiddendim=self.nhid,
-                              nclasses=self.nclasses, l2reg=reg,
-                              seed=self.seed, cudaEfficient=self.cudaEfficient)
-                # small hack : SNLI specific
-                if self.nepoches:
-                    clf.nepoches = self.nepoches
-                if self.maxepoch:
-                    clf.maxepoch = self.maxepoch
+                clf = MLP(self.classifier_config, inputdim=self.featdim,
+                          nclasses=self.nclasses, l2reg=reg,
+                          seed=self.seed, cudaEfficient=self.cudaEfficient)
+
+                # TODO: Find a hack for reducing nb epoches in SNLI
                 clf.fit(self.X['train'], self.y['train'],
                         validation_data=(self.X['valid'], self.y['valid']))
             else:
@@ -259,19 +230,11 @@ class SplitClassifier(object):
         clf = LogisticRegression(C=optreg, random_state=self.seed)
         logging.info('Evaluating...')
         if self.usepytorch:
-            if self.classifier == 'LogReg':
-                clf = LogReg(inputdim=self.featdim, nclasses=self.nclasses,
-                             l2reg=optreg, seed=self.seed,
-                             cudaEfficient=self.cudaEfficient)
-            elif self.classifier == 'MLP':
-                clf = MLP(inputdim=self.featdim, hiddendim=self.nhid,
-                          nclasses=self.nclasses, l2reg=optreg, seed=self.seed,
-                          cudaEfficient=self.cudaEfficient)
-            # small hack : MultiNLI/SNLI specific
-            if self.nepoches:
-                clf.nepoches = self.nepoches
-            if self.maxepoch:
-                clf.maxepoch = self.maxepoch
+            clf = MLP(self.classifier_config, inputdim=self.featdim,
+                      nclasses=self.nclasses, l2reg=optreg,
+                      seed=self.seed, cudaEfficient=self.cudaEfficient)
+
+            # TODO: Find a hack for reducing nb epoches in SNLI
             clf.fit(self.X['train'], self.y['train'],
                     validation_data=(self.X['valid'], self.y['valid']))
         else:
