@@ -22,25 +22,25 @@ This code is written in python. The dependencies are:
 
 SentEval allows you to evaluate your sentence embeddings as features for the following tasks:
 
-| Task     	| Type                         	| n train 	| n test 	| needs_training 	| set_classifier |
-|----------	|------------------------------	|---------	|--------	|----------------	|
-| [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| movie review                 	| 11k     	| 11k    	| 1 | yes            	|
-| [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| product review               	| 4k      	| 4k     	| 1 | yes            	|
-| [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| subjectivity status          	| 10k     	| 10k    	| 1 | yes            	|
-| [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| opinion-polarity             	| 11k     	| 11k    	| 1 | yes            	|
-| [SST](https://nlp.stanford.edu/sentiment/index.html)      	| (binary) sentiment analysis  	| 67k     	| 1.8k   	| yes            	| 1 |
-| [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| 6k      	| 500    	| yes            	| 1 |
-| [SICK-E](http://clic.cimec.unitn.it/composes/sick.html)   	| recognizing textual entailment 	| 4.5k    	| 4.9k   	| yes            	| 1 |
-| [SNLI](https://nlp.stanford.edu/projects/snli/)     	| natural language inference   	| 550k    	| 9.8k   	| yes            	| 1 |
-| [STS 2012](https://www.cs.york.ac.uk/semeval-2012/task6/) 	| semantic textual similarity  	| N/A     	| 3.1k   	| no             	| 0 |
-| [STS 2013](http://ixa2.si.ehu.es/sts/) 	| semantic textual similarity  	| N/A     	| 1.5k   	| no             	| 0 |
-| [STS 2014](http://alt.qcri.org/semeval2014/task10/) 	| semantic textual similarity  	| N/A     	| 3.7k   	| no             	| 0 |
-| [STS 2015](http://alt.qcri.org/semeval2015/task2/) 	| semantic textual similarity  	| N/A     	| 8.5k   	| no             	| 0 |
-| [STS 2016](http://alt.qcri.org/semeval2016/task1/) 	| semantic textual similarity  	| N/A     	| 9.2k   	| no             	| 0 |
-| [STS B](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results)    	| semantic textual similarity  	| 5.7k    	| 1.4k   	| yes            	| 0 |
-| [SICK-R](http://clic.cimec.unitn.it/composes/sick.html)   	| semantic relatedness           	| 4.5k    	| 4.9k   	| yes            	| 0 |
-| [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art))     	| paraphrase detection         	| 4.1k    	| 1 | 1.7k   	| yes            	|
-| [COCO](http://mscoco.org/)     	| image-caption retrieval      	| 567k    	| 5*1k   	| yes            	| 0 |
+| Task     	| Type                         	| n train 	| n test 	| needs_train 	| set_class |
+|----------	|------------------------------	|-----------	|----------	|----------------	|---------------	|
+| [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| movie review                 	| 11k     	| 11k    	| 1 | 1 |
+| [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| product review               	| 4k      	| 4k     	| 1 | 1 |
+| [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| subjectivity status          	| 10k     	| 10k    	| 1 | 1 |
+| [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| opinion-polarity  | 11k     	| 11k    	| 1 | 1 |
+| [SST](https://nlp.stanford.edu/sentiment/index.html)      	| (binary) sentiment analysis  	| 67k     	| 1.8k   	| 1 | 1 |
+| [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| 6k      	| 500    	| 1 | 1 |
+| [SICK-E](http://clic.cimec.unitn.it/composes/sick.html)   	| recognizing textual entailment 	| 4.5k    	| 4.9k   	| 1 | 1 |
+| [SNLI](https://nlp.stanford.edu/projects/snli/)     	| natural language inference   	| 550k    	| 9.8k   	| 1 | 1 |
+| [STS 2012](https://www.cs.york.ac.uk/semeval-2012/task6/) 	| semantic textual similarity  	| N/A     	| 3.1k   	| 0  | 0 |
+| [STS 2013](http://ixa2.si.ehu.es/sts/) 	| semantic textual similarity  	| N/A     	| 1.5k   	| 0  | 0 |
+| [STS 2014](http://alt.qcri.org/semeval2014/task10/) 	| semantic textual similarity  	| N/A     	| 3.7k   	| 0  | 0 |
+| [STS 2015](http://alt.qcri.org/semeval2015/task2/) 	| semantic textual similarity  	| N/A     	| 8.5k   	| 0  | 0 |
+| [STS 2016](http://alt.qcri.org/semeval2016/task1/) 	| semantic textual similarity  	| N/A     	| 9.2k   	| 0  | 0 |
+| [STS B](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results)    	| semantic textual similarity  	| 5.7k    	| 1.4k   	| 1 | 0 |
+| [SICK-R](http://clic.cimec.unitn.it/composes/sick.html)   	| semantic relatedness| 4.5k    	| 4.9k   	| 1 | 0 |
+| [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art)) | paraphrase detection  | 4.1k | 1.7k | 1 | 1 |
+| [COCO](http://mscoco.org/)     	| image-caption retrieval      	| 567k    	| 5*1k   	| 1 | 0 |
 
 Note: COCO comes with ResNet-101 2048d image embeddings. [More details on the tasks.](https://arxiv.org/pdf/1705.02364.pdf)
 
@@ -209,8 +209,5 @@ Please considering citing [[1]](https://arxiv.org/abs/1705.02364) [[2]](https://
   year={2017}
 }
 ```
-
-## License
-SentEval is BSD-licensed.
 
 Contact: [aconneau@fb.com](mailto:aconneau@fb.com), [dkiela@fb.com](mailto:dkiela@fb.com)
