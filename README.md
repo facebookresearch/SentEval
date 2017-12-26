@@ -4,12 +4,13 @@ SentEval is a library for evaluating the quality of sentence embeddings. We asse
 
 
 **SentEval recent fixes (12/26):**
-* renamed main directory: new way to import SentEval (see below)
-* fixed **reproducibility issue for STS tasks** (which was due to issue in data preprocessing get_transfer_data)
-* now single download file in data/
-* added option to **set parameters of the classifier** (nhid, optim, lr, batch size, ...)
-* added example of classifier setting to **speed up training (x5) in prototyping phase**
-* **New Transfer Tasks Coming Soon ...**
+1. renamed main directory: new way to import SentEval (see below)
+2. fixed **reproducibility issue for STS tasks** (which was due to issue in data preprocessing get_transfer_data)
+3. now single download file in data/
+4. added option to **set parameters of the classifier** (nhid, optim, lr, batch size, ...)
+5. added example of classifier setting to **speed up training (x5) in prototyping phase**
+
+**New Transfer Tasks Coming Soon ...**
 
 ## Dependencies
 
