@@ -1,6 +1,6 @@
 # SentEval - evaluation tool for sentence embeddings
 
-SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks (more details [here](https://arxiv.org/abs/1705.02364)). Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
+SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. SentEval currently includes **17 tasks**. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
 
 
 **SentEval recent fixes (12/26):**
@@ -115,10 +115,7 @@ batcher(params, batch)
 
 *Example*: in bow.py, batcher is used to compute the mean of the word vectors for each sentence in the batch using params.word_vec. Use your own encoder in that function to encode sentences.
 
-### 3.) set parameters and define your classifier
-
-
-### 4.) evaluation on transfer tasks
+### 3.) evaluation on transfer tasks
 
 After having implemented the batch and prepare function for your own sentence encoder,
 
@@ -131,6 +128,11 @@ params['classifier'] = {'nhid': 0, 'optim': 'adam',
                                  'max_epoch': 200, 'dropout': 0.}
 ```
 
+1bis) You can set the parameters of your classifier as follows (see below for more information):
+```python
+params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
+                                 'tenacity': 5, 'epoch_size': 4}
+```
 2) Create an instance of the class SE:
 ```python
 se = senteval.engine.SE(params, batcher, prepare)
