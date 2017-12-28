@@ -31,7 +31,8 @@ mkdir $data_path
 TREC='http://cogcomp.cs.illinois.edu/Data/QA/QC'
 SICK='http://alt.qcri.org/semeval2014/task1/data/uploads'
 BINCLASSIF='http://www.stanford.edu/~sidaw/projects/datasmall_NB_ACL12.zip'
-SST='https://raw.githubusercontent.com/PrincetonML/SIF/master/data'
+SSTbin='https://raw.githubusercontent.com/PrincetonML/SIF/master/data'
+SSTfine='https://raw.githubusercontent.com/AcademiaSinicaNLPLab/sentiment_dataset/master/data/'
 STSBenchmark='http://ixa2.si.ehu.es/stswiki/images/4/48/Stsbenchmark.tar.gz'
 SNLI='https://nlp.stanford.edu/projects/snli/snli_1.0.zip'
 MULTINLI='https://www.nyu.edu/projects/bowman/multinli/multinli_0.9.zip'
@@ -56,14 +57,19 @@ STS_subdirs=(["STS12"]="test-gold" ["STS13"]="test-gs" ["STS14"]="sts-en-test-gs
 
 
 ### Get Stanford Sentiment Treebank (SST) binary classification task
-# SST
+# SST binary
 mkdir -p $data_path/SST/binary
 for split in train dev test
 do
-    curl -Lo $data_path/SST/binary/sentiment-$split $SST/sentiment-$split
+    curl -Lo $data_path/SST/binary/sentiment-$split $SSTbin/sentiment-$split
 done
 
-
+# SST fine-grained
+mkdir -p $data_path/SST/fine/
+for split in train dev test
+do
+  curl -Lo $data_path/SST/fine/sentiment-$split $SSTfine/stsa.fine.$split
+done
 
 ### STS datasets
 

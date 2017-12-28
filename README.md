@@ -9,6 +9,7 @@ SentEval is a library for evaluating the quality of sentence embeddings. We asse
 3. now single download file in data/
 4. added option to **set parameters of the classifier** (nhid, optim, lr, batch size, ...)
 5. added example of classifier setting to **speed up training (x5) in prototyping phase**
+6. ** NEW TASK: SST fine-grained added** (5 class sentiment analysis)
 
 **New Transfer Tasks Coming Soon ...**
 
@@ -16,8 +17,8 @@ SentEval is a library for evaluating the quality of sentence embeddings. We asse
 
 This code is written in python. The dependencies are:
 
-* Python 2.7 (with [NumPy](http://www.numpy.org/)/[SciPy](http://www.scipy.org/))
-* [Pytorch](http://pytorch.org/) >= 0.2
+* Python 2/3 with [NumPy](http://www.numpy.org/)/[SciPy](http://www.scipy.org/)
+* [Pytorch](http://pytorch.org/)
 * [scikit-learn](http://scikit-learn.org/stable/index.html)>=0.18.0
 
 ## Transfer tasks
@@ -30,7 +31,8 @@ SentEval allows you to evaluate your sentence embeddings as features for the fol
 | [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| product review               	| 4k      	| 4k     	| 1 | 1 |
 | [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| subjectivity status          	| 10k     	| 10k    	| 1 | 1 |
 | [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| opinion-polarity  | 11k     	| 11k    	| 1 | 1 |
-| [SST](https://nlp.stanford.edu/sentiment/index.html)      	| (binary) sentiment analysis  	| 67k     	| 1.8k   	| 1 | 1 |
+| [SST](https://nlp.stanford.edu/sentiment/index.html)      	| binary sentiment analysis  	| 67k     	| 1.8k   	| 1 | 1 |
+| **[SST](https://nlp.stanford.edu/sentiment/index.html)**      	| **fine-grained sentiment analysis**  	| 8.5k     	| 2.2k   	| 1 | 1 |
 | [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| 6k      	| 0.5k    	| 1 | 1 |
 | [SICK-E](http://clic.cimec.unitn.it/composes/sick.html)   	| natural language inference 	| 4.5k    	| 4.9k   	| 1 | 1 |
 | [SNLI](https://nlp.stanford.edu/projects/snli/)     	| natural language inference   	| 550k    	| 9.8k   	| 1 | 1 |
@@ -144,27 +146,26 @@ results = se.eval(transfer_tasks)
 ```
 The current list of available tasks is:
 ```python
-['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC', 'SNLI',
+['CR', 'MR', 'MPQA', 'SUBJ', 'SST2', 'SST5', 'TREC', 'MRPC', 'SNLI',
 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'ImageCaptionRetrieval',
 'STS12', 'STS13', 'STS14', 'STS15', 'STS16']
 ```
 
-## SentEval parameters (fast version)
-SentEval has several parameters (only task_path is required):
+## SentEval parameters
 Global parameters of SentEval:
 ```bash
 # senteval parameters
-task_path                   # path to SentEval datasets
+task_path                   # path to SentEval datasets (required)
 seed                        # seed
 usepytorch                  # use cuda-pytorch (else scikit-learn) where possible
 kfold                       # k-fold validation for MR/CR/SUB/MPQA.
 ```
 
-Parameters of the classifier (by default nonlineary is Tanh for MLP):
+Parameters of the classifier:
 ```bash
-nhid:                       # number of hidden units (0: Logistic Regression)
+nhid:                       # number of hidden units (0: Logistic Regression, >0: MLP); Default nonlinearity: Tanh
 optim:                      # optimizer ("sgd,lr=0.1", "adam", "rmsprop" ..)
-tenacity:                   # how many times dev acc does not increase before stopping
+tenacity:                   # how many times dev acc does not increase before training stops
 epoch_size:                 # each epoch corresponds to epoch_size pass on the train set
 max_epoch:                  # max number of epoches
 dropout:                    # dropout for MLP

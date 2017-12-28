@@ -19,7 +19,7 @@ from senteval.trec import TRECEval
 from senteval.sick import SICKRelatednessEval, SICKEntailmentEval
 from senteval.mrpc import MRPCEval
 from senteval.sts import STS12Eval, STS13Eval, STS14Eval, STS15Eval, STS16Eval, STSBenchmarkEval
-from senteval.sst import SSTBinaryEval
+from senteval.sst import SSTEval
 from senteval.rank import ImageCaptionRetrievalEval
 
 
@@ -45,7 +45,7 @@ class SE(object):
         self.batcher = batcher
         self.prepare = prepare if prepare else lambda x, y: None
 
-        self.list_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST', 'TREC', 'MRPC',
+        self.list_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST2', 'SST5', 'TREC', 'MRPC',
                            'SICKRelatedness', 'SICKEntailment', 'STSBenchmark',
                            'SNLI', 'ImageCaptionRetrieval', 'STS12', 'STS13',
                            'STS14', 'STS15', 'STS16']
@@ -66,8 +66,10 @@ class SE(object):
             self.evaluation = MPQAEval(tpath + '/MPQA', seed=self.params.seed)
         elif name == 'SUBJ':
             self.evaluation = SUBJEval(tpath + '/SUBJ', seed=self.params.seed)
-        elif name == 'SST':
-            self.evaluation = SSTBinaryEval(tpath + '/SST/binary', seed=self.params.seed)
+        elif name == 'SST2':
+            self.evaluation = SSTEval(tpath + '/SST/binary', nclasses=2, seed=self.params.seed)
+        elif name == 'SST5':
+            self.evaluation = SSTEval(tpath + '/SST/fine', nclasses=5, seed=self.params.seed)
         elif name == 'TREC':
             self.evaluation = TRECEval(tpath + '/TREC', seed=self.params.seed)
         elif name == 'MRPC':

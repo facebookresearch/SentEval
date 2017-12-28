@@ -19,11 +19,16 @@ import numpy as np
 from senteval.tools.validation import SplitClassifier
 
 
-class SSTBinaryEval(object):
-    def __init__(self, task_path, seed=1111):
-        logging.debug('***** Transfer task : SST Binary \
-            classification *****\n\n')
+class SSTEval(object):
+    def __init__(self, task_path, nclasses=2, seed=1111):
         self.seed = seed
+
+        # binary of fine-grained
+        assert nclasses in [2, 5]
+        self.nclasses = nclasses
+        self.task_name = 'Binary' if self.nclasses == 2 else 'Fine-Grained'
+        logging.debug('***** Transfer task : SST %s classification *****\n\n', self.task_name)
+
         train = self.loadFile(os.path.join(task_path, 'sentiment-train'))
         dev = self.loadFile(os.path.join(task_path, 'sentiment-dev'))
         test = self.loadFile(os.path.join(task_path, 'sentiment-test'))
@@ -38,9 +43,15 @@ class SSTBinaryEval(object):
         sst_data = {'X': [], 'y': []}
         with io.open(fpath, 'r', encoding='utf-8') as f:
             for line in f:
-                sample = line.strip().split('\t')
-                sst_data['y'].append(int(sample[1]))
-                sst_data['X'].append(sample[0].split())
+                if self.nclasses == 2:
+                    sample = line.strip().split('\t')
+                    sst_data['y'].append(int(sample[1]))
+                    sst_data['X'].append(sample[0].split())
+                elif self.nclasses == 5:
+                    sample = line.strip().split(' ', 1)
+                    sst_data['y'].append(int(sample[0]))
+                    sst_data['X'].append(sample[1].split())
+        assert max(sst_data['y']) == self.nclasses - 1
         return sst_data
 
     def run(self, params, batcher):
@@ -64,7 +75,7 @@ class SSTBinaryEval(object):
             sst_embed[key]['y'] = np.array(self.sst_data[key]['y'])
             logging.info('Computed {0} embeddings'.format(key))
 
-        config_classifier = {'nclasses': 2, 'seed': self.seed,
+        config_classifier = {'nclasses': self.nclasses, 'seed': self.seed,
                              'usepytorch': params.usepytorch,
                              'classifier': params.classifier}
 
@@ -78,7 +89,7 @@ class SSTBinaryEval(object):
 
         devacc, testacc = clf.run()
         logging.debug('\nDev acc : {0} Test acc : {1} for \
-            SST Binary classification\n'.format(devacc, testacc))
+            SST {2} classification\n'.format(devacc, testacc, self.task_name))
 
         return {'devacc': devacc, 'acc': testacc,
                 'ndev': len(sst_embed['dev']['X']),
