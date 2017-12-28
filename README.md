@@ -9,7 +9,7 @@ SentEval is a library for evaluating the quality of sentence embeddings. We asse
 3. now single download file in data/
 4. added option to **set parameters of the classifier** (nhid, optim, lr, batch size, ...)
 5. added example of classifier setting to **speed up training (x5) in prototyping phase**
-6. ** NEW TASK: SST fine-grained added** (5 class sentiment analysis)
+6. **NEW TASK: SST fine-grained added** (5 class sentiment analysis)
 
 **New Transfer Tasks Coming Soon ...**
 
