@@ -192,7 +192,7 @@ class MLP(PyTorchClassifier):
             self.model = nn.Sequential(
                 nn.Linear(self.inputdim, params["nhid"]),
                 nn.Dropout(p=self.dropout),
-                nn.Tanh(),
+                nn.Sigmoid(),
                 nn.Linear(params["nhid"], self.nclasses),
                 ).cuda()
 
