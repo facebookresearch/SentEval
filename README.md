@@ -174,6 +174,7 @@ dropout:                    # dropout for MLP
 Note that to get a proxy of the results while **dramatically reducing computation time**,
 we suggest the **prototyping config**:
 ```python
+params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5}
 params_senteval['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
                                  'tenacity': 3, 'epoch_size': 2}
 ```
@@ -181,6 +182,7 @@ which will results in a 5 times speedup for classification tasks.
 
 To produce results that are **comparable to the literature**, use the **default config**:
 ```python
+params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
 params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
