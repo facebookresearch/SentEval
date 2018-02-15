@@ -30,7 +30,7 @@ mkdir $data_path
 
 TREC='http://cogcomp.cs.illinois.edu/Data/QA/QC'
 SICK='http://alt.qcri.org/semeval2014/task1/data/uploads'
-BINCLASSIF='http://www.stanford.edu/~sidaw/projects/datasmall_NB_ACL12.zip'
+BINCLASSIF='https://s3.amazonaws.com/senteval/senteval_data/datasmall_NB_ACL12.zip'
 SSTbin='https://raw.githubusercontent.com/PrincetonML/SIF/master/data'
 SSTfine='https://raw.githubusercontent.com/AcademiaSinicaNLPLab/sentiment_dataset/master/data/'
 STSBenchmark='http://ixa2.si.ehu.es/stswiki/images/4/48/Stsbenchmark.tar.gz'
