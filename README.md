@@ -3,15 +3,9 @@
 SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. **SentEval currently includes 17 tasks**. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
 
 
-**SentEval recent fixes (12/26):**
-1. renamed main directory: new way to import SentEval (see below)
-2. fixed **reproducibility issue for STS tasks** (which was due to issue in data preprocessing get_transfer_data)
-3. now single download file in data/
-4. added option to **set parameters of the classifier** (nhid, optim, lr, batch size, ...)
-5. added example of classifier setting to **speed up training (x5) in prototyping phase**
-6. **NEW TASK: SST fine-grained added** (5 class sentiment analysis)
-
-**New Transfer Tasks Coming Soon ...**
+**SentEval new tasks (04/22):**
+1. Added probing tasks for evaluating what linguistic properties are encoded in
+sentence embeddings
 
 ## Dependencies
 
@@ -23,7 +17,8 @@ This code is written in python. The dependencies are:
 
 ## Transfer tasks
 
-SentEval allows you to evaluate your sentence embeddings as features for the following tasks:
+### Downstream tasks
+SentEval allows you to evaluate your sentence embeddings as features for the following *downstream* tasks:
 
 | Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
 |----------	|------------------------------	|-----------:|----------:|:-----------:|:----------:|
@@ -50,27 +45,40 @@ where **needs_train** means a model with parameters is learned on top of the sen
 
 Note: COCO comes with ResNet-101 2048d image embeddings. [More details on the tasks.](https://arxiv.org/pdf/1705.02364.pdf)
 
+### Probing tasks
+SentEval also includes a series of [*probing* tasks](https://github.com/facebookresearch/SentEval/tree/master/data/probing) to evaluate what linguistic properties are encoded in your sentence embeddings:
+
+| Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
+|----------	|------------------------------	|-----------:|----------:|:-----------:|:----------:|
+| SentLen	| Length prediction	| 100k     	| 10k    	| 1 | 1 |
+| WC	| Word Content analysis	| 100k     	| 10k    	| 1 | 1 |
+| TreeDepth	| Tree depth prediction	| 100k     	| 10k    	| 1 | 1 |
+| TopConst	| Top Constituents prediction	| 100k     	| 10k    	| 1 | 1 |
+| BShift	| Word order analysis	| 100k     	| 10k    	| 1 | 1 |
+| Tense	| Verb tense prediction	| 100k     	| 10k    	| 1 | 1 |
+| SubjNum	| Subject number prediction	| 100k     	| 10k    	| 1 | 1 |
+| ObjNum	| Object number prediction	| 100k     	| 10k    	| 1 | 1 |
+| SOMO	| Semantic odd man out	| 100k     	| 10k    	| 1 | 1 |
+| CoordInv	| Coordination Inversion | 100k     	| 10k    	| 1 | 1 |
+
+
 ## Download datasets
 To get all the transfer tasks datasets, run (in data/):
 ```bash
-./get_transfer_data_ptb.bash
+./get_transfer_data.bash
 ```
-This will automatically download and preprocess the datasets, and store them in data/senteval_data (warning: for MacOS users, you may have to use p7zip instead of unzip). Note: we provide PTB or MOSES tokenization.
-
-WARNING: Extracting the [MRPC](https://www.microsoft.com/en-us/download/details.aspx?id=52398) MSI file requires the "[cabextract](https://www.cabextract.org.uk/#install)" command line (i.e *apt-get/yum install cabextract*).
+This will automatically download and preprocess the datasets, and store them in data/senteval_data (warning: for MacOS users, you may have to use p7zip instead of unzip).
 
 ## How to use SentEval: examples
 
 ### examples/bow.py
 
-In examples/bow.py, we evaluate the quality of the average(GloVe) embeddings.
+In examples/bow.py, we evaluate the quality of the average of word embeddings.
 
-To get GloVe embeddings [2GB], run (in examples/):
-```bash
-./get_glove.bash
-```
+To download state-of-the-art fastText embeddings, see [here](https://s3-us-west-1.amazonaws.com/fasttext-vectors/crawl-300d-2M.vec.zip
+).
 
-To reproduce the results for avg(GloVe) vectors, run (in examples/):  
+To reproduce the results for bag-of-vectors, run (in examples/):  
 ```bash
 python bow.py
 ```
@@ -129,7 +137,7 @@ params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
 
 2) (optional) set the parameters of the classifier (when applicable):
 ```python
-params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
+params['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
 You can choose **nhid=0** (Logistic Regression) or **nhid>0** (MLP) and define the parameters for training.
@@ -175,7 +183,7 @@ Note that to get a proxy of the results while **dramatically reducing computatio
 we suggest the **prototyping config**:
 ```python
 params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5}
-params_senteval['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
+params['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
                                  'tenacity': 3, 'epoch_size': 2}
 ```
 which will results in a 5 times speedup for classification tasks.
@@ -183,7 +191,7 @@ which will results in a 5 times speedup for classification tasks.
 To produce results that are **comparable to the literature**, use the **default config**:
 ```python
 params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
-params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
+params['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
 which takes longer but will produce better and comparable results.
