@@ -63,11 +63,11 @@ SentEval also includes a series of [*probing* tasks](https://github.com/facebook
 
 
 ## Download datasets
-To get all the transfer tasks datasets, run (in data/):
+To get all the transfer tasks datasets, run (in data/downstream/):
 ```bash
 ./get_transfer_data.bash
 ```
-This will automatically download and preprocess the datasets, and store them in data/senteval_data (warning: for MacOS users, you may have to use p7zip instead of unzip).
+This will automatically download and preprocess the downstream datasets, and store them in data/downstream (warning: for MacOS users, you may have to use p7zip instead of unzip). The probing tasks are already in data/probing by default.
 
 ## How to use SentEval: examples
 
@@ -156,7 +156,9 @@ The current list of available tasks is:
 ```python
 ['CR', 'MR', 'MPQA', 'SUBJ', 'SST2', 'SST5', 'TREC', 'MRPC', 'SNLI',
 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'ImageCaptionRetrieval',
-'STS12', 'STS13', 'STS14', 'STS15', 'STS16']
+'STS12', 'STS13', 'STS14', 'STS15', 'STS16',
+'Length', 'WordContent', 'Depth', 'TopConstituents','BigramShift', 'Tense',
+'SubjNumber', 'ObjNumber', 'OddManOut', 'CoordinationInversion']
 ```
 
 ## SentEval parameters
@@ -195,6 +197,8 @@ params['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
 which takes longer but will produce better and comparable results.
+
+For probing tasks, we used an MLP with a Sigmoid nonlinearity and and tuned the nhid (in [50, 100, 200]) and dropout (in [0.0, 0.1, 0.2]) on the dev set.
 
 ## References
 
