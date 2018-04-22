@@ -1,6 +1,6 @@
 # SentEval: evaluation toolkit for sentence embeddings
 
-SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. **SentEval currently includes 17 tasks**. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
+SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. **SentEval currently includes 17 downstream tasks**. We also include a suite of 10 **probing tasks** which evaluate what linguistic properties are encoded in sentence embeddings. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
 
 
 **SentEval new tasks (04/22):**
