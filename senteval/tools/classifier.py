@@ -105,7 +105,7 @@ class PyTorchClassifier(object):
                 output = self.model(Xbatch)
                 # loss
                 loss = self.loss_fn(output, ybatch)
-                all_costs.append(loss.data[0])
+                all_costs.append(loss.data.item())
                 # backward
                 self.optimizer.zero_grad()
                 loss.backward()
@@ -127,7 +127,7 @@ class PyTorchClassifier(object):
                 ybatch = ybatch.cuda()
             output = self.model(Xbatch)
             pred = output.data.max(1)[1]
-            correct += pred.long().eq(ybatch.data.long()).sum()
+            correct += pred.long().eq(ybatch.data.long()).sum().item()
         accuracy = 1.0*correct / len(devX)
         return accuracy
 
