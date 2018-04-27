@@ -9,7 +9,7 @@
 # Download and tokenize data with MOSES tokenizer
 #
 
-data_path=senteval_data
+data_path=.
 preprocess_exec=./tokenizer.sed
 
 # Get MOSES
@@ -233,31 +233,10 @@ done
 
 
 ### download MRPC
-# This extraction needs "cabextract" to extract the MSI file
-
-# sudo apt-get install cabextract
-# sudo yum install cabextract
-# sudo brew install cabextract
-
 mkdir $data_path/MRPC
-curl -Lo $data_path/MRPC/MSRParaphraseCorpus.msi $MRPC
-cabextract $data_path/MRPC/MSRParaphraseCorpus.msi -d $data_path/MRPC
-# ****HACK**** renaming files
-cat $data_path/MRPC/_2DEC3DBE877E4DB192D17C0256E90F1D | tr -d $'\r' > $data_path/MRPC/msr_paraphrase_train.txt
-cat $data_path/MRPC/_D7B391F9EAFF4B1B8BCE8F21B20B1B61 | tr -d $'\r' > $data_path/MRPC/msr_paraphrase_test.txt
-rm $data_path/MRPC/_*
-rm $data_path/MRPC/MSRParaphraseCorpus.msi
+curl -Lo $data_path/MRPC/msr_paraphrase_train.txt https://s3.amazonaws.com/senteval/senteval_data/msr_paraphrase_train.txt
+curl -Lo $data_path/MRPC/msr_paraphrase_test.txt https://s3.amazonaws.com/senteval/senteval_data/msr_paraphrase_test.txt
 
-for split in train test
-do
-    fname=$data_path/MRPC/msr_paraphrase_$split.txt
-    cut -f1,2,3 $fname | sed '1d' > $data_path/MRPC/tmp1
-    cut -f4 $fname | sed '1d' | $PTBTOKENIZER > $data_path/MRPC/tmp2
-    cut -f5 $fname | sed '1d' | $PTBTOKENIZER > $data_path/MRPC/tmp3
-    head -n 1 $fname > $data_path/MRPC/tmp4
-    paste $data_path/MRPC/tmp1 $data_path/MRPC/tmp2 $data_path/MRPC/tmp3 >> $data_path/MRPC/tmp4
-    mv $data_path/MRPC/tmp4 $fname
-    rm $data_path/MRPC/tmp1 $data_path/MRPC/tmp2 $data_path/MRPC/tmp3
-done
 
+# remove moses folder
 rm -rf mosesdecoder
