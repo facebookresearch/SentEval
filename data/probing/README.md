@@ -188,9 +188,9 @@ Please considering citing [[1]](https://arxiv.org/abs/1805.01070) if using these
 [1] A. Conneau, G. Kruszewski, G. Lample, L. Barrault, M. Baroni, [*What you can cram into a single vector: Probing sentence embeddings for linguistic properties*](https://arxiv.org/abs/1805.01070)
 
 ```
-@article{conneau2017probing,
+@article{conneau2018probing,
   title={What you can cram into a single vector: Probing sentence embeddings for linguistic properties},
   author={Conneau, Alexis and Kruszewski, German and Lample, Guillaume and Barrault, Loic and Baroni, Marco},
   journal={arXiv preprint arXiv:1805.01070},
-  year={2017}
+  year={2018}
 }
