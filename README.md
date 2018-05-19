@@ -12,7 +12,7 @@ sentence embeddings
 This code is written in python. The dependencies are:
 
 * Python 2/3 with [NumPy](http://www.numpy.org/)/[SciPy](http://www.scipy.org/)
-* [Pytorch](http://pytorch.org/)
+* [Pytorch](http://pytorch.org/)>=0.4
 * [scikit-learn](http://scikit-learn.org/stable/index.html)>=0.18.0
 
 ## Transfer tasks
