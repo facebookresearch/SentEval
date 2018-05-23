@@ -220,12 +220,12 @@ Please considering citing [[1]](https://arxiv.org/abs/1803.05449) if using this 
 Contact: [aconneau@fb.com](mailto:aconneau@fb.com), [dkiela@fb.com](mailto:dkiela@fb.com)
 
 ### Related work
-* Kiros et al. - [SkipThought Vectors](https://arxiv.org/abs/1506.06726) (NIPS 2015)
-* Arora et al. - [A Simple but Tough-to-Beat Baseline for Sentence Embeddings](https://openreview.net/pdf?id=SyK00v5xx) (ICLR 2017)
-* Adi et al. - [Fine-grained analysis of sentence embeddings using auxiliary prediction tasks](https://arxiv.org/abs/1608.04207) (ICLR 2017)
-* Conneau et al. - [Supervised Learning of Universal Sentence Representations from Natural Language Inference Data](https://arxiv.org/abs/1705.02364) (EMNLP 2017)
-* Subramanian et al. - [Learning General Purpose Distributed Sentence Representations via Large Scale Multi-task Learning](https://arxiv.org/abs/1804.00079) (ICLR 2018)
-* Nie et al. - [DisSent: Sentence Representation Learning from Explicit Discourse Relations](https://arxiv.org/abs/1710.04334)
-* Cer et al. - [Universal Sentence Encoder](https://arxiv.org/abs/1803.11175)
-* Conneau et al. - [What you can cram into a single vector: Probing sentence embeddings for linguistic properties](https://arxiv.org/abs/1805.01070) (ACL 2018)
+* [Kiros et al. - SkipThought Vectors](https://arxiv.org/abs/1506.06726) (NIPS 2015)
+* [Arora et al. - A Simple but Tough-to-Beat Baseline for Sentence Embeddings](https://openreview.net/pdf?id=SyK00v5xx) (ICLR 2017)
+* [Adi et al. - Fine-grained analysis of sentence embeddings using auxiliary prediction tasks](https://arxiv.org/abs/1608.04207) (ICLR 2017)
+* [Conneau et al. - Supervised Learning of Universal Sentence Representations from Natural Language Inference Data](https://arxiv.org/abs/1705.02364) (EMNLP 2017)
+* [Subramanian et al. - Learning General Purpose Distributed Sentence Representations via Large Scale Multi-task Learning](https://arxiv.org/abs/1804.00079) (ICLR 2018)
+* [Nie et al. - DisSent: Sentence Representation Learning from Explicit Discourse Relations](https://arxiv.org/abs/1710.04334)
+* [Cer et al. - Universal Sentence Encoder](https://arxiv.org/abs/1803.11175)
+* [Conneau et al. - What you can cram into a single vector: Probing sentence embeddings for linguistic properties](https://arxiv.org/abs/1805.01070) (ACL 2018)
 ...
