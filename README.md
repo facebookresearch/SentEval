@@ -202,19 +202,31 @@ For probing tasks, we used an MLP with a Sigmoid nonlinearity and and tuned the 
 
 ## References
 
-Please considering citing [[1]](https://arxiv.org/abs/1705.02364) if using this code for evaluating sentence embedding methods.
+Please considering citing [[1]](https://arxiv.org/abs/1803.05449) if using this code for evaluating sentence embedding methods.
 
-### Supervised Learning of Universal Sentence Representations from Natural Language Inference Data
+### SentEval: An Evaluation Toolkit for Universal Sentence Representations
 
-[1] A. Conneau, D. Kiela, H. Schwenk, L. Barrault, A. Bordes, [*Supervised Learning of Universal Sentence Representations from Natural Language Inference Data*](https://arxiv.org/abs/1705.02364)
+[1] A. Conneau, D. Kiela, [*SentEval: An Evaluation Toolkit for Universal Sentence Representations*](https://arxiv.org/abs/1803.05449)
 
 ```
-@article{conneau2017supervised,
-  title={Supervised Learning of Universal Sentence Representations from Natural Language Inference Data},
-  author={Conneau, Alexis and Kiela, Douwe and Schwenk, Holger and Barrault, Loic and Bordes, Antoine},
-  journal={arXiv preprint arXiv:1705.02364},
-  year={2017}
+@article{conneau2018senteval,
+  title={SentEval: An Evaluation Toolkit for Universal Sentence Representations},
+  author={Conneau, Alexis and Kiela, Douwe},
+  journal={arXiv preprint arXiv:1803.05449},
+  year={2018}
 }
 ```
 
 Contact: [aconneau@fb.com](mailto:aconneau@fb.com), [dkiela@fb.com](mailto:dkiela@fb.com)
+
+### Related work
+
+Kiros et al. - [SkipThought Vectors](https://arxiv.org/abs/1506.06726) (NIPS 2015)
+Arora et al. - [A Simple but Tough-to-Beat Baseline for Sentence Embeddings](https://openreview.net/pdf?id=SyK00v5xx) (ICLR 2017)
+Adi et al. - [Fine-grained analysis of sentence embeddings using auxiliary prediction tasks](https://arxiv.org/abs/1608.04207) (ICLR 2017)
+Conneau et al. - [Supervised Learning of Universal Sentence Representations from Natural Language Inference Data](https://arxiv.org/abs/1705.02364) (EMNLP 2017)
+Subramanian et al. - [Learning General Purpose Distributed Sentence Representations via Large Scale Multi-task Learning](https://arxiv.org/abs/1804.00079) (ICLR 2018)
+Nie et al. - [DisSent: Sentence Representation Learning from Explicit Discourse Relations](https://arxiv.org/abs/1710.04334)
+Cer et al. - [Universal Sentence Encoder](https://arxiv.org/abs/1803.11175)
+Conneau et al. - [What you can cram into a single vector: Probing sentence embeddings for linguistic properties](https://arxiv.org/abs/1805.01070) (ACL 2018)
+...
