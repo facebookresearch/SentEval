@@ -50,17 +50,16 @@ SentEval also includes a series of [*probing* tasks](https://github.com/facebook
 
 | Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
 |----------	|------------------------------	|-----------:|----------:|:-----------:|:----------:|
-| SentLen	| Length prediction	| 100k     	| 10k    	| 1 | 1 |
-| WC	| Word Content analysis	| 100k     	| 10k    	| 1 | 1 |
-| TreeDepth	| Tree depth prediction	| 100k     	| 10k    	| 1 | 1 |
-| TopConst	| Top Constituents prediction	| 100k     	| 10k    	| 1 | 1 |
-| BShift	| Word order analysis	| 100k     	| 10k    	| 1 | 1 |
-| Tense	| Verb tense prediction	| 100k     	| 10k    	| 1 | 1 |
-| SubjNum	| Subject number prediction	| 100k     	| 10k    	| 1 | 1 |
-| ObjNum	| Object number prediction	| 100k     	| 10k    	| 1 | 1 |
-| SOMO	| Semantic odd man out	| 100k     	| 10k    	| 1 | 1 |
-| CoordInv	| Coordination Inversion | 100k     	| 10k    	| 1 | 1 |
-
+| [SentLen](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Length prediction	| 100k     	| 10k    	| 1 | 1 |
+| [WC](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Word Content analysis	| 100k     	| 10k    	| 1 | 1 |
+| [TreeDepth](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Tree depth prediction	| 100k     	| 10k    	| 1 | 1 |
+| [TopConst](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Top Constituents prediction	| 100k     	| 10k    	| 1 | 1 |
+| [BShift](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Word order analysis	| 100k     	| 10k    	| 1 | 1 |
+| [Tense](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Verb tense prediction	| 100k     	| 10k    	| 1 | 1 |
+| [SubjNum](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Subject number prediction	| 100k     	| 10k    	| 1 | 1 |
+| [ObjNum](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Object number prediction	| 100k     	| 10k    	| 1 | 1 |
+| [SOMO](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Semantic odd man out	| 100k     	| 10k    	| 1 | 1 |
+| [CoordInv](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Coordination Inversion | 100k     	| 10k    	| 1 | 1 |
 
 ## Download datasets
 To get all the transfer tasks datasets, run (in data/downstream/):
