@@ -44,8 +44,9 @@ Evaluation of trained model on Transfer Tasks (SentEval)
 """
 
 # define senteval params
-params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5}
-params_senteval['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
+params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5,
+                   'batch_size': 128}
+params_senteval['classifier'] = {'nhid': 0, 'optim': 'rmsprop',
                                  'tenacity': 3, 'epoch_size': 2}
 # Set up logger
 logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)

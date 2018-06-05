@@ -30,6 +30,7 @@ def prepare(params, samples):
     params.wvec_dim = 300
     return
 
+
 def batcher(params, batch):
     batch = [sent if sent != [] else ['.'] for sent in batch]
     embeddings = []
@@ -50,8 +51,9 @@ def batcher(params, batch):
 
 
 # Set params for SentEval
-params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5}
-params_senteval['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
+params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5,
+                   'batch_size': 128}
+params_senteval['classifier'] = {'nhid': 0, 'optim': 'rmsprop',
                                  'tenacity': 3, 'epoch_size': 2}
 
 # Set up logger
