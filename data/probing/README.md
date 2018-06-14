@@ -194,6 +194,7 @@ Please considering citing [[1]](https://arxiv.org/abs/1805.01070) if using these
   journal={arXiv preprint arXiv:1805.01070},
   year={2018}
 }
+```
 
 ### Related work
 * [X. Shi, I. Padhi, K. Knight - Does string-based neural MT learn source syntax?, EMNLP 2016](https://aclanthology.coli.uni-saarland.de/papers/D16-1159/d16-1159)
