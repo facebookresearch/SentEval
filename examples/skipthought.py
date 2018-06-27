@@ -34,7 +34,7 @@ def prepare(params, samples):
 
 def batcher(params, batch):
     batch = [str(' '.join(sent), errors="ignore") if sent != [] else '.' for sent in batch]
-    embeddings = skipthoughts.encode(params.encoder, batch,
+    embeddings = skipthoughts.encode(params['encoder'], batch,
                                      verbose=False, use_eos=True)
     return embeddings
 
@@ -48,7 +48,7 @@ logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 
 if __name__ == "__main__":
     # Load SkipThought model
-    params_senteval.encoder = skipthoughts.load_model()
+    params_senteval['encoder'] = skipthoughts.load_model()
 
     se = senteval.engine.SE(params_senteval, batcher, prepare)
     transfer_tasks = ['STS12', 'STS13', 'STS14', 'STS15', 'STS16',
