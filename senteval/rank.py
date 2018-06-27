@@ -11,6 +11,7 @@ Image-Caption Retrieval with COCO dataset
 from __future__ import absolute_import, division, unicode_literals
 
 import os
+import sys
 import logging
 import numpy as np
 
@@ -43,8 +44,12 @@ class ImageCaptionRetrievalEval(object):
         for split in ['train', 'valid', 'test']:
             list_sent = []
             list_img_feat = []
-            with open(os.path.join(fpath, split + '.pkl')) as f:
-                cocodata = pickle.load(f)
+            if sys.version_info < (3, 0):
+                with open(os.path.join(fpath, split + '.pkl')) as f:
+                    cocodata = pickle.load(f)
+            else:
+                with open(os.path.join(fpath, split + '.pkl'), 'rb') as f:
+                    cocodata = pickle.load(f, encoding='latin1')
 
             for imgkey in range(len(cocodata['features'])):
                 assert len(cocodata['image_to_caption_ids'][imgkey]) >= 5, \
