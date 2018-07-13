@@ -59,12 +59,12 @@ class RelatednessPytorch(object):
 
     def prepare_data(self, trainX, trainy, devX, devy, testX, testy):
         # Transform probs to log-probs for KL-divergence
-        trainX = torch.FloatTensor(trainX).cuda()
-        trainy = torch.FloatTensor(trainy).cuda()
-        devX = torch.FloatTensor(devX).cuda()
-        devy = torch.FloatTensor(devy).cuda()
-        testX = torch.FloatTensor(testX).cuda()
-        testY = torch.FloatTensor(testy).cuda()
+        trainX = torch.from_numpy(trainX).cuda()
+        trainy = torch.from_numpy(trainy).cuda()
+        devX = torch.from_numpy(devX).cuda()
+        devy = torch.from_numpy(devy).cuda()
+        testX = torch.from_numpy(testX).cuda()
+        testY = torch.from_numpy(testy).cuda()
 
         return trainX, trainy, devX, devy, testX, testy
 
@@ -108,8 +108,8 @@ class RelatednessPytorch(object):
             for i in range(0, len(X), self.batch_size):
                 # forward
                 idx = torch.from_numpy(permutation[i:i + self.batch_size]).long().cuda()
-                Xbatch = Variable(X.index_select(0, idx))
-                ybatch = Variable(y.index_select(0, idx))
+                Xbatch = X[idx]
+                ybatch =y[idx]
                 output = self.model(Xbatch)
                 # loss
                 loss = self.loss_fn(output, ybatch)
@@ -124,11 +124,12 @@ class RelatednessPytorch(object):
     def predict_proba(self, devX):
         self.model.eval()
         probas = []
-        for i in range(0, len(devX), self.batch_size):
-            Xbatch = Variable(devX[i:i + self.batch_size], volatile=True)
-            if len(probas) == 0:
-                probas = self.model(Xbatch).data.cpu().numpy()
-            else:
-                probas = np.concatenate((probas,
-                    self.model(Xbatch).data.cpu().numpy()), axis=0)
+        with torch.no_grad():
+            for i in range(0, len(devX), self.batch_size):
+                Xbatch = devX[i:i + self.batch_size]
+                if len(probas) == 0:
+                    probas = self.model(Xbatch).data.cpu().numpy()
+                else:
+                    probas = np.concatenate((probas,
+                        self.model(Xbatch).data.cpu().numpy()), axis=0)
         return probas
