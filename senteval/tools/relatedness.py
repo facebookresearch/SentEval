@@ -58,12 +58,12 @@ class RelatednessPytorch(object):
 
     def prepare_data(self, trainX, trainy, devX, devy, testX, testy):
         # Transform probs to log-probs for KL-divergence
-        trainX = torch.from_numpy(trainX).cuda()
-        trainy = torch.from_numpy(trainy).cuda()
-        devX = torch.from_numpy(devX).cuda()
-        devy = torch.from_numpy(devy).cuda()
-        testX = torch.from_numpy(testX).cuda()
-        testY = torch.from_numpy(testy).cuda()
+        trainX = torch.from_numpy(trainX).float().cuda()
+        trainy = torch.from_numpy(trainy).float().cuda()
+        devX = torch.from_numpy(devX).float().cuda()
+        devy = torch.from_numpy(devy).float().cuda()
+        testX = torch.from_numpy(testX).float().cuda()
+        testY = torch.from_numpy(testy).float().cuda()
 
         return trainX, trainy, devX, devy, testX, testy
 
