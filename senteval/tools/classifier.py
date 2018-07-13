@@ -18,7 +18,6 @@ from senteval import utils
 
 import torch
 from torch import nn
-from torch.autograd import Variable
 import torch.nn.functional as F
 
 
