@@ -120,14 +120,15 @@ class PyTorchClassifier(object):
             devX = torch.FloatTensor(devX).cuda()
             devy = torch.LongTensor(devy).cuda()
         for i in range(0, len(devX), self.batch_size):
-            Xbatch = Variable(devX[i:i + self.batch_size], volatile=True)
-            ybatch = Variable(devy[i:i + self.batch_size], volatile=True)
-            if self.cudaEfficient:
-                Xbatch = Xbatch.cuda()
-                ybatch = ybatch.cuda()
-            output = self.model(Xbatch)
-            pred = output.data.max(1)[1]
-            correct += pred.long().eq(ybatch.data.long()).sum().item()
+            with torch.no_grad():
+                Xbatch = Variable(devX[i:i + self.batch_size])
+                ybatch = Variable(devy[i:i + self.batch_size])
+                if self.cudaEfficient:
+                    Xbatch = Xbatch.cuda()
+                    ybatch = ybatch.cuda()
+                output = self.model(Xbatch)
+                pred = output.data.max(1)[1]
+                correct += pred.long().eq(ybatch.data.long()).sum().item()
         accuracy = 1.0*correct / len(devX)
         return accuracy
 
