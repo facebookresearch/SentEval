@@ -38,6 +38,8 @@ def main():
                         help='a NumPy binary file containing the corresponding embeddings')
     parser.add_argument('-t', '--tasks',
                         help='a comma-separated list of tasks')
+    parser.add_argument('--no-gpu', action='store_true',
+                        help='do not use GPU (turn off PyTorch)')
     args = parser.parse_args()
 
     sent2emb = {}
@@ -71,7 +73,7 @@ def main():
         return embeddings
 
     params_senteval = {
-        'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10
+        'task_path': PATH_TO_DATA, 'usepytorch': not args.no_gpu, 'kfold': 10
     }
     params_senteval['classifier'] = {
         'nhid': 0, 'optim': 'adam', 'batch_size': 64, 'tenacity': 5,
