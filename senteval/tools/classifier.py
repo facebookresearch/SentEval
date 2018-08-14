@@ -114,47 +114,50 @@ class PyTorchClassifier(object):
         self.nepoch += epoch_size
 
     def score(self, devX, devy):
-        self.model.eval()
-        correct = 0
-        if not isinstance(devX, torch.cuda.FloatTensor) or self.cudaEfficient:
-            devX = torch.FloatTensor(devX).cuda()
-            devy = torch.LongTensor(devy).cuda()
-        for i in range(0, len(devX), self.batch_size):
-            Xbatch = Variable(devX[i:i + self.batch_size], volatile=True)
-            ybatch = Variable(devy[i:i + self.batch_size], volatile=True)
-            if self.cudaEfficient:
-                Xbatch = Xbatch.cuda()
-                ybatch = ybatch.cuda()
-            output = self.model(Xbatch)
-            pred = output.data.max(1)[1]
-            correct += pred.long().eq(ybatch.data.long()).sum().item()
-        accuracy = 1.0*correct / len(devX)
-        return accuracy
+        with torch.no_grad():
+            self.model.eval()
+            correct = 0
+            if not isinstance(devX, torch.cuda.FloatTensor) or self.cudaEfficient:
+                devX = torch.FloatTensor(devX).cuda()
+                devy = torch.LongTensor(devy).cuda()
+            for i in range(0, len(devX), self.batch_size):
+                Xbatch = Variable(devX[i:i + self.batch_size])
+                ybatch = Variable(devy[i:i + self.batch_size])
+                if self.cudaEfficient:
+                    Xbatch = Xbatch.cuda()
+                    ybatch = ybatch.cuda()
+                output = self.model(Xbatch)
+                pred = output.data.max(1)[1]
+                correct += pred.long().eq(ybatch.data.long()).sum().item()
+            accuracy = 1.0*correct / len(devX)
+            return accuracy
 
     def predict(self, devX):
-        self.model.eval()
-        if not isinstance(devX, torch.cuda.FloatTensor):
-            devX = torch.FloatTensor(devX).cuda()
-        yhat = np.array([])
-        for i in range(0, len(devX), self.batch_size):
-            Xbatch = Variable(devX[i:i + self.batch_size], volatile=True)
-            output = self.model(Xbatch)
-            yhat = np.append(yhat,
-                             output.data.max(1)[1].cpu().numpy())
-        yhat = np.vstack(yhat)
-        return yhat
+        with torch.no_grad():
+            self.model.eval()
+            if not isinstance(devX, torch.cuda.FloatTensor):
+                devX = torch.FloatTensor(devX).cuda()
+            yhat = np.array([])
+            for i in range(0, len(devX), self.batch_size):
+                Xbatch = Variable(devX[i:i + self.batch_size])
+                output = self.model(Xbatch)
+                yhat = np.append(yhat,
+                                 output.data.max(1)[1].cpu().numpy())
+            yhat = np.vstack(yhat)
+            return yhat
 
     def predict_proba(self, devX):
-        self.model.eval()
-        probas = []
-        for i in range(0, len(devX), self.batch_size):
-            Xbatch = Variable(devX[i:i + self.batch_size], volatile=True)
-            vals = F.softmax(self.model(Xbatch).data.cpu().numpy())
-            if not probas:
-                probas = vals
-            else:
-                probas = np.concatenate(probas, vals, axis=0)
-        return probas
+        with torch.no_grad():
+            self.model.eval()
+            probas = []
+            for i in range(0, len(devX), self.batch_size):
+                Xbatch = Variable(devX[i:i + self.batch_size])
+                vals = F.softmax(self.model(Xbatch).data.cpu().numpy())
+                if not probas:
+                    probas = vals
+                else:
+                    probas = np.concatenate(probas, vals, axis=0)
+            return probas
 
 
 """

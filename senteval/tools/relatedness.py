@@ -113,7 +113,7 @@ class RelatednessPytorch(object):
                 output = self.model(Xbatch)
                 # loss
                 loss = self.loss_fn(output, ybatch)
-                all_costs.append(loss.data[0])
+                all_costs.append(loss.data.item())
                 # backward
                 self.optimizer.zero_grad()
                 loss.backward()
@@ -122,13 +122,14 @@ class RelatednessPytorch(object):
         self.nepoch += nepoches
 
     def predict_proba(self, devX):
-        self.model.eval()
-        probas = []
-        for i in range(0, len(devX), self.batch_size):
-            Xbatch = Variable(devX[i:i + self.batch_size], volatile=True)
-            if len(probas) == 0:
-                probas = self.model(Xbatch).data.cpu().numpy()
-            else:
-                probas = np.concatenate((probas,
-                    self.model(Xbatch).data.cpu().numpy()), axis=0)
-        return probas
+        with torch.no_grad():
+            self.model.eval()
+            probas = []
+            for i in range(0, len(devX), self.batch_size):
+                Xbatch = Variable(devX[i:i + self.batch_size])
+                if len(probas) == 0:
+                    probas = self.model(Xbatch).data.cpu().numpy()
+                else:
+                    probas = np.concatenate((probas,
+                        self.model(Xbatch).data.cpu().numpy()), axis=0)
+            return probas
