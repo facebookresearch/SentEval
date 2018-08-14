@@ -45,7 +45,7 @@ class RelatednessPytorch(object):
 
         self.model = nn.Sequential(
             nn.Linear(self.inputdim, self.nclasses),
-            nn.Softmax(),
+            nn.Softmax(dim=1),
             )
         self.loss_fn = nn.MSELoss()
 
