@@ -13,11 +13,12 @@ from __future__ import absolute_import, division, unicode_literals
 
 import argparse
 import logging
+import os
 import sys
 
 # Set PATHs
-PATH_TO_SENTEVAL = '../'
-PATH_TO_DATA = '../data'
+PATH_TO_SENTEVAL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PATH_TO_DATA = os.path.join(PATH_TO_SENTEVAL, 'data')
 
 sys.path.insert(0, PATH_TO_SENTEVAL)
 import senteval
