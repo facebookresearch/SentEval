@@ -88,6 +88,7 @@ def main():
 
     results = se.eval(transfer_tasks)
     json.dump(results, sys.stdout, skipkeys=True)
+    sys.stdout.write('\n')
 
 
 if __name__ == '__main__':
