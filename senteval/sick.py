@@ -110,6 +110,8 @@ class SICKRelatednessEval(object):
 
         pr = pearsonr(yhat, self.sick_data['test']['y'])[0]
         sr = spearmanr(yhat, self.sick_data['test']['y'])[0]
+        pr = 0 if pr != pr else pr
+        sr = 0 if sr != sr else sr
         se = mean_squared_error(yhat, self.sick_data['test']['y'])
         logging.debug('Dev : Pearson {0}'.format(devpr))
         logging.debug('Test : Pearson {0} Spearman {1} MSE {2} \

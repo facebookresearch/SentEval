@@ -263,7 +263,7 @@ class ImageSentenceRankingPytorch(object):
                     imgbatch, sentbatch, imgcbatch, sentcbatch)
                 # loss
                 loss = self.loss_fn(anchor1, anchor2, img_sentc, sent_imgc)
-                all_costs.append(loss.data[0])
+                all_costs.append(loss.data.item())
                 # backward
                 self.optimizer.zero_grad()
                 loss.backward()
@@ -276,82 +276,84 @@ class ImageSentenceRankingPytorch(object):
         Images: (5N, imgdim) matrix of images
         Captions: (5N, sentdim) matrix of captions
         """
-        # Project images and captions
-        img_embed, sent_embed = [], []
-        for i in range(0, len(images), self.batch_size):
-            img_embed.append(self.model.proj_image(
-                Variable(images[i:i + self.batch_size], volatile=True)))
-            sent_embed.append(self.model.proj_sentence(
-                Variable(captions[i:i + self.batch_size], volatile=True)))
-        img_embed = torch.cat(img_embed, 0).data
-        sent_embed = torch.cat(sent_embed, 0).data
+        with torch.no_grad():
+            # Project images and captions
+            img_embed, sent_embed = [], []
+            for i in range(0, len(images), self.batch_size):
+                img_embed.append(self.model.proj_image(
+                    Variable(images[i:i + self.batch_size])))
+                sent_embed.append(self.model.proj_sentence(
+                    Variable(captions[i:i + self.batch_size])))
+            img_embed = torch.cat(img_embed, 0).data
+            sent_embed = torch.cat(sent_embed, 0).data
 
-        npts = int(img_embed.size(0) / 5)
-        idxs = torch.cuda.LongTensor(range(0, len(img_embed), 5))
-        ims = img_embed.index_select(0, idxs)
+            npts = int(img_embed.size(0) / 5)
+            idxs = torch.cuda.LongTensor(range(0, len(img_embed), 5))
+            ims = img_embed.index_select(0, idxs)
 
-        ranks = np.zeros(5 * npts)
-        for index in range(npts):
+            ranks = np.zeros(5 * npts)
+            for index in range(npts):
 
-            # Get query captions
-            queries = sent_embed[5*index: 5*index + 5]
+                # Get query captions
+                queries = sent_embed[5*index: 5*index + 5]
 
-            # Compute scores
-            scores = torch.mm(queries, ims.transpose(0, 1)).cpu().numpy()
-            inds = np.zeros(scores.shape)
-            for i in range(len(inds)):
-                inds[i] = np.argsort(scores[i])[::-1]
-                ranks[5 * index + i] = np.where(inds[i] == index)[0][0]
+                # Compute scores
+                scores = torch.mm(queries, ims.transpose(0, 1)).cpu().numpy()
+                inds = np.zeros(scores.shape)
+                for i in range(len(inds)):
+                    inds[i] = np.argsort(scores[i])[::-1]
+                    ranks[5 * index + i] = np.where(inds[i] == index)[0][0]
 
-        # Compute metrics
-        r1 = 100.0 * len(np.where(ranks < 1)[0]) / len(ranks)
-        r5 = 100.0 * len(np.where(ranks < 5)[0]) / len(ranks)
-        r10 = 100.0 * len(np.where(ranks < 10)[0]) / len(ranks)
-        medr = np.floor(np.median(ranks)) + 1
-        return (r1, r5, r10, medr)
+            # Compute metrics
+            r1 = 100.0 * len(np.where(ranks < 1)[0]) / len(ranks)
+            r5 = 100.0 * len(np.where(ranks < 5)[0]) / len(ranks)
+            r10 = 100.0 * len(np.where(ranks < 10)[0]) / len(ranks)
+            medr = np.floor(np.median(ranks)) + 1
+            return (r1, r5, r10, medr)
 
     def i2t(self, images, captions):
         """
         Images: (5N, imgdim) matrix of images
         Captions: (5N, sentdim) matrix of captions
         """
-        # Project images and captions
-        img_embed, sent_embed = [], []
-        for i in range(0, len(images), self.batch_size):
-            img_embed.append(self.model.proj_image(
-                Variable(images[i:i + self.batch_size], volatile=True)))
-            sent_embed.append(self.model.proj_sentence(
-                Variable(captions[i:i + self.batch_size], volatile=True)))
-        img_embed = torch.cat(img_embed, 0).data
-        sent_embed = torch.cat(sent_embed, 0).data
+        with torch.no_grad():
+            # Project images and captions
+            img_embed, sent_embed = [], []
+            for i in range(0, len(images), self.batch_size):
+                img_embed.append(self.model.proj_image(
+                    Variable(images[i:i + self.batch_size])))
+                sent_embed.append(self.model.proj_sentence(
+                    Variable(captions[i:i + self.batch_size])))
+            img_embed = torch.cat(img_embed, 0).data
+            sent_embed = torch.cat(sent_embed, 0).data
 
-        npts = int(img_embed.size(0) / 5)
-        index_list = []
-        
-        ranks = np.zeros(npts)
-        for index in range(npts):
+            npts = int(img_embed.size(0) / 5)
+            index_list = []
 
-            # Get query image
-            query_img = img_embed[5 * index]
+            ranks = np.zeros(npts)
+            for index in range(npts):
 
-            # Compute scores
-            scores = torch.mm(query_img.view(1, -1),
-                              sent_embed.transpose(0, 1)).view(-1)
-            scores = scores.cpu().numpy()
-            inds = np.argsort(scores)[::-1]
-            index_list.append(inds[0])
+                # Get query image
+                query_img = img_embed[5 * index]
 
-            # Score
-            rank = 1e20
-            for i in range(5*index, 5*index + 5, 1):
-                tmp = np.where(inds == i)[0][0]
-                if tmp < rank:
-                    rank = tmp
-            ranks[index] = rank
+                # Compute scores
+                scores = torch.mm(query_img.view(1, -1),
+                                  sent_embed.transpose(0, 1)).view(-1)
+                scores = scores.cpu().numpy()
+                inds = np.argsort(scores)[::-1]
+                index_list.append(inds[0])
 
-        # Compute metrics
-        r1 = 100.0 * len(np.where(ranks < 1)[0]) / len(ranks)
-        r5 = 100.0 * len(np.where(ranks < 5)[0]) / len(ranks)
-        r10 = 100.0 * len(np.where(ranks < 10)[0]) / len(ranks)
-        medr = np.floor(np.median(ranks)) + 1
-        return (r1, r5, r10, medr)
+                # Score
+                rank = 1e20
+                for i in range(5*index, 5*index + 5, 1):
+                    tmp = np.where(inds == i)[0][0]
+                    if tmp < rank:
+                        rank = tmp
+                ranks[index] = rank
+
+            # Compute metrics
+            r1 = 100.0 * len(np.where(ranks < 1)[0]) / len(ranks)
+            r5 = 100.0 * len(np.where(ranks < 5)[0]) / len(ranks)
+            r10 = 100.0 * len(np.where(ranks < 10)[0]) / len(ranks)
+            medr = np.floor(np.median(ranks)) + 1
+            return (r1, r5, r10, medr)

@@ -1,29 +1,24 @@
 # SentEval: evaluation toolkit for sentence embeddings
 
-SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. **SentEval currently includes 17 tasks**. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
+SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. **SentEval currently includes 17 downstream tasks**. We also include a suite of **10 probing tasks** which evaluate what linguistic properties are encoded in sentence embeddings. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
 
 
-**SentEval recent fixes (12/26):**
-1. renamed main directory: new way to import SentEval (see below)
-2. fixed **reproducibility issue for STS tasks** (which was due to issue in data preprocessing get_transfer_data)
-3. now single download file in data/
-4. added option to **set parameters of the classifier** (nhid, optim, lr, batch size, ...)
-5. added example of classifier setting to **speed up training (x5) in prototyping phase**
-6. **NEW TASK: SST fine-grained added** (5 class sentiment analysis)
+**(04/22) SentEval new tasks: Added probing tasks for evaluating what linguistic properties are encoded in sentence embeddings**
 
-**New Transfer Tasks Coming Soon ...**
+**(10/04) SentEval example scripts for three sentence encoders: [SkipThought-LN](https://github.com/ryankiros/layer-norm#skip-thoughts)/[GenSen](https://github.com/Maluuba/gensen)/[Google-USE](https://tfhub.dev/google/universal-sentence-encoder/1)**
 
 ## Dependencies
 
 This code is written in python. The dependencies are:
 
 * Python 2/3 with [NumPy](http://www.numpy.org/)/[SciPy](http://www.scipy.org/)
-* [Pytorch](http://pytorch.org/)
+* [Pytorch](http://pytorch.org/)>=0.4
 * [scikit-learn](http://scikit-learn.org/stable/index.html)>=0.18.0
 
 ## Transfer tasks
 
-SentEval allows you to evaluate your sentence embeddings as features for the following tasks:
+### Downstream tasks
+SentEval allows you to evaluate your sentence embeddings as features for the following *downstream* tasks:
 
 | Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
 |----------	|------------------------------	|-----------:|----------:|:-----------:|:----------:|
@@ -50,27 +45,43 @@ where **needs_train** means a model with parameters is learned on top of the sen
 
 Note: COCO comes with ResNet-101 2048d image embeddings. [More details on the tasks.](https://arxiv.org/pdf/1705.02364.pdf)
 
-## Download datasets
-To get all the transfer tasks datasets, run (in data/):
-```bash
-./get_transfer_data_ptb.bash
-```
-This will automatically download and preprocess the datasets, and store them in data/senteval_data (warning: for MacOS users, you may have to use p7zip instead of unzip). Note: we provide PTB or MOSES tokenization.
+### Probing tasks
+SentEval also includes a series of [*probing* tasks](https://github.com/facebookresearch/SentEval/tree/master/data/probing) to evaluate what linguistic properties are encoded in your sentence embeddings:
 
-WARNING: Extracting the [MRPC](https://www.microsoft.com/en-us/download/details.aspx?id=52398) MSI file requires the "[cabextract](https://www.cabextract.org.uk/#install)" command line (i.e *apt-get/yum install cabextract*).
+| Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
+|----------	|------------------------------	|-----------:|----------:|:-----------:|:----------:|
+| [SentLen](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Length prediction	| 100k     	| 10k    	| 1 | 1 |
+| [WC](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Word Content analysis	| 100k     	| 10k    	| 1 | 1 |
+| [TreeDepth](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Tree depth prediction	| 100k     	| 10k    	| 1 | 1 |
+| [TopConst](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Top Constituents prediction	| 100k     	| 10k    	| 1 | 1 |
+| [BShift](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Word order analysis	| 100k     	| 10k    	| 1 | 1 |
+| [Tense](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Verb tense prediction	| 100k     	| 10k    	| 1 | 1 |
+| [SubjNum](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Subject number prediction	| 100k     	| 10k    	| 1 | 1 |
+| [ObjNum](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Object number prediction	| 100k     	| 10k    	| 1 | 1 |
+| [SOMO](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Semantic odd man out	| 100k     	| 10k    	| 1 | 1 |
+| [CoordInv](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Coordination Inversion | 100k     	| 10k    	| 1 | 1 |
+
+## Download datasets
+To get all the transfer tasks datasets, run (in data/downstream/):
+```bash
+./get_transfer_data.bash
+```
+This will automatically download and preprocess the downstream datasets, and store them in data/downstream (warning: for MacOS users, you may have to use p7zip instead of unzip). The probing tasks are already in data/probing by default.
 
 ## How to use SentEval: examples
 
 ### examples/bow.py
 
-In examples/bow.py, we evaluate the quality of the average(GloVe) embeddings.
+In examples/bow.py, we evaluate the quality of the average of word embeddings.
 
-To get GloVe embeddings [2GB], run (in examples/):
+To download state-of-the-art fastText embeddings:
+
 ```bash
-./get_glove.bash
+curl -Lo glove.840B.300d.zip http://nlp.stanford.edu/data/glove.840B.300d.zip
+curl -Lo crawl-300d-2M.vec.zip https://s3-us-west-1.amazonaws.com/fasttext-vectors/crawl-300d-2M.vec.zip
 ```
 
-To reproduce the results for avg(GloVe) vectors, run (in examples/):  
+To reproduce the results for bag-of-vectors, run (in examples/):  
 ```bash
 python bow.py
 ```
@@ -81,9 +92,20 @@ As required by SentEval, this script implements two functions: **prepare** (opti
 
 To get the **[InferSent](https://www.github.com/facebookresearch/InferSent)** model and reproduce our results, download our best models and run infersent.py (in examples/):
 ```bash
-curl -Lo examples/infersent.allnli.pickle https://s3.amazonaws.com/senteval/infersent/infersent.allnli.pickle
-curl -Lo examples/infersent.snli.pickle https://s3.amazonaws.com/senteval/infersent/infersent.snli.pickle
+curl -Lo examples/infersent1.pkl https://s3.amazonaws.com/senteval/infersent/infersent1.pkl
+curl -Lo examples/infersent2.pkl https://s3.amazonaws.com/senteval/infersent/infersent2.pkl
 ```
+
+### examples/skipthought.py - examples/gensen.py - examples/googleuse.py
+
+We also provide example scripts for three other encoders:
+
+* [SkipThought with Layer-Normalization](https://github.com/ryankiros/layer-norm#skip-thoughts) in Theano
+* [GenSen encoder](https://github.com/Maluuba/gensen) in Pytorch
+* [Google encoder](https://tfhub.dev/google/universal-sentence-encoder/1) in TensorFlow
+
+Note that for SkipThought and GenSen, following the steps of the associated githubs is necessary.
+The Google encoder script should work as-is.
 
 ## How to use SentEval
 
@@ -129,7 +151,7 @@ params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
 
 2) (optional) set the parameters of the classifier (when applicable):
 ```python
-params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
+params['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
 You can choose **nhid=0** (Logistic Regression) or **nhid>0** (MLP) and define the parameters for training.
@@ -148,7 +170,9 @@ The current list of available tasks is:
 ```python
 ['CR', 'MR', 'MPQA', 'SUBJ', 'SST2', 'SST5', 'TREC', 'MRPC', 'SNLI',
 'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'ImageCaptionRetrieval',
-'STS12', 'STS13', 'STS14', 'STS15', 'STS16']
+'STS12', 'STS13', 'STS14', 'STS15', 'STS16',
+'Length', 'WordContent', 'Depth', 'TopConstituents','BigramShift', 'Tense',
+'SubjNumber', 'ObjNumber', 'OddManOut', 'CoordinationInversion']
 ```
 
 ## SentEval parameters
@@ -174,33 +198,47 @@ dropout:                    # dropout for MLP
 Note that to get a proxy of the results while **dramatically reducing computation time**,
 we suggest the **prototyping config**:
 ```python
-params_senteval['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
+params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5}
+params['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
                                  'tenacity': 3, 'epoch_size': 2}
 ```
 which will results in a 5 times speedup for classification tasks.
 
 To produce results that are **comparable to the literature**, use the **default config**:
 ```python
-params_senteval['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
+params = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 10}
+params['classifier'] = {'nhid': 0, 'optim': 'adam', 'batch_size': 64,
                                  'tenacity': 5, 'epoch_size': 4}
 ```
 which takes longer but will produce better and comparable results.
 
+For probing tasks, we used an MLP with a Sigmoid nonlinearity and and tuned the nhid (in [50, 100, 200]) and dropout (in [0.0, 0.1, 0.2]) on the dev set.
+
 ## References
 
-Please considering citing [[1]](https://arxiv.org/abs/1705.02364) if using this code for evaluating sentence embedding methods.
+Please considering citing [[1]](https://arxiv.org/abs/1803.05449) if using this code for evaluating sentence embedding methods.
 
-### Supervised Learning of Universal Sentence Representations from Natural Language Inference Data
+### SentEval: An Evaluation Toolkit for Universal Sentence Representations
 
-[1] A. Conneau, D. Kiela, H. Schwenk, L. Barrault, A. Bordes, [*Supervised Learning of Universal Sentence Representations from Natural Language Inference Data*](https://arxiv.org/abs/1705.02364)
+[1] A. Conneau, D. Kiela, [*SentEval: An Evaluation Toolkit for Universal Sentence Representations*](https://arxiv.org/abs/1803.05449)
 
 ```
-@article{conneau2017supervised,
-  title={Supervised Learning of Universal Sentence Representations from Natural Language Inference Data},
-  author={Conneau, Alexis and Kiela, Douwe and Schwenk, Holger and Barrault, Loic and Bordes, Antoine},
-  journal={arXiv preprint arXiv:1705.02364},
-  year={2017}
+@article{conneau2018senteval,
+  title={SentEval: An Evaluation Toolkit for Universal Sentence Representations},
+  author={Conneau, Alexis and Kiela, Douwe},
+  journal={arXiv preprint arXiv:1803.05449},
+  year={2018}
 }
 ```
 
 Contact: [aconneau@fb.com](mailto:aconneau@fb.com), [dkiela@fb.com](mailto:dkiela@fb.com)
+
+### Related work
+* [J. R Kiros, Y. Zhu, R. Salakhutdinov, R. S. Zemel, A. Torralba, R. Urtasun, S. Fidler - SkipThought Vectors, NIPS 2015](https://arxiv.org/abs/1506.06726)
+* [S. Arora, Y. Liang, T. Ma - A Simple but Tough-to-Beat Baseline for Sentence Embeddings, ICLR 2017](https://openreview.net/pdf?id=SyK00v5xx)
+* [Y. Adi, E. Kermany, Y. Belinkov, O. Lavi, Y. Goldberg - Fine-grained analysis of sentence embeddings using auxiliary prediction tasks, ICLR 2017](https://arxiv.org/abs/1608.04207)
+* [A. Conneau, D. Kiela, L. Barrault, H. Schwenk, A. Bordes - Supervised Learning of Universal Sentence Representations from Natural Language Inference Data, EMNLP 2017](https://arxiv.org/abs/1705.02364)
+* [S. Subramanian, A. Trischler, Y. Bengio, C. J Pal - Learning General Purpose Distributed Sentence Representations via Large Scale Multi-task Learning, ICLR 2018](https://arxiv.org/abs/1804.00079)
+* [A. Nie, E. D. Bennett, N. D. Goodman - DisSent: Sentence Representation Learning from Explicit Discourse Relations, 2018](https://arxiv.org/abs/1710.04334)
+* [D. Cer, Y. Yang, S. Kong, N. Hua, N. Limtiaco, R. St. John, N. Constant, M. Guajardo-Cespedes, S. Yuan, C. Tar, Y. Sung, B. Strope, R. Kurzweil - Universal Sentence Encoder, 2018](https://arxiv.org/abs/1803.11175)
+* [A. Conneau, G. Kruszewski, G. Lample, L. Barrault, M. Baroni - What you can cram into a single vector: Probing sentence embeddings for linguistic properties, ACL 2018](https://arxiv.org/abs/1805.01070)
