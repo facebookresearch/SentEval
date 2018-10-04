@@ -18,7 +18,6 @@ from senteval import utils
 
 import torch
 from torch import nn
-from torch.autograd import Variable
 import torch.nn.functional as F
 
 
@@ -44,21 +43,17 @@ class PyTorchClassifier(object):
             devX, devy = validation_data
         else:
             permutation = np.random.permutation(len(X))
-            trainidx = permutation[int(validation_split*len(X)):]
-            devidx = permutation[0:int(validation_split*len(X))]
+            trainidx = permutation[int(validation_split * len(X)):]
+            devidx = permutation[0:int(validation_split * len(X))]
             trainX, trainy = X[trainidx], y[trainidx]
             devX, devy = X[devidx], y[devidx]
 
-        if not self.cudaEfficient:
-            trainX = torch.FloatTensor(trainX).cuda()
-            trainy = torch.LongTensor(trainy).cuda()
-            devX = torch.FloatTensor(devX).cuda()
-            devy = torch.LongTensor(devy).cuda()
-        else:
-            trainX = torch.FloatTensor(trainX)
-            trainy = torch.LongTensor(trainy)
-            devX = torch.FloatTensor(devX)
-            devy = torch.LongTensor(devy)
+        device = torch.device('cpu') if self.cudaEfficient else torch.device('cuda')
+
+        trainX = torch.from_numpy(trainX).to(device, dtype=torch.float32)
+        trainy = torch.from_numpy(trainy).to(device, dtype=torch.int64)
+        devX = torch.from_numpy(devX).to(device, dtype=torch.float32)
+        devy = torch.from_numpy(devy).to(device, dtype=torch.int64)
 
         return trainX, trainy, devX, devy
 
@@ -94,11 +89,11 @@ class PyTorchClassifier(object):
             all_costs = []
             for i in range(0, len(X), self.batch_size):
                 # forward
-                idx = torch.LongTensor(permutation[i:i + self.batch_size])
-                if isinstance(X, torch.cuda.FloatTensor):
-                    idx = idx.cuda()
-                Xbatch = Variable(X.index_select(0, idx))
-                ybatch = Variable(y.index_select(0, idx))
+                idx = torch.from_numpy(permutation[i:i + self.batch_size]).long().to(X.device)
+
+                Xbatch = X[idx]
+                ybatch = y[idx]
+
                 if self.cudaEfficient:
                     Xbatch = Xbatch.cuda()
                     ybatch = ybatch.cuda()
@@ -114,50 +109,50 @@ class PyTorchClassifier(object):
         self.nepoch += epoch_size
 
     def score(self, devX, devy):
+        self.model.eval()
+        correct = 0
+        if not isinstance(devX, torch.cuda.FloatTensor) or self.cudaEfficient:
+            devX = torch.FloatTensor(devX).cuda()
+            devy = torch.LongTensor(devy).cuda()
         with torch.no_grad():
-            self.model.eval()
-            correct = 0
-            if not isinstance(devX, torch.cuda.FloatTensor) or self.cudaEfficient:
-                devX = torch.FloatTensor(devX).cuda()
-                devy = torch.LongTensor(devy).cuda()
             for i in range(0, len(devX), self.batch_size):
-                Xbatch = Variable(devX[i:i + self.batch_size])
-                ybatch = Variable(devy[i:i + self.batch_size])
+                Xbatch = devX[i:i + self.batch_size]
+                ybatch = devy[i:i + self.batch_size]
                 if self.cudaEfficient:
                     Xbatch = Xbatch.cuda()
                     ybatch = ybatch.cuda()
                 output = self.model(Xbatch)
                 pred = output.data.max(1)[1]
                 correct += pred.long().eq(ybatch.data.long()).sum().item()
-            accuracy = 1.0*correct / len(devX)
-            return accuracy
+            accuracy = 1.0 * correct / len(devX)
+        return accuracy
 
     def predict(self, devX):
+        self.model.eval()
+        if not isinstance(devX, torch.cuda.FloatTensor):
+            devX = torch.FloatTensor(devX).cuda()
+        yhat = np.array([])
         with torch.no_grad():
-            self.model.eval()
-            if not isinstance(devX, torch.cuda.FloatTensor):
-                devX = torch.FloatTensor(devX).cuda()
-            yhat = np.array([])
             for i in range(0, len(devX), self.batch_size):
-                Xbatch = Variable(devX[i:i + self.batch_size])
+                Xbatch = devX[i:i + self.batch_size]
                 output = self.model(Xbatch)
                 yhat = np.append(yhat,
                                  output.data.max(1)[1].cpu().numpy())
-            yhat = np.vstack(yhat)
-            return yhat
+        yhat = np.vstack(yhat)
+        return yhat
 
     def predict_proba(self, devX):
+        self.model.eval()
+        probas = []
         with torch.no_grad():
-            self.model.eval()
-            probas = []
             for i in range(0, len(devX), self.batch_size):
-                Xbatch = Variable(devX[i:i + self.batch_size])
+                Xbatch = devX[i:i + self.batch_size]
                 vals = F.softmax(self.model(Xbatch).data.cpu().numpy())
                 if not probas:
                     probas = vals
                 else:
                     probas = np.concatenate(probas, vals, axis=0)
-            return probas
+        return probas
 
 
 """
@@ -190,14 +185,14 @@ class MLP(PyTorchClassifier):
         if params["nhid"] == 0:
             self.model = nn.Sequential(
                 nn.Linear(self.inputdim, self.nclasses),
-                ).cuda()
+            ).cuda()
         else:
             self.model = nn.Sequential(
                 nn.Linear(self.inputdim, params["nhid"]),
                 nn.Dropout(p=self.dropout),
                 nn.Sigmoid(),
                 nn.Linear(params["nhid"], self.nclasses),
-                ).cuda()
+            ).cuda()
 
         self.loss_fn = nn.CrossEntropyLoss().cuda()
         self.loss_fn.size_average = False

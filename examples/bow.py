@@ -12,6 +12,7 @@ import io
 import numpy as np
 import logging
 
+
 # Set PATHs
 PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data'
