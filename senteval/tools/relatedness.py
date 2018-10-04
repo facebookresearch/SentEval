@@ -85,6 +85,7 @@ class RelatednessPytorch(object):
             self.trainepoch(trainX, trainy, nepoches=50)
             yhat = np.dot(self.predict_proba(devX), r)
             pr = pearsonr(yhat, self.devscores)[0]
+            pr = 0 if pr != pr else pr  # if NaN bc std=0
             # early stop on Pearson
             if pr > bestpr:
                 bestpr = pr
@@ -129,6 +130,5 @@ class RelatednessPytorch(object):
                 if len(probas) == 0:
                     probas = self.model(Xbatch).data.cpu().numpy()
                 else:
-                    probas = np.concatenate((probas,
-                                             self.model(Xbatch).data.cpu().numpy()), axis=0)
+                    probas = np.concatenate((probas, self.model(Xbatch).data.cpu().numpy()), axis=0)
         return probas
