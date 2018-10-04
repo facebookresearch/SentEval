@@ -7,6 +7,8 @@ SentEval is a library for evaluating the quality of sentence embeddings. We asse
 1. Added probing tasks for evaluating what linguistic properties are encoded in
 sentence embeddings
 
+**SentEval example scripts for three sentence encoders: [SkipThought-LN](https://github.com/ryankiros/layer-norm#skip-thoughts)/[GenSen](https://github.com/Maluuba/gensen)/[Google-USE](https://tfhub.dev/google/universal-sentence-encoder/1) (10/04)**
+
 ## Dependencies
 
 This code is written in python. The dependencies are:
@@ -95,6 +97,17 @@ To get the **[InferSent](https://www.github.com/facebookresearch/InferSent)** mo
 curl -Lo examples/infersent1.pkl https://s3.amazonaws.com/senteval/infersent/infersent1.pkl
 curl -Lo examples/infersent2.pkl https://s3.amazonaws.com/senteval/infersent/infersent2.pkl
 ```
+
+### examples/skipthought.py - examples/gensen.py - examples/googleuse.py
+
+We also provide example scripts for three other encoders:
+
+* [SkipThought with Layer-Normalization](https://github.com/ryankiros/layer-norm#skip-thoughts) in Theano
+* [GenSen encoder](https://github.com/Maluuba/gensen) in Pytorch
+* [Google encoder](https://tfhub.dev/google/universal-sentence-encoder/1) in TensorFlow
+
+Note that for SkipThought and GenSen, following the steps of the associated githubs is necessary.
+The Google encoder script should work as-is.
 
 ## How to use SentEval
 
