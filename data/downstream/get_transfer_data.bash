@@ -28,7 +28,7 @@ PTBTOKENIZER="sed -f tokenizer.sed"
 
 mkdir $data_path
 
-TREC='http://cogcomp.cs.illinois.edu/Data/QA/QC'
+TREC='http://cogcomp.org/Data/QA/QC'
 SICK='http://alt.qcri.org/semeval2014/task1/data/uploads'
 BINCLASSIF='https://s3.amazonaws.com/senteval/senteval_data/datasmall_NB_ACL12.zip'
 SSTbin='https://raw.githubusercontent.com/PrincetonML/SIF/master/data'
