@@ -81,7 +81,7 @@ class InnerKFoldClassifier(object):
                         clf.fit(X_in_train, y_in_train,
                                 validation_data=(X_in_test, y_in_test))
                     else:
-                        clf = LogisticRegression(C=reg, solver='liblinear', random_state=self.seed)
+                        clf = LogisticRegression(C=reg, multi_class='auto', solver='liblinear', random_state=self.seed)
                         clf.fit(X_in_train, y_in_train)
                     regscores.append(clf.score(X_in_test, y_in_test))
                 scores.append(round(100*np.mean(regscores), 2))
@@ -97,7 +97,7 @@ class InnerKFoldClassifier(object):
 
                 clf.fit(X_train, y_train, validation_split=0.05)
             else:
-                clf = LogisticRegression(C=optreg, solver='liblinear', random_state=self.seed)
+                clf = LogisticRegression(C=optreg, multi_class='auto', solver='liblinear', random_state=self.seed)
                 clf.fit(X_train, y_train)
 
             self.testresults.append(round(100*clf.score(X_test, y_test), 2))
@@ -149,7 +149,7 @@ class KFoldClassifier(object):
                               seed=self.seed)
                     clf.fit(X_train, y_train, validation_data=(X_test, y_test))
                 else:
-                    clf = LogisticRegression(C=reg, solver='liblinear', random_state=self.seed)
+                    clf = LogisticRegression(C=reg, multi_class='auto', solver='liblinear', random_state=self.seed)
                     clf.fit(X_train, y_train)
                 score = clf.score(X_test, y_test)
                 scanscores.append(score)
@@ -171,7 +171,7 @@ class KFoldClassifier(object):
                       seed=self.seed)
             clf.fit(self.train['X'], self.train['y'], validation_split=0.05)
         else:
-            clf = LogisticRegression(C=optreg, solver='liblinear', random_state=self.seed)
+            clf = LogisticRegression(C=optreg, multi_class='auto', solver='liblinear', random_state=self.seed)
             clf.fit(self.train['X'], self.train['y'])
         yhat = clf.predict(self.test['X'])
 
@@ -217,7 +217,7 @@ class SplitClassifier(object):
                 clf.fit(self.X['train'], self.y['train'],
                         validation_data=(self.X['valid'], self.y['valid']))
             else:
-                clf = LogisticRegression(C=reg, solver='liblinear', random_state=self.seed)
+                clf = LogisticRegression(C=reg, multi_class='auto', solver='liblinear', random_state=self.seed)
                 clf.fit(self.X['train'], self.y['train'])
             scores.append(round(100*clf.score(self.X['valid'],
                                 self.y['valid']), 2))
@@ -227,7 +227,7 @@ class SplitClassifier(object):
         devaccuracy = np.max(scores)
         logging.info('Validation : best param found is reg = {0} with score \
             {1}'.format(optreg, devaccuracy))
-        clf = LogisticRegression(C=optreg, solver='liblinear', random_state=self.seed)
+        clf = LogisticRegression(C=optreg, multi_class='auto', solver='liblinear', random_state=self.seed)
         logging.info('Evaluating...')
         if self.usepytorch:
             clf = MLP(self.classifier_config, inputdim=self.featdim,
@@ -238,7 +238,7 @@ class SplitClassifier(object):
             clf.fit(self.X['train'], self.y['train'],
                     validation_data=(self.X['valid'], self.y['valid']))
         else:
-            clf = LogisticRegression(C=optreg, solver='liblinear', random_state=self.seed)
+            clf = LogisticRegression(C=optreg, multi_class='auto', solver='liblinear', random_state=self.seed)
             clf.fit(self.X['train'], self.y['train'])
 
         testaccuracy = clf.score(self.X['test'], self.y['test'])
