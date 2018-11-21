@@ -88,7 +88,7 @@ do
     for sts_task in ${STS_tasks[$task]}
     do
         fname=STS.input.$sts_task.txt
-        task_path=$data_path/STS/$task-en-test/
+        task_path=$data_path/STS/$task-en-test
 
         if [ "$task" = "STS16" ] ; then
             echo 'Handling STS2016'
