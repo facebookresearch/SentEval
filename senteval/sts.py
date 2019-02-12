@@ -49,6 +49,33 @@ class STSEval(object):
             self.data[dataset] = (sent1, sent2, gs_scores)
             self.samples += sent1 + sent2
 
+    def loadSICKTypeFile(self, fpath):
+        self.data = {}
+        self.samples = []
+
+        for dataset in self.datasets:
+            dpath = os.path.join(fpath, 'sts-%s.csv' % dataset)
+            sick_data = {'X_A': [], 'X_B': [], 'y': []}
+            with io.open(dpath, 'r', encoding='utf-8') as f:
+                for line in f:
+                    text = line.strip().split('\t')
+                    sick_data['X_A'].append(text[5].split())
+                    sick_data['X_B'].append(text[6].split())
+                    sick_data['y'].append(text[4])
+
+            sick_data['y'] = [float(s) for s in sick_data['y']]
+
+            gs_scores = np.asarray(sick_data['y'])
+            sent1 = np.array(sick_data['X_A'])
+            sent2 = np.array(sick_data['X_B'])
+            # sort data by length to minimize padding in batcher
+            sorted_data = sorted(zip(sent1, sent2, gs_scores),
+                                 key=lambda z: (len(z[0]), len(z[1]), z[2]))
+            sent1, sent2, gs_scores = map(list, zip(*sorted_data))
+
+            self.data[dataset] = (sent1, sent2, gs_scores)
+            self.samples += sent1 + sent2
+
     def do_prepare(self, params, prepare):
         if 'similarity' in params:
             self.similarity = params.similarity
@@ -169,3 +196,19 @@ class STSBenchmarkEval(SICKRelatednessEval):
 
         sick_data['y'] = [float(s) for s in sick_data['y']]
         return sick_data
+
+
+class STSBenchmarkUnsupervisedDevEval(STSEval):
+    def __init__(self, task_path, seed=1111):
+        logging.debug('\n\n***** Transfer task : STSBenchmarkUnsupervisedDev *****\n\n')
+        self.seed = seed
+        self.datasets = ['dev']
+        self.loadSICKTypeFile(task_path)
+
+
+class STSBenchmarkUnsupervisedTestEval(STSEval):
+    def __init__(self, task_path, seed=1111):
+        logging.debug('\n\n***** Transfer task : STSBenchmarkUnsupervisedTest *****\n\n')
+        self.seed = seed
+        self.datasets = ['test']
+        self.loadSICKTypeFile(task_path)
