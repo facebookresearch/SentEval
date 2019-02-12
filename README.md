@@ -38,6 +38,7 @@ SentEval allows you to evaluate your sentence embeddings as features for the fol
 | [STS 2015](http://alt.qcri.org/semeval2015/task2/) 	| semantic textual similarity  	| N/A     	| 8.5k   	| 0  | 0 |
 | [STS 2016](http://alt.qcri.org/semeval2016/task1/) 	| semantic textual similarity  	| N/A     	| 9.2k   	| 0  | 0 |
 | [STS B](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results)    	| semantic textual similarity  	| 5.7k    	| 1.4k   	| 1 | 0 |
+| [STS B Unsupervised](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results)    	| semantic textual similarity  	| 5.7k    	| 1.4k   	| 0 | 0 |
 | [SICK-R](http://clic.cimec.unitn.it/composes/sick.html)   	| semantic textual similarity | 4.5k    	| 4.9k   	| 1 | 0 |
 | [COCO](http://mscoco.org/)     	| image-caption retrieval      	| 567k    	| 5*1k   	| 1 | 0 |
 
@@ -169,7 +170,8 @@ results = se.eval(transfer_tasks)
 The current list of available tasks is:
 ```python
 ['CR', 'MR', 'MPQA', 'SUBJ', 'SST2', 'SST5', 'TREC', 'MRPC', 'SNLI',
-'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'ImageCaptionRetrieval',
+'SICKEntailment', 'SICKRelatedness', 'ImageCaptionRetrieval',
+'STSBenchmark', 'STSBenchmarkUnsupervisedDev', 'STSBenchmarkUnsupervisedTest',
 'STS12', 'STS13', 'STS14', 'STS15', 'STS16',
 'Length', 'WordContent', 'Depth', 'TopConstituents','BigramShift', 'Tense',
 'SubjNumber', 'ObjNumber', 'OddManOut', 'CoordinationInversion']
