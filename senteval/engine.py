@@ -18,7 +18,7 @@ from senteval.snli import SNLIEval
 from senteval.trec import TRECEval
 from senteval.sick import SICKRelatednessEval, SICKEntailmentEval
 from senteval.mrpc import MRPCEval
-from senteval.sts import STS12Eval, STS13Eval, STS14Eval, STS15Eval, STS16Eval, STSBenchmarkEval
+from senteval.sts import STS12Eval, STS13Eval, STS14Eval, STS15Eval, STS16Eval, STSBenchmarkEval, STSBenchmarkUnsupervisedDevEval, STSBenchmarkUnsupervisedTestEval
 from senteval.sst import SSTEval
 from senteval.rank import ImageCaptionRetrievalEval
 from senteval.probing import *
@@ -46,7 +46,7 @@ class SE(object):
         self.prepare = prepare if prepare else lambda x, y: None
 
         self.list_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST2', 'SST5', 'TREC', 'MRPC',
-                           'SICKRelatedness', 'SICKEntailment', 'STSBenchmark',
+                           'SICKRelatedness', 'SICKEntailment', 'STSBenchmark', 'STSBenchmarkUnsupervisedDev', 'STSBenchmarkUnsupervisedTest',
                            'SNLI', 'ImageCaptionRetrieval', 'STS12', 'STS13',
                            'STS14', 'STS15', 'STS16',
                            'Length', 'WordContent', 'Depth', 'TopConstituents',
@@ -83,6 +83,10 @@ class SE(object):
             self.evaluation = SICKRelatednessEval(tpath + '/downstream/SICK', seed=self.params.seed)
         elif name == 'STSBenchmark':
             self.evaluation = STSBenchmarkEval(tpath + '/downstream/STS/STSBenchmark', seed=self.params.seed)
+        elif name == 'STSBenchmarkUnsupervisedDev':
+            self.evaluation = STSBenchmarkUnsupervisedDevEval(tpath + '/downstream/STS/STSBenchmark', seed=self.params.seed)
+        elif name == 'STSBenchmarkUnsupervisedTest':
+            self.evaluation = STSBenchmarkUnsupervisedTestEval(tpath + '/downstream/STS/STSBenchmark', seed=self.params.seed)
         elif name == 'SICKEntailment':
             self.evaluation = SICKEntailmentEval(tpath + '/downstream/SICK', seed=self.params.seed)
         elif name == 'SNLI':
