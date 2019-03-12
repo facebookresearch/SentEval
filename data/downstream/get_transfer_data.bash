@@ -30,13 +30,13 @@ mkdir $data_path
 
 TREC='http://cogcomp.org/Data/QA/QC'
 SICK='http://alt.qcri.org/semeval2014/task1/data/uploads'
-BINCLASSIF='https://s3.amazonaws.com/senteval/senteval_data/datasmall_NB_ACL12.zip'
+BINCLASSIF='https://dl.fbaipublicfiles.com/senteval/senteval_data/datasmall_NB_ACL12.zip'
 SSTbin='https://raw.githubusercontent.com/PrincetonML/SIF/master/data'
 SSTfine='https://raw.githubusercontent.com/AcademiaSinicaNLPLab/sentiment_dataset/master/data/'
 STSBenchmark='http://ixa2.si.ehu.es/stswiki/images/4/48/Stsbenchmark.tar.gz'
 SNLI='https://nlp.stanford.edu/projects/snli/snli_1.0.zip'
 MULTINLI='https://www.nyu.edu/projects/bowman/multinli/multinli_0.9.zip'
-COCO='https://s3.amazonaws.com/senteval/coco_r101_feat'
+COCO='https://dl.fbaipublicfiles.com/senteval/coco_r101_feat'
 
 # MRPC is a special case (we use "cabextract" to extract the msi file on Linux, see below)
 MRPC='https://download.microsoft.com/download/D/4/6/D46FF87A-F6B9-4252-AA8B-3604ED519838/MSRParaphraseCorpus.msi'
@@ -234,8 +234,8 @@ done
 
 ### download MRPC
 mkdir $data_path/MRPC
-curl -Lo $data_path/MRPC/msr_paraphrase_train.txt https://s3.amazonaws.com/senteval/senteval_data/msr_paraphrase_train.txt
-curl -Lo $data_path/MRPC/msr_paraphrase_test.txt https://s3.amazonaws.com/senteval/senteval_data/msr_paraphrase_test.txt
+curl -Lo $data_path/MRPC/msr_paraphrase_train.txt https://dl.fbaipublicfiles.com/senteval/senteval_data/msr_paraphrase_train.txt
+curl -Lo $data_path/MRPC/msr_paraphrase_test.txt https://dl.fbaipublicfiles.com/senteval/senteval_data/msr_paraphrase_test.txt
 
 
 # remove moses folder

@@ -92,8 +92,8 @@ As required by SentEval, this script implements two functions: **prepare** (opti
 
 To get the **[InferSent](https://www.github.com/facebookresearch/InferSent)** model and reproduce our results, download our best models and run infersent.py (in examples/):
 ```bash
-curl -Lo examples/infersent1.pkl https://s3.amazonaws.com/senteval/infersent/infersent1.pkl
-curl -Lo examples/infersent2.pkl https://s3.amazonaws.com/senteval/infersent/infersent2.pkl
+curl -Lo examples/infersent1.pkl https://dl.fbaipublicfiles.com/senteval/infersent/infersent1.pkl
+curl -Lo examples/infersent2.pkl https://dl.fbaipublicfiles.com/senteval/infersent/infersent2.pkl
 ```
 
 ### examples/skipthought.py - examples/gensen.py - examples/googleuse.py
