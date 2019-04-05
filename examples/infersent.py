@@ -22,9 +22,10 @@ from models import InferSent
 # Set PATHs
 PATH_SENTEVAL = '../'
 PATH_TO_DATA = '../data'
-PATH_TO_W2V = 'PATH/TO/glove.840B.300d.txt'  # or crawl-300d-2M.vec for V2
-MODEL_PATH = 'infersent1.pkl'
-V = 1 # version of InferSent
+# PATH_TO_W2V = 'PATH/TO/glove.840B.300d.txt'  # or crawl-300d-2M.vec for V2
+PATH_TO_W2V = '../data/vectors/crawl-300d-2M.vec'  # or crawl-300d-2M.vec for V2
+MODEL_PATH = '../data/models/infersent2.pkl'
+V = 2 # version of InferSent
 
 assert os.path.isfile(MODEL_PATH) and os.path.isfile(PATH_TO_W2V), \
     'Set MODEL and GloVe PATHs'

@@ -25,6 +25,7 @@ import senteval
 # tensorflow session
 session = tf.Session()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+os.environ['TFHUB_CACHE_DIR'] = '../data/models/tfhub_modules'
 
 # SentEval prepare and batcher
 def prepare(params, samples):
@@ -44,7 +45,7 @@ def make_embed_fn(module):
   return lambda x: session.run(embeddings, {sentences: x})
 
 # Start TF session and load Google Universal Sentence Encoder
-encoder = make_embed_fn("https://tfhub.dev/google/universal-sentence-encoder-large/2")
+encoder = make_embed_fn("https://tfhub.dev/google/universal-sentence-encoder-large/3")
 
 # Set params for SentEval
 params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5}

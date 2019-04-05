@@ -17,7 +17,7 @@ import logging
 PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data'
 # PATH_TO_VEC = 'glove/glove.840B.300d.txt'
-PATH_TO_VEC = 'fasttext/crawl-300d-2M.vec'
+PATH_TO_VEC = '../data/vectors/crawl-300d-2M.vec'
 
 # import SentEval
 sys.path.insert(0, PATH_TO_SENTEVAL)

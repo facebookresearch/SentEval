@@ -12,4 +12,7 @@ __pycache__/
 *.txt
 
 # data files
-data/senteval_data*
+data/downstream/*/
+data/models/
+data/vectors/
+
