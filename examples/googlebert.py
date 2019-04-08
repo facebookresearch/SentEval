@@ -71,9 +71,6 @@ def load_bert():
     return estimator
 
 
-# Start TF session and load Google Universal Sentence Encoder
-# bert = hub.Module('', trainable=True)
-
 # Set params for SentEval
 params_senteval = {'task_path': PATH_TO_DATA, 'usepytorch': True, 'kfold': 5}
 params_senteval['classifier'] = {'nhid': 0, 'optim': 'rmsprop', 'batch_size': 128,
