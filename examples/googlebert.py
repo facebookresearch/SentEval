@@ -3,6 +3,7 @@ import os
 import sys
 
 import tensorflow as tf
+import numpy as np
 from bert import tokenization, extract_features, modeling
 
 # Set PATHs
@@ -45,7 +46,7 @@ def batcher(params, batch):
     for result in params['bert'].predict(input_fn, yield_single_examples=True):
         embeddings.append(result['layer_output_0'][0].flat)
 
-    return embeddings
+    return np.vstack(embeddings)
 
 
 def load_bert():
