@@ -68,6 +68,7 @@ class SSTEval(object):
 
             sst_embed[key]['X'] = []
             for ii in range(0, len(self.sst_data[key]['y']), bsize):
+                logging.info(f'Computing embeddings for batch {ii} - {ii + params.batch_size}')
                 batch = self.sst_data[key]['X'][ii:ii + bsize]
                 embeddings = batcher(params, batch)
                 sst_embed[key]['X'].append(embeddings)

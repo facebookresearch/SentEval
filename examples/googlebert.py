@@ -43,9 +43,8 @@ def batcher(params, batch):
     input_fn = extract_features.input_fn_builder(features=features, seq_length=MAX_SEQ_LENGTH)
     embeddings = []
     for result in params['bert'].predict(input_fn, yield_single_examples=True):
-        embeddings += [result['layer_output_0']]
+        embeddings.append(result['layer_output_0'][0].flat)
 
-    print('Batch done.')
     return embeddings
 
 

@@ -43,6 +43,7 @@ class BinaryClassifierEval(object):
         sorted_labels = [y for (x, y) in sorted_corpus]
         logging.info('Generating sentence embeddings')
         for ii in range(0, self.n_samples, params.batch_size):
+            logging.info(f'Generating embeddings for batch {ii} - {ii + params.batch_size}')
             batch = sorted_samples[ii:ii + params.batch_size]
             embeddings = batcher(params, batch)
             enc_input.append(embeddings)

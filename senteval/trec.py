@@ -59,6 +59,7 @@ class TRECEval(object):
 
         # Get train embeddings
         for ii in range(0, len(train_labels), params.batch_size):
+            logging.info(f'Computing embeddings for batch {ii} - {ii + params.batch_size}')
             batch = train_samples[ii:ii + params.batch_size]
             embeddings = batcher(params, batch)
             train_embeddings.append(embeddings)
