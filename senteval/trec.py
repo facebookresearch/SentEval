@@ -20,8 +20,13 @@ from senteval.tools.validation import KFoldClassifier
 
 
 class TRECEval(object):
-    def __init__(self, task_path, seed=1111):
-        logging.info('***** Transfer task : TREC *****\n\n')
+    def __init__(self, task_path, is_russian=False, seed=1111):
+        logging.info('***** Transfer task : TREC *****')
+        self.is_russian = is_russian
+        if self.is_russian:
+            logging.info('******* Russian Language *******\n\n')
+        else:
+            logging.info('******* English Language *******\n\n')
         self.seed = seed
         self.train = self.loadFile(os.path.join(task_path, 'train_5500.label'))
         self.test = self.loadFile(os.path.join(task_path, 'TREC_10.label'))
@@ -34,7 +39,11 @@ class TRECEval(object):
         trec_data = {'X': [], 'y': []}
         tgt2idx = {'ABBR': 0, 'DESC': 1, 'ENTY': 2,
                    'HUM': 3, 'LOC': 4, 'NUM': 5}
-        with io.open(fpath, 'r', encoding='latin-1') as f:
+        if not self.is_russian:
+            encoding = 'latin-1'
+        else:
+            encoding = 'UTF-8'
+        with io.open(fpath, 'r', encoding=encoding) as f:
             for line in f:
                 target, sample = line.strip().split(':', 1)
                 sample = sample.split(' ', 1)[1].split()

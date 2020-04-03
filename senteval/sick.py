@@ -23,8 +23,13 @@ from senteval.tools.validation import SplitClassifier
 
 
 class SICKRelatednessEval(object):
-    def __init__(self, task_path, seed=1111):
-        logging.debug('***** Transfer task : SICK-Relatedness*****\n\n')
+    def __init__(self, task_path, is_russian=False, seed=1111):
+        logging.debug('***** Transfer task : SICK-Relatedness*****')
+        self.is_russian = is_russian
+        if self.is_russian:
+            logging.info('************ Russian Language *************\n\n')
+        else:
+            logging.info('************ English Language *************\n\n')
         self.seed = seed
         train = self.loadFile(os.path.join(task_path, 'SICK_train.txt'))
         dev = self.loadFile(os.path.join(task_path, 'SICK_trial.txt'))
@@ -135,8 +140,13 @@ class SICKRelatednessEval(object):
 
 
 class SICKEntailmentEval(SICKRelatednessEval):
-    def __init__(self, task_path, seed=1111):
-        logging.debug('***** Transfer task : SICK-Entailment*****\n\n')
+    def __init__(self, task_path, is_russian=False, seed=1111):
+        logging.debug('***** Transfer task : SICK-Entailment*****')
+        self.is_russian = is_russian
+        if self.is_russian:
+            logging.info('************ Russian Language ************\n\n')
+        else:
+            logging.info('************ English Language ************\n\n')
         self.seed = seed
         train = self.loadFile(os.path.join(task_path, 'SICK_train.txt'))
         dev = self.loadFile(os.path.join(task_path, 'SICK_trial.txt'))

@@ -150,8 +150,13 @@ class STS16Eval(STSEval):
 
 
 class STSBenchmarkEval(SICKRelatednessEval):
-    def __init__(self, task_path, seed=1111):
-        logging.debug('\n\n***** Transfer task : STSBenchmark*****\n\n')
+    def __init__(self, task_path, is_russian=False, seed=1111):
+        logging.info('***** Transfer task : STSBenchmark *****')
+        self.is_russian = is_russian
+        if self.is_russian:
+            logging.info('*********** Russian Language ***********\n\n')
+        else:
+            logging.info('*********** English Language ***********\n\n')
         self.seed = seed
         train = self.loadFile(os.path.join(task_path, 'sts-train.csv'))
         dev = self.loadFile(os.path.join(task_path, 'sts-dev.csv'))

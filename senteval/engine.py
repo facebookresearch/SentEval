@@ -45,13 +45,12 @@ class SE(object):
         self.batcher = batcher
         self.prepare = prepare if prepare else lambda x, y: None
 
-        self.list_tasks = ['CR', 'MR', 'MPQA', 'SUBJ', 'SST2', 'SST5', 'TREC', 'MRPC',
-                           'SICKRelatedness', 'SICKEntailment', 'STSBenchmark',
-                           'SNLI', 'ImageCaptionRetrieval', 'STS12', 'STS13',
-                           'STS14', 'STS15', 'STS16',
-                           'Length', 'WordContent', 'Depth', 'TopConstituents',
-                           'BigramShift', 'Tense', 'SubjNumber', 'ObjNumber',
-                           'OddManOut', 'CoordinationInversion']
+        self.list_tasks = ['SST2', 'SST5', 'TREC', 'MRPC', 'SICKRelatedness', 'SICKEntailment', 'STSBenchmark',
+                           'SST2_RU', 'SST3_RU', 'TREC_RU', 'MRPC_RU', 'SICKRelatedness_RU', 'SICKEntailment_RU',
+                           'STSBenchmark_RU',
+                           'CR', 'MR', 'MPQA', 'SUBJ', 'SNLI', 'STS12', 'STS13', 'STS14', 'STS15', 'STS16',
+                           'ImageCaptionRetrieval', 'Length', 'WordContent', 'Depth', 'TopConstituents', 'BigramShift',
+                           'Tense', 'SubjNumber', 'ObjNumber', 'OddManOut', 'CoordinationInversion']
 
     def eval(self, name):
         # evaluate on evaluation [name], either takes string or list of strings
@@ -63,57 +62,73 @@ class SE(object):
         assert name in self.list_tasks, str(name) + ' not in ' + str(self.list_tasks)
 
         # Original SentEval tasks
+        # English language
         if name == 'CR':
-            self.evaluation = CREval(tpath + '/downstream/CR', seed=self.params.seed)
+            self.evaluation = CREval(tpath + '/En/downstream/CR', seed=self.params.seed)
         elif name == 'MR':
-            self.evaluation = MREval(tpath + '/downstream/MR', seed=self.params.seed)
+            self.evaluation = MREval(tpath + '/En/downstream/MR', seed=self.params.seed)
         elif name == 'MPQA':
-            self.evaluation = MPQAEval(tpath + '/downstream/MPQA', seed=self.params.seed)
+            self.evaluation = MPQAEval(tpath + '/En/downstream/MPQA', seed=self.params.seed)
         elif name == 'SUBJ':
-            self.evaluation = SUBJEval(tpath + '/downstream/SUBJ', seed=self.params.seed)
+            self.evaluation = SUBJEval(tpath + '/En/downstream/SUBJ', seed=self.params.seed)
         elif name == 'SST2':
-            self.evaluation = SSTEval(tpath + '/downstream/SST/binary', nclasses=2, seed=self.params.seed)
+            self.evaluation = SSTEval(tpath + '/En/downstream/SST/binary', nclasses=2, seed=self.params.seed)
         elif name == 'SST5':
-            self.evaluation = SSTEval(tpath + '/downstream/SST/fine', nclasses=5, seed=self.params.seed)
+            self.evaluation = SSTEval(tpath + '/En/downstream/SST/fine', nclasses=5, seed=self.params.seed)
         elif name == 'TREC':
-            self.evaluation = TRECEval(tpath + '/downstream/TREC', seed=self.params.seed)
+            self.evaluation = TRECEval(tpath + '/En/downstream/TREC', seed=self.params.seed)
         elif name == 'MRPC':
-            self.evaluation = MRPCEval(tpath + '/downstream/MRPC', seed=self.params.seed)
+            self.evaluation = MRPCEval(tpath + '/En/downstream/MRPC', seed=self.params.seed)
         elif name == 'SICKRelatedness':
-            self.evaluation = SICKRelatednessEval(tpath + '/downstream/SICK', seed=self.params.seed)
+            self.evaluation = SICKRelatednessEval(tpath + '/En/downstream/SICK', seed=self.params.seed)
         elif name == 'STSBenchmark':
-            self.evaluation = STSBenchmarkEval(tpath + '/downstream/STS/STSBenchmark', seed=self.params.seed)
+            self.evaluation = STSBenchmarkEval(tpath + '/En/downstream/STS/STSBenchmark', seed=self.params.seed)
         elif name == 'SICKEntailment':
-            self.evaluation = SICKEntailmentEval(tpath + '/downstream/SICK', seed=self.params.seed)
+            self.evaluation = SICKEntailmentEval(tpath + '/En/downstream/SICK', seed=self.params.seed)
         elif name == 'SNLI':
-            self.evaluation = SNLIEval(tpath + '/downstream/SNLI', seed=self.params.seed)
+            self.evaluation = SNLIEval(tpath + '/En/downstream/SNLI', seed=self.params.seed)
         elif name in ['STS12', 'STS13', 'STS14', 'STS15', 'STS16']:
             fpath = name + '-en-test'
-            self.evaluation = eval(name + 'Eval')(tpath + '/downstream/STS/' + fpath, seed=self.params.seed)
+            self.evaluation = eval(name + 'Eval')(tpath + '/En/downstream/STS/' + fpath, seed=self.params.seed)
         elif name == 'ImageCaptionRetrieval':
-            self.evaluation = ImageCaptionRetrievalEval(tpath + '/downstream/COCO', seed=self.params.seed)
+            self.evaluation = ImageCaptionRetrievalEval(tpath + '/En/downstream/COCO', seed=self.params.seed)
+        # Russian language
+        elif name == 'TREC_RU':
+            self.evaluation = TRECEval(tpath + '/Ru/TREC', is_russian=True, seed=self.params.seed)
+        elif name == 'SICKEntailment_RU':
+            self.evaluation = SICKEntailmentEval(tpath + '/Ru/SICK', is_russian=True, seed=self.params.seed)
+        elif name == 'MRPC_RU':
+            self.evaluation = MRPCEval(tpath + '/Ru/MRPC', is_russian=True, seed=self.params.seed)
+        elif name == 'SST2_RU':
+            self.evaluation = SSTEval(tpath + '/Ru/SST/binary', nclasses=2, is_russian=True, seed=self.params.seed)
+        elif name == 'SST3_RU':
+            self.evaluation = SSTEval(tpath + '/Ru/SST/fine', nclasses=3, is_russian=True, seed=self.params.seed)
+        elif name == 'STSBenchmark_RU':
+            self.evaluation = STSBenchmarkEval(tpath + '/Ru/STSBenchmark', is_russian=True, seed=self.params.seed)
+        elif name == 'SICKRelatedness_RU':
+            self.evaluation = SICKRelatednessEval(tpath + '/Ru/SICK', is_russian=True, seed=self.params.seed)
 
         # Probing Tasks
         elif name == 'Length':
-                self.evaluation = LengthEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = LengthEval(tpath + '/En/probing', seed=self.params.seed)
         elif name == 'WordContent':
-                self.evaluation = WordContentEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = WordContentEval(tpath + '/En/probing', seed=self.params.seed)
         elif name == 'Depth':
-                self.evaluation = DepthEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = DepthEval(tpath + '/En/probing', seed=self.params.seed)
         elif name == 'TopConstituents':
-                self.evaluation = TopConstituentsEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = TopConstituentsEval(tpath + '/En/probing', seed=self.params.seed)
         elif name == 'BigramShift':
-                self.evaluation = BigramShiftEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = BigramShiftEval(tpath + '/En/probing', seed=self.params.seed)
         elif name == 'Tense':
-                self.evaluation = TenseEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = TenseEval(tpath + '/En/probing', seed=self.params.seed)
         elif name == 'SubjNumber':
-                self.evaluation = SubjNumberEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = SubjNumberEval(tpath + '/En/probing', seed=self.params.seed)
         elif name == 'ObjNumber':
-                self.evaluation = ObjNumberEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = ObjNumberEval(tpath + '/En/probing', seed=self.params.seed)
         elif name == 'OddManOut':
-                self.evaluation = OddManOutEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = OddManOutEval(tpath + '/En/probing', seed=self.params.seed)
         elif name == 'CoordinationInversion':
-                self.evaluation = CoordinationInversionEval(tpath + '/probing', seed=self.params.seed)
+                self.evaluation = CoordinationInversionEval(tpath + '/En/probing', seed=self.params.seed)
 
         self.params.current_task = name
         self.evaluation.do_prepare(self.params, self.prepare)

@@ -20,15 +20,19 @@ from senteval.tools.validation import SplitClassifier
 
 
 class SSTEval(object):
-    def __init__(self, task_path, nclasses=2, seed=1111):
+    def __init__(self, task_path, nclasses=2, is_russian=False, seed=1111):
         self.seed = seed
 
         # binary of fine-grained
-        assert nclasses in [2, 5]
+        assert nclasses in [2, 3, 5]
         self.nclasses = nclasses
         self.task_name = 'Binary' if self.nclasses == 2 else 'Fine-Grained'
-        logging.debug('***** Transfer task : SST %s classification *****\n\n', self.task_name)
-
+        logging.debug('***** Transfer task : SST %s classification *****', self.task_name)
+        self.is_russian = is_russian
+        if self.is_russian:
+            logging.info('*************** Russian Language ****************\n\n')
+        else:
+            logging.info('*************** English Language ****************\n\n')
         train = self.loadFile(os.path.join(task_path, 'sentiment-train'))
         dev = self.loadFile(os.path.join(task_path, 'sentiment-dev'))
         test = self.loadFile(os.path.join(task_path, 'sentiment-test'))
@@ -47,7 +51,7 @@ class SSTEval(object):
                     sample = line.strip().split('\t')
                     sst_data['y'].append(int(sample[1]))
                     sst_data['X'].append(sample[0].split())
-                elif self.nclasses == 5:
+                elif self.nclasses == 3 or self.nclasses == 5:
                     sample = line.strip().split(' ', 1)
                     sst_data['y'].append(int(sample[0]))
                     sst_data['X'].append(sample[1].split())
