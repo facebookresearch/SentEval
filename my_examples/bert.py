@@ -62,7 +62,7 @@ if __name__ == "__main__":
     se = senteval.engine.SE(params_senteval, batcher, prepare)
     transfer_tasks = ['SICKEntailment', 'SST2', 'SST5', 'TREC', 'MRPC',
                       'SICKEntailment_RU', 'SST2_RU', 'SST3_RU', 'TREC_RU', 'MRPC_RU'
-                      'STSBenchmark', 'SICKRelatedness'
+                      'STSBenchmark', 'SICKRelatedness',
                       'STSBenchmark_RU', 'SICKRelatedness_RU'
                       ]
     results = se.eval(transfer_tasks)

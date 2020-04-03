@@ -9,6 +9,7 @@ from wikipedia2vec import Wikipedia2Vec
 # Set PATHs
 PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data'
+# Download Russian model from https://wikipedia2vec.github.io/wikipedia2vec/pretrained/ to folder 'word2vec_ru'
 PATH_TO_MODEL = os.path.join('word2vec_ru', 'ruwiki_20180420_300d.pkl')
 
 # import SentEval
@@ -19,6 +20,9 @@ import senteval
 # SentEval prepare and batcher
 def prepare(params, samples):
     # Load model
+    if not os.path.exists(PATH_TO_MODEL):
+        raise Exception("There are no pretrained model in \"" + PATH_TO_MODEL + "\"")
+
     params.model = Wikipedia2Vec.load(PATH_TO_MODEL)
     return
 
@@ -49,7 +53,7 @@ logging.basicConfig(format='%(asctime)s : %(message)s', level=logging.DEBUG)
 if __name__ == "__main__":
     se = senteval.engine.SE(params_senteval, batcher, prepare)
     transfer_tasks = ['SICKEntailment_RU', 'SST2_RU', 'SST3_RU', 'TREC_RU', 'MRPC_RU'
-                      # 'STSBenchmark_RU', 'SICKRelatedness_RU'
+                      'STSBenchmark_RU', 'SICKRelatedness_RU'
                       ]
     results = se.eval(transfer_tasks)
     print(results)

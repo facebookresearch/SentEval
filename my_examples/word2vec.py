@@ -9,6 +9,7 @@ import numpy as np
 # Set PATHs
 PATH_TO_SENTEVAL = '../'
 PATH_TO_DATA = '../data'
+# Download model from https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit to folder 'word2vec'
 PATH_TO_MODEL = os.path.join('word2vec', 'GoogleNews-vectors-negative300.bin')
 
 # import SentEval
@@ -19,6 +20,9 @@ import senteval
 # SentEval prepare and batcher
 def prepare(params, samples):
     # Load model
+    if not os.path.exists(PATH_TO_MODEL):
+        raise Exception("There are no pretrained model in \"" + PATH_TO_MODEL + "\"")
+
     params.model = gensim.models.KeyedVectors.load_word2vec_format(PATH_TO_MODEL, binary=True)
     return
 
