@@ -1,5 +1,67 @@
-# SentEval: evaluation toolkit for sentence embeddings
+# SentEval with unsupervised STS-Benchmark
 
+The main aim of this SentEval fork is to resolve inconsistent comparisons on the STS Benchmark. The issue stems from the fact that the [STS benchmark](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark) was originally intended to evaluate similarity of sentences by directly computing some similarity measure (say, cosine) between the sentence representations or embeddings (see section 8 of [[3]](http://www.aclweb.org/anthology/S/S17/S17-2001.pdf)). 
+
+However, SentEval and several papers using it, compare on the STS Benchmark after training a classifier on the top. This leads to unfair comparisons across various methods, particularly when *unsupervised sentence representation approaches* are concerned. 
+
+It should be noted that SentEval does indeed specify `train=1` in the readme. But since SentEval is a common evaluation suite for sentence embeddings, this fork provides for *fair unsupervised evaluations* on the STS Benchmark.
+
+### An example that illustrates this point
+To give one concrete example, running GloVe (commoncrawl) with STSBenchmark (via SentEval) gives a score of 64.74 on the test set. (This is corroborated by another [paper](https://arxiv.org/pdf/1806.06259.pdf) which claims of getting same score for GloVe via SentEval) 
+
+While, if we just do the evaluation (via cosine similarity on the embeddings alone) it gives a score on test set of 41.5 (with commoncrawl) and 40.8 (with wiki+gigawords 6B as mentioned in SemEval paper), which matches with the scores on the above benchmark website. 
+
+## Usage
+In order to facilitate this, another task called *STS B Unsupervised* is created. To get the scores on the dev and test set, you just have to specify the task names: `STSBenchmarkUnsupervisedDev`, `STSBenchmarkUnsupervisedTest` respectively.
+
+| Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
+|----------	|------------------------------	|-----------:|----------:|:-----------:|:----------:|
+| [STS B Unsupervised](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results)    	| semantic textual similarity  	| 5.7k    	| 1.4k   	| 0 | 0 |
+
+## References
+
+This adapted evaluation suite was used in the work called GLOSS [[1]](https://arxiv.org/abs/1907.06385), and please consider citing [1] when using this fork of SentEval. Also, consider citing the original SentEval reference [[2]](https://arxiv.org/abs/1803.05449) and the corresponding benchmark datasets that you use besides the evaluation framework, e.g., for STS-Benchmark [[3]](https://www.aclweb.org/anthology/S17-2001.pdf).
+
+[1] S.P. Singh, A. Fan, M. Auli, [*GLOSS: Generative Latent Optimization of Sentence Representations*](https://arxiv.org/abs/1907.06385)
+
+```
+@article{singh2019gloss,
+  title={GLOSS: Generative Latent Optimization of Sentence Representations},
+  author={Singh, Sidak Pal and Fan, Angela and Auli, Michael},
+  journal={arXiv preprint arXiv:1907.06385},
+  year={2019}
+}
+```
+
+[2] A. Conneau, D. Kiela, [*SentEval: An Evaluation Toolkit for Universal Sentence Representations*](https://arxiv.org/abs/1803.05449)
+
+```
+@article{conneau2018senteval,
+  title={SentEval: An Evaluation Toolkit for Universal Sentence Representations},
+  author={Conneau, Alexis and Kiela, Douwe},
+  journal={arXiv preprint arXiv:1803.05449},
+  year={2018}
+}
+```
+
+[3] D. Cer, M. Diab, E. Agirre, I. Lopez-Gazpio,  L. Specia, [*SemEval-2017 Task 1: Semantic Textual Similarity
+Multilingual and Cross-lingual Focused Evaluation*](https://www.aclweb.org/anthology/S17-2001.pdf)
+
+```
+@inproceedings{cer-etal-2017-semeval,
+    title = "{S}em{E}val-2017 Task 1: Semantic Textual Similarity Multilingual and Crosslingual Focused Evaluation",
+    author = "Cer, Daniel  and Diab, Mona  and Agirre, Eneko  and Lopez-Gazpio, I{\~n}igo  and Specia, Lucia",
+    booktitle = "Proceedings of the 11th International Workshop on Semantic Evaluation ({S}em{E}val-2017)",
+    month = aug,
+    year = "2017",
+    address = "Vancouver, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/S17-2001",
+    doi = "10.18653/v1/S17-2001",
+    pages = "1--14",
+}
+```
+## SentEval README continued
 SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. **SentEval currently includes 17 downstream tasks**. We also include a suite of **10 probing tasks** which evaluate what linguistic properties are encoded in sentence embeddings. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
 
 
@@ -216,31 +278,5 @@ which takes longer but will produce better and comparable results.
 
 For probing tasks, we used an MLP with a Sigmoid nonlinearity and and tuned the nhid (in [50, 100, 200]) and dropout (in [0.0, 0.1, 0.2]) on the dev set.
 
-## References
 
-Please considering citing [[1]](https://arxiv.org/abs/1803.05449) if using this code for evaluating sentence embedding methods.
 
-### SentEval: An Evaluation Toolkit for Universal Sentence Representations
-
-[1] A. Conneau, D. Kiela, [*SentEval: An Evaluation Toolkit for Universal Sentence Representations*](https://arxiv.org/abs/1803.05449)
-
-```
-@article{conneau2018senteval,
-  title={SentEval: An Evaluation Toolkit for Universal Sentence Representations},
-  author={Conneau, Alexis and Kiela, Douwe},
-  journal={arXiv preprint arXiv:1803.05449},
-  year={2018}
-}
-```
-
-Contact: [aconneau@fb.com](mailto:aconneau@fb.com), [dkiela@fb.com](mailto:dkiela@fb.com)
-
-### Related work
-* [J. R Kiros, Y. Zhu, R. Salakhutdinov, R. S. Zemel, A. Torralba, R. Urtasun, S. Fidler - SkipThought Vectors, NIPS 2015](https://arxiv.org/abs/1506.06726)
-* [S. Arora, Y. Liang, T. Ma - A Simple but Tough-to-Beat Baseline for Sentence Embeddings, ICLR 2017](https://openreview.net/pdf?id=SyK00v5xx)
-* [Y. Adi, E. Kermany, Y. Belinkov, O. Lavi, Y. Goldberg - Fine-grained analysis of sentence embeddings using auxiliary prediction tasks, ICLR 2017](https://arxiv.org/abs/1608.04207)
-* [A. Conneau, D. Kiela, L. Barrault, H. Schwenk, A. Bordes - Supervised Learning of Universal Sentence Representations from Natural Language Inference Data, EMNLP 2017](https://arxiv.org/abs/1705.02364)
-* [S. Subramanian, A. Trischler, Y. Bengio, C. J Pal - Learning General Purpose Distributed Sentence Representations via Large Scale Multi-task Learning, ICLR 2018](https://arxiv.org/abs/1804.00079)
-* [A. Nie, E. D. Bennett, N. D. Goodman - DisSent: Sentence Representation Learning from Explicit Discourse Relations, 2018](https://arxiv.org/abs/1710.04334)
-* [D. Cer, Y. Yang, S. Kong, N. Hua, N. Limtiaco, R. St. John, N. Constant, M. Guajardo-Cespedes, S. Yuan, C. Tar, Y. Sung, B. Strope, R. Kurzweil - Universal Sentence Encoder, 2018](https://arxiv.org/abs/1803.11175)
-* [A. Conneau, G. Kruszewski, G. Lample, L. Barrault, M. Baroni - What you can cram into a single vector: Probing sentence embeddings for linguistic properties, ACL 2018](https://arxiv.org/abs/1805.01070)
