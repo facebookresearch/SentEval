@@ -21,8 +21,13 @@ from sklearn.metrics import f1_score
 
 
 class MRPCEval(object):
-    def __init__(self, task_path, seed=1111):
-        logging.info('***** Transfer task : MRPC *****\n\n')
+    def __init__(self, task_path, is_russian=False, seed=1111):
+        logging.info('***** Transfer task : MRPC *****')
+        self.is_russian = is_russian
+        if self.is_russian:
+            logging.info('******* Russian Language *******\n\n')
+        else:
+            logging.info('******* English Language *******\n\n')
         self.seed = seed
         train = self.loadFile(os.path.join(task_path,
                               'msr_paraphrase_train.txt'))

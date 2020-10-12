@@ -3,6 +3,8 @@
 SentEval is a library for evaluating the quality of sentence embeddings. We assess their generalization power by using them as features on a broad and diverse set of "transfer" tasks. **SentEval currently includes 17 downstream tasks**. We also include a suite of **10 probing tasks** which evaluate what linguistic properties are encoded in sentence embeddings. Our goal is to ease the study and the development of general-purpose fixed-size sentence representations.
 
 
+**(05/08) SentEval new tasks: Added russian dataset for downstream tasks; Added example scripts for Russian and English datasets for four sentence encoders: Word2Vec, ELMo, BERT, Multilingual USE**
+
 **(04/22) SentEval new tasks: Added probing tasks for evaluating what linguistic properties are encoded in sentence embeddings**
 
 **(10/04) SentEval example scripts for three sentence encoders: [SkipThought-LN](https://github.com/ryankiros/layer-norm#skip-thoughts)/[GenSen](https://github.com/Maluuba/gensen)/[Google-USE](https://tfhub.dev/google/universal-sentence-encoder/1)**
@@ -18,28 +20,35 @@ This code is written in python. The dependencies are:
 ## Transfer tasks
 
 ### Downstream tasks
-SentEval allows you to evaluate your sentence embeddings as features for the following *downstream* tasks:
+SentEval allows you to evaluate your sentence embeddings as features for the following *downstream* tasks for English and Russian languages:
 
-| Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
-|----------	|------------------------------	|-----------:|----------:|:-----------:|:----------:|
-| [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| movie review                 	| 11k     	| 11k    	| 1 | 1 |
-| [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| product review               	| 4k      	| 4k     	| 1 | 1 |
-| [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| subjectivity status          	| 10k     	| 10k    	| 1 | 1 |
-| [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| opinion-polarity  | 11k     	| 11k    	| 1 | 1 |
-| [SST](https://nlp.stanford.edu/sentiment/index.html)      	| binary sentiment analysis  	| 67k     	| 1.8k   	| 1 | 1 |
-| **[SST](https://nlp.stanford.edu/sentiment/index.html)**      	| **fine-grained sentiment analysis**  	| 8.5k     	| 2.2k   	| 1 | 1 |
-| [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| 6k      	| 0.5k    	| 1 | 1 |
-| [SICK-E](http://clic.cimec.unitn.it/composes/sick.html)   	| natural language inference 	| 4.5k    	| 4.9k   	| 1 | 1 |
-| [SNLI](https://nlp.stanford.edu/projects/snli/)     	| natural language inference   	| 550k    	| 9.8k   	| 1 | 1 |
-| [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art)) | paraphrase detection  | 4.1k | 1.7k | 1 | 1 |
-| [STS 2012](https://www.cs.york.ac.uk/semeval-2012/task6/) 	| semantic textual similarity  	| N/A     	| 3.1k   	| 0  | 0 |
-| [STS 2013](http://ixa2.si.ehu.es/sts/) 	| semantic textual similarity  	| N/A     	| 1.5k   	| 0  | 0 |
-| [STS 2014](http://alt.qcri.org/semeval2014/task10/) 	| semantic textual similarity  	| N/A     	| 3.7k   	| 0  | 0 |
-| [STS 2015](http://alt.qcri.org/semeval2015/task2/) 	| semantic textual similarity  	| N/A     	| 8.5k   	| 0  | 0 |
-| [STS 2016](http://alt.qcri.org/semeval2016/task1/) 	| semantic textual similarity  	| N/A     	| 9.2k   	| 0  | 0 |
-| [STS B](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results)    	| semantic textual similarity  	| 5.7k    	| 1.4k   	| 1 | 0 |
-| [SICK-R](http://clic.cimec.unitn.it/composes/sick.html)   	| semantic textual similarity | 4.5k    	| 4.9k   	| 1 | 0 |
-| [COCO](http://mscoco.org/)     	| image-caption retrieval      	| 567k    	| 5*1k   	| 1 | 0 |
+| Task     	| Type                         	| Language | #train 	| #test 	| needs_train 	| set_classifier |
+|----------	|------------------------------	|----------|-----------:|----------:|:-----------:|:----------:|
+| [MR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| movie review                 	| _English_ | 11k     	| 11k    	| 1 | 1 |
+| [CR](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)       	| product review               	| _English_ | 4k      	| 4k     	| 1 | 1 |
+| [SUBJ](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| subjectivity status          	| _English_ | 10k     	| 10k    	| 1 | 1 |
+| [MPQA](https://nlp.stanford.edu/~sidaw/home/projects:nbsvm)     	| opinion-polarity  | _English_ | 11k       | 11k    	| 1 | 1 |
+| [SST](https://nlp.stanford.edu/sentiment/index.html)      	| binary sentiment analysis  	| _English_ | 67k     	| 1.8k   	| 1 | 1 |
+| **[SST](https://nlp.stanford.edu/sentiment/index.html)**      	| **fine-grained sentiment analysis**  	| _English_ | 8.5k     	| 2.2k   	| 1 | 1 |
+| [SST_RU](http://study.mokoron.com)      	| binary sentiment analysis  	| _Russian_ | 170k     	| 37.8k   	| 1 | 1 |
+| **[SST_RU](http://www.dialog-21.ru/evaluation/2016/sentiment/)**      	| **fine-grained sentiment analysis**  	| _Russian_ | 43.5k     	| 9.5k   	| 1 | 1 |
+| [TREC](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| _English_ | 6k      	| 0.5k    	| 1 | 1 |
+| [TREC_RU (translation)](http://cogcomp.cs.illinois.edu/Data/QA/QC/)     	| question-type classification 	| _Russian_ | 5.5k      	| 0.5k    	| 1 | 1 |
+| [SICK-E](http://clic.cimec.unitn.it/composes/sick.html)   	| natural language inference 	| _English_ | 4.5k    	| 4.9k   	| 1 | 1 |
+| [SICK-E_RU (translation)](http://clic.cimec.unitn.it/composes/sick.html)   	| natural language inference 	| _Russian_ | 4.5k    	| 4.9k   	| 1 | 1 |
+| [SNLI](https://nlp.stanford.edu/projects/snli/)     	| natural language inference   	| _English_ | 550k    	| 9.8k   	| 1 | 1 |
+| [MRPC](https://aclweb.org/aclwiki/Paraphrase_Identification_(State_of_the_art)) | paraphrase detection  | _English_ | 4.1k | 1.7k | 1 | 1 |
+| [MRPC_RU](https://github.com/Koziev/NLP_Datasets/tree/master/ParaphraseDetection/Data) | paraphrase detection  | _Russian_ | 35.5k | 4.5k | 1 | 1 |
+| [STS 2012](https://www.cs.york.ac.uk/semeval-2012/task6/) 	| semantic textual similarity  	| _English_ | N/A     	| 3.1k   	| 0  | 0 |
+| [STS 2013](http://ixa2.si.ehu.es/sts/) 	| semantic textual similarity  	| _English_ | N/A     	| 1.5k   	| 0  | 0 |
+| [STS 2014](http://alt.qcri.org/semeval2014/task10/) 	| semantic textual similarity  	| _English_ | N/A     	| 3.7k   	| 0  | 0 |
+| [STS 2015](http://alt.qcri.org/semeval2015/task2/) 	| semantic textual similarity  	| _English_ | N/A     	| 8.5k   	| 0  | 0 |
+| [STS 2016](http://alt.qcri.org/semeval2016/task1/) 	| semantic textual similarity  	| _English_ | N/A     	| 9.2k   	| 0  | 0 |
+| [STS B](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results)    	| semantic textual similarity  	| _English_ | 5.7k    	| 1.4k   	| 1 | 0 |
+| [STS B RU (translation)](http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark#Results)    	| semantic textual similarity  	| _Russian_ | 5.7k    	| 1.4k   	| 1 | 0 |
+| [SICK-R](http://clic.cimec.unitn.it/composes/sick.html)   	| semantic textual similarity | _English_ | 4.5k    	| 4.9k   	| 1 | 0 |
+| [SICK-R_RU (translation)](http://clic.cimec.unitn.it/composes/sick.html)   	| semantic textual similarity | _Russian_ | 4.5k    	| 4.9k   	| 1 | 0 |
+| [COCO](http://mscoco.org/)     	| image-caption retrieval      	| _English_ | 567k    	| 5*1k   	| 1 | 0 |
 
 where **needs_train** means a model with parameters is learned on top of the sentence embeddings, and **set_classifier** means you can define the parameters of the classifier in the case of a classification task (see below).
 
@@ -48,25 +57,26 @@ Note: COCO comes with ResNet-101 2048d image embeddings. [More details on the ta
 ### Probing tasks
 SentEval also includes a series of [*probing* tasks](https://github.com/facebookresearch/SentEval/tree/master/data/probing) to evaluate what linguistic properties are encoded in your sentence embeddings:
 
-| Task     	| Type                         	| #train 	| #test 	| needs_train 	| set_classifier |
-|----------	|------------------------------	|-----------:|----------:|:-----------:|:----------:|
-| [SentLen](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Length prediction	| 100k     	| 10k    	| 1 | 1 |
-| [WC](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Word Content analysis	| 100k     	| 10k    	| 1 | 1 |
-| [TreeDepth](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Tree depth prediction	| 100k     	| 10k    	| 1 | 1 |
-| [TopConst](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Top Constituents prediction	| 100k     	| 10k    	| 1 | 1 |
-| [BShift](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Word order analysis	| 100k     	| 10k    	| 1 | 1 |
-| [Tense](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Verb tense prediction	| 100k     	| 10k    	| 1 | 1 |
-| [SubjNum](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Subject number prediction	| 100k     	| 10k    	| 1 | 1 |
-| [ObjNum](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Object number prediction	| 100k     	| 10k    	| 1 | 1 |
-| [SOMO](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Semantic odd man out	| 100k     	| 10k    	| 1 | 1 |
-| [CoordInv](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Coordination Inversion | 100k     	| 10k    	| 1 | 1 |
+| Task     	| Type                         	| Language | #train 	| #test 	| needs_train 	| set_classifier |
+|----------	|------------------------------	|----------|-----------:|----------:|:-----------:|:----------:|
+| [SentLen](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Length prediction	| _English_ | 100k     	| 10k    	| 1 | 1 |
+| [WC](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Word Content analysis	| _English_ | 100k     	| 10k    	| 1 | 1 |
+| [TreeDepth](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Tree depth prediction	| _English_ | 100k     	| 10k    	| 1 | 1 |
+| [TopConst](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Top Constituents prediction	| _English_ | 100k     	| 10k    	| 1 | 1 |
+| [BShift](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Word order analysis	| _English_ | 100k     	| 10k    	| 1 | 1 |
+| [Tense](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Verb tense prediction	| _English_ | 100k     	| 10k    	| 1 | 1 |
+| [SubjNum](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Subject number prediction	| _English_ | 100k     	| 10k    	| 1 | 1 |
+| [ObjNum](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Object number prediction	| _English_ | 100k     	| 10k    	| 1 | 1 |
+| [SOMO](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Semantic odd man out	| _English_ | 100k     	| 10k    	| 1 | 1 |
+| [CoordInv](https://github.com/facebookresearch/SentEval/tree/master/data/probing)	| Coordination Inversion | _English_ | 100k     	| 10k    	| 1 | 1 |
 
 ## Download datasets
-To get all the transfer tasks datasets, run (in data/downstream/):
+To get all English transfer tasks datasets, run (in data/En/downstream/):
 ```bash
 ./get_transfer_data.bash
 ```
-This will automatically download and preprocess the downstream datasets, and store them in data/downstream (warning: for MacOS users, you may have to use p7zip instead of unzip). The probing tasks are already in data/probing by default.
+This will automatically download and preprocess the English downstream datasets, and store them in data/En/downstream (warning: for MacOS users, you may have to use p7zip instead of unzip). The probing tasks are already in data/probing by default.
+All Russian datasets is already saved in data/Ru/.
 
 ## How to use SentEval: examples
 
@@ -106,6 +116,64 @@ We also provide example scripts for three other encoders:
 
 Note that for SkipThought and GenSen, following the steps of the associated githubs is necessary.
 The Google encoder script should work as-is.
+
+### RU_EN_examples
+
+We provide example scripts for comparison of models for Russian and English
+
+### RU_EN_examples/bert.py
+
+* [Multilingual BERT encoder](https://github.com/google-research/bert)
+
+In RU_EN_examples/bert.py, we evaluate the quality of the average of Multilingual BERT word embeddings.
+
+To reproduce the results, run (in RU_EN_examples/):  
+```bash
+python bert.py
+```
+
+### RU_EN_examples/muse.py
+
+* [Multilingual Universal Sentence Encoder](https://tfhub.dev/google/universal-sentence-encoder-multilingual-large/3)
+
+In RU_EN_examples/muse.py, we evaluate the quality of Multilingual Universal Sentence Encoder.
+
+To reproduce the results, run (in RU_EN_examples/):  
+```bash
+python muse.py
+```
+
+### RU_EN_examples/elmo.py & RU_EN_examples/elmo_ru.py
+
+* [English ELMo encoder](https://tfhub.dev/google/elmo/3)
+* [Russian ELMo encoder](http://docs.deeppavlov.ai/en/master/features/pretrained_vectors.html)
+
+In RU_EN_examples/elmo.py and RU_EN_examples/elmo_ru.py, we evaluate the quality of the average of ELMo word embeddings.
+
+To reproduce the results, run (in RU_EN_examples/):  
+```bash
+python elmo.py
+python elmo_ru.py
+```
+
+### RU_EN_examples/word2vec.py & RU_EN_examples/word2vec_ru.py
+
+* [English Word2Vec encoder](https://drive.google.com/file/d/0B7XkCwpI5KDYNlNUTTlSS21pQmM/edit)
+* [Russian Word2Vec encoder](https://wikipedia2vec.github.io/wikipedia2vec/pretrained/)
+
+In RU_EN_examples/word2vec.py and RU_EN_examples/word2vec_ru.py, we evaluate the quality of the average of Word2Vec word embeddings.
+
+To get the **Word2Vec** models and reproduce our results, download best models and run python scripts (in RU_EN_examples/):
+```bash
+mkdir word2vec
+curl -Lo word2vec/GoogleNews-vectors-negative300.bin https://drive.google.com/u/0/uc?export=download&confirm=WQpT&id=0B7XkCwpI5KDYNlNUTTlSS21pQmM
+mkdir word2vec_ru
+curl -Lo word2vec_ru/ruwiki_20180420_300d.pkl.bz2 http://wikipedia2vec.s3.amazonaws.com/models/es/2018-04-20/eswiki_20180420_300d.pkl.bz2
+bzip2 -d word2vec_ru/ruwiki_20180420_300d.pkl.bz2 word2vec_ru/
+
+python word2vec.py
+python word2vec_ru.py
+```
 
 ## How to use SentEval
 
@@ -168,11 +236,12 @@ results = se.eval(transfer_tasks)
 ```
 The current list of available tasks is:
 ```python
-['CR', 'MR', 'MPQA', 'SUBJ', 'SST2', 'SST5', 'TREC', 'MRPC', 'SNLI',
-'SICKEntailment', 'SICKRelatedness', 'STSBenchmark', 'ImageCaptionRetrieval',
-'STS12', 'STS13', 'STS14', 'STS15', 'STS16',
-'Length', 'WordContent', 'Depth', 'TopConstituents','BigramShift', 'Tense',
-'SubjNumber', 'ObjNumber', 'OddManOut', 'CoordinationInversion']
+['SST2', 'SST5', 'TREC', 'MRPC', 'SICKRelatedness', 'SICKEntailment', 'STSBenchmark',
+'SST2_RU', 'SST3_RU', 'TREC_RU', 'MRPC_RU', 'SICKRelatedness_RU', 'SICKEntailment_RU',
+'STSBenchmark_RU',
+'CR', 'MR', 'MPQA', 'SUBJ', 'SNLI', 'STS12', 'STS13', 'STS14', 'STS15', 'STS16',
+'ImageCaptionRetrieval', 'Length', 'WordContent', 'Depth', 'TopConstituents', 'BigramShift',
+'Tense', 'SubjNumber', 'ObjNumber', 'OddManOut', 'CoordinationInversion']
 ```
 
 ## SentEval parameters
