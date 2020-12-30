@@ -34,7 +34,7 @@ This is a classification task where the goal is to predict the sentence length
 which has been binned in 6 possible categories with lengths ranging in the
 following intervals: --0: (5-8), 1: (9-12), 2: (13-16), 3: (17-20), 4: (21-25),
 5: (26-28). These are the same bins from Adi et al. except for the two larger
-ones --(30-33), (34-70)-- and lenght 29 in the last bin, all of which we
+ones --(30-33), (34-70)-- and length 29 in the last bin, all of which we
 excluded because the corresponding lengths  were filtered out in our corpus
 pre-processing step. This task is called SentLen in the paper.
 
