@@ -11,6 +11,7 @@ import numpy as np
 import re
 import inspect
 from torch import optim
+import sys
 
 
 def create_dictionary(sentences):
@@ -86,7 +87,10 @@ def get_optimizer(s):
         raise Exception('Unknown optimization method: "%s"' % method)
 
     # check that we give good parameters to the optimizer
-    expected_args = inspect.getargspec(optim_fn.__init__)[0]
+    if if sys.version_info < (3, 10):
+        expected_args = inspect.getargspec(optim_fn.__init__)[0]
+    else:
+        expected_args = list(inspect.signature(optim_fn.__init__).parameters.keys())
     assert expected_args[:2] == ['self', 'params']
     if not all(k in expected_args[2:] for k in optim_params.keys()):
         raise Exception('Unexpected parameters: expected "%s", got "%s"' % (
