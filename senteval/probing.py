@@ -14,8 +14,12 @@ from __future__ import absolute_import, division, unicode_literals
 import os
 import io
 import copy
+import json
 import logging
 import numpy as np
+
+from datasets import Dataset, DatasetDict
+from tqdm import tqdm
 
 from senteval.tools.validation import SplitClassifier
 
@@ -54,7 +58,7 @@ class PROBINGEval(object):
             for i, y in enumerate(self.task_data[split]['y']):
                 self.task_data[split]['y'][i] = self.tok2label[y]
 
-    def run(self, params, batcher):
+    def run(self, params, batcher, train_clf=False):
         task_embed = {'train': {}, 'dev': {}, 'test': {}}
         bsize = params.batch_size
         logging.info('Computing embeddings for train/dev/test')
@@ -66,37 +70,47 @@ class PROBINGEval(object):
             self.task_data[key]['X'], self.task_data[key]['y'] = map(list, zip(*sorted_data))
 
             task_embed[key]['X'] = []
-            for ii in range(0, len(self.task_data[key]['y']), bsize):
+            task_embed[key]['sent'] = []
+            for ii in tqdm(range(0, len(self.task_data[key]['y']), bsize)):
                 batch = self.task_data[key]['X'][ii:ii + bsize]
                 embeddings = batcher(params, batch)
                 task_embed[key]['X'].append(embeddings)
+                task_embed[key]['sent'].extend([" ".join(sent) if sent != [] else ['.'] for sent in batch])
+
             task_embed[key]['X'] = np.vstack(task_embed[key]['X'])
             task_embed[key]['y'] = np.array(self.task_data[key]['y'])
         logging.info('Computed embeddings')
 
-        config_classifier = {'nclasses': self.nclasses, 'seed': self.seed,
-                             'usepytorch': params.usepytorch,
-                             'classifier': params.classifier}
+        path = f'datasets/{self.task}.hf'
+        dataset = DatasetDict({key: Dataset.from_dict(task_embed[key]) for key in self.task_data})
+        dataset.save_to_disk(path)
 
-        if self.task == "WordContent" and params.classifier['nhid'] > 0:
-            config_classifier = copy.deepcopy(config_classifier)
-            config_classifier['classifier']['nhid'] = 0
-            print(params.classifier['nhid'])
+        logging.info(f'Saved to datasets/{path}')
+        
+        if train_clf:
+            config_classifier = {'nclasses': self.nclasses, 'seed': self.seed,
+                                 'usepytorch': params.usepytorch,
+                                 'classifier': params.classifier}
 
-        clf = SplitClassifier(X={'train': task_embed['train']['X'],
-                                 'valid': task_embed['dev']['X'],
-                                 'test': task_embed['test']['X']},
-                              y={'train': task_embed['train']['y'],
-                                 'valid': task_embed['dev']['y'],
-                                 'test': task_embed['test']['y']},
-                              config=config_classifier)
+            if self.task == "WordContent" and params.classifier['nhid'] > 0:
+                config_classifier = copy.deepcopy(config_classifier)
+                config_classifier['classifier']['nhid'] = 0
+                print(params.classifier['nhid'])
 
-        devacc, testacc = clf.run()
-        logging.debug('\nDev acc : %.1f Test acc : %.1f for %s classification\n' % (devacc, testacc, self.task.upper()))
+            clf = SplitClassifier(X={'train': task_embed['train']['X'],
+                                     'valid': task_embed['dev']['X'],
+                                     'test': task_embed['test']['X']},
+                                  y={'train': task_embed['train']['y'],
+                                     'valid': task_embed['dev']['y'],
+                                     'test': task_embed['test']['y']},
+                                  config=config_classifier)
 
-        return {'devacc': devacc, 'acc': testacc,
-                'ndev': len(task_embed['dev']['X']),
-                'ntest': len(task_embed['test']['X'])}
+            devacc, testacc = clf.run()
+            logging.debug('\nDev acc : %.1f Test acc : %.1f for %s classification\n' % (devacc, testacc, self.task.upper()))
+
+            return {'devacc': devacc, 'acc': testacc,
+                    'ndev': len(task_embed['dev']['X']),
+                    'ntest': len(task_embed['test']['X'])}
 
 """
 Surface Information

@@ -30,7 +30,7 @@ class SE(object):
         params.usepytorch = True if 'usepytorch' not in params else params.usepytorch
         params.seed = 1111 if 'seed' not in params else params.seed
 
-        params.batch_size = 128 if 'batch_size' not in params else params.batch_size
+        params.batch_size = 32 if 'batch_size' not in params else params.batch_size
         params.nhid = 0 if 'nhid' not in params else params.nhid
         params.kfold = 5 if 'kfold' not in params else params.kfold
 
