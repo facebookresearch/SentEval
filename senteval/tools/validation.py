@@ -244,9 +244,8 @@ class SplitClassifier(object):
         testaccuracy = clf.score(self.X['test'], self.y['test'])
         testaccuracy = round(100*testaccuracy, 2)
         return devaccuracy, testaccuracy
-        
-        
- class SplitClassifier2(object):
+
+class SplitClassifier2(object):
     """
     (train, valid, test) split classifier.
     """
